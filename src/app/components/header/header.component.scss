@@ -1,0 +1,30 @@
+.main-header {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  min-height: fit-content;
+
+  background-color: #ca5c50;
+
+  .logo {
+    padding: 1.5%;
+    font-family: "Montserrat", sans-serif;
+    color: #f0e9d7;
+    font-size: 3.2vw;
+
+    @media (max-width: 450px) {
+      font-size: 10vw;
+      min-height: fit-content;
+
+      // padding-bottom: 1vw;
+      // padding-top: 1vw;
+    }
+  }
+
+  @media (max-width: 450px) {
+    min-height: fit-content;
+
+    padding-bottom: 1vw;
+    padding-top: 1vw;
+  }
+}
