@@ -1,0 +1,86 @@
+<div class="loading-div" *ngIf="isLoading">
+    <app-loading-spinner ></app-loading-spinner>
+</div>
+
+<div class="container">
+  <form class="registration-form"
+          (ngSubmit)="onSubmit()"
+          [formGroup]="registrationForm">
+        <div class="form-text-div">
+            <strong>Sign Up</strong>
+        </div>
+
+        <div class="div-for-field">
+          <label for="userName">Name</label>
+          <input
+            formControlName="userName"
+            name="userName"
+            type="text"
+            class="field"
+            placeholder="Sam"/>
+            <span
+            *ngIf="registrationForm.get('userName').hasError('incorrectName')
+            && registrationForm.get('userName').touched">Only 1 Latin word! First letter Upper! No number! </span>
+        </div>
+
+        <div class="div-for-field">
+          <label for="userSurname">Surname</label>
+          <input
+            formControlName="userSurname"
+            name="userSurname"
+            type="text"
+            class="field"
+            placeholder="Smith">
+            <span
+            *ngIf="registrationForm.get('userSurname').hasError('incorrectSurname')
+            && registrationForm.get('userSurname').touched">Only 1 Latin word! First letter Upper! No number! </span>
+        </div>
+
+        <div class="div-for-field">
+          <label for="userEmail">Email</label>
+          <input
+            formControlName="userEmail"
+            name="userEmail"
+            type="email"
+            class="field"
+            placeholder="example@gmail.com"/>
+            <span
+            *ngIf="registrationForm.get('userEmail').hasError('incorrectEmail')
+            && registrationForm.get('userEmail').touched">Only Gmail! Lowercase without spaces!</span>
+            <span *ngIf="registrationForm.get('userEmail').hasError('alreadyRegistered')">Email already registered!</span>
+        </div>
+
+        <div class="div-for-field">
+          <label for="userPassword">Password</label>
+          <input
+            formControlName="userPassword"
+            name="userPassword"
+            type="password"
+            class="field"/>
+        </div>
+
+        <div class="div-for-field">
+          <label for="userPosition">Position</label>
+          <select
+          formControlName="userPosition"
+          name="positions-selector"
+          class="field">
+            <option value="Developer" >Developer</option>
+            <option value="Project Manager">Project Manager</option>
+          </select>
+        </div>
+
+        <div class="div-for-field">
+          <input
+          type="submit"
+          value="Submit"
+          class="submit-button"
+          [disabled]="registrationForm.invalid || isLoading" />
+          <!-- <span *ngIf="registrationForm.invalid">Enter ALL data [correctly]!</span> -->
+        </div>
+
+        <a href="#">Already have an account?</a>
+
+      </form>
+</div>
+
