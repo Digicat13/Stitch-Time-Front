@@ -39,7 +39,17 @@ export class RegistrationFormComponent implements OnInit {
         Validators.required,
         this.singInUpValidator.emailValidator
       ]),
-      userPassword: new FormControl(null, [Validators.required]),
+      passwords: new FormGroup(
+        {
+          userPassword: new FormControl(null, [
+            Validators.required,
+            this.singInUpValidator.passwordValidator
+          ]),
+          userConfirmPassword: new FormControl(null, [Validators.required])
+        },
+        [Validators.required, this.singInUpValidator.matchPasswordsValidator]
+      ),
+
       userPosition: new FormControl(null, [Validators.required])
     });
   }
@@ -49,7 +59,8 @@ export class RegistrationFormComponent implements OnInit {
       name: this.registrationForm.get("userName").value,
       surname: this.registrationForm.get("userSurname").value,
       email: this.registrationForm.get("userEmail").value,
-      password: this.registrationForm.get("userPassword").value,
+      password: this.registrationForm.get("passwords").get("userPassword")
+        .value,
       position: this.registrationForm.get("userPosition").value
     };
 
@@ -61,18 +72,17 @@ export class RegistrationFormComponent implements OnInit {
 
         this.localStorageService.storeUserDataOnLocalStorage(responseUserData);
 
-        console.log(this.localStorageService.getUserDataFromLocalStorage());
-
-        this.openSuccessfullyRegisteredDialog(responseUserData.name);
+        this.openSuccessfullyRegisteredDialog(
+          this.localStorageService.getUserDataFromLocalStorage().name
+        );
 
         this.registrationForm.reset();
       },
       error => {
         this.isLoading = false;
 
-        this.localStorageService.storeUserDataOnLocalStorage(inputData);
-
-        console.log(this.localStorageService.getUserDataFromLocalStorage());
+        // TODO сюди треба додати обробку помилки, якщо ще щось сталось, хоча, тут єдиний трабл
+        // це як раз або ВЖЕ ЗАРЕЄСТРОВАНИЙ емейл, або ж трабл з підключенням до сервака ;)
 
         if (error.name !== undefined && error.name !== null) {
           this.openErrorResponseDialog(error.name);

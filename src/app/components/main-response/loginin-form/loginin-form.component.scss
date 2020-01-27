@@ -58,32 +58,7 @@
       }
 
       label {
-        font-weight:bold;
-      }
-
-    }
-
-    // .password-dnt-match {
-    //   align-self: flex-start;
-    // }
-
-    div {
-      .div-for-field {
-        margin: 0.5vw;
-        margin-right: 1.5vw;
-        margin-left: 1.5vw;
-        min-width: fit-content;
-        max-width: 260px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-
-        @media (max-width: 450px) {
-          font-size: 1em;
-          margin: 0.7vw;
-          margin-right: 3.5vw;
-          margin-left: 3.5vw;
-        }
+        font-weight: bold;
       }
     }
 
@@ -132,7 +107,6 @@
       cursor: no-drop;
       // padding: 0.5em;
       // font-size: 1.5em;
-
 
       @media (max-width: 450px) {
         font-size: 1.2em;
