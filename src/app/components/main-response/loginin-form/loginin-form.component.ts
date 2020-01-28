@@ -1,9 +1,7 @@
-import { Component, OnInit, AfterViewInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { IUserData } from "../../../interfaces/user-data";
 import { SignInUpService } from "src/app/services/sign-in-up.service";
-import { SignInUpValidator } from "src/app/validators/sign-in-up.validator";
-import { SuccessfullyRegisteredDialogComponent } from "../successfully-registered-dialog/successfully-registered-dialog.component";
 import { MatDialog } from "@angular/material";
 import { ErrorResponseDialogComponent } from "../error-response-dialog/error-response-dialog.component";
 import { LocalStorageService } from "src/app/services/local-storage.service";
@@ -19,7 +17,6 @@ export class LogininFormComponent implements OnInit {
 
   constructor(
     private signInUpService: SignInUpService,
-    private singInUpValidator: SignInUpValidator,
     public dialog: MatDialog,
     private localStorageService: LocalStorageService
   ) {}
@@ -47,9 +44,6 @@ export class LogininFormComponent implements OnInit {
       },
       errorData => {
         this.isLoading = false;
-
-        // this.getRedBorderEmailInput();
-        // this.getRedBorderPasswordInput();
 
         if (errorData.name !== undefined && errorData.name !== null) {
           this.openErrorResponseDialog(errorData.name);
@@ -88,11 +82,4 @@ export class LogininFormComponent implements OnInit {
       console.log("The dialog was closed");
     });
   }
-
-  // removeRedBorder(inputName: string) {
-  //   if (this.loginInForm.get(inputName).invalid) {
-  //     const emailInput = document.getElementsByName(inputName)[0];
-  //     emailInput.classList.remove("red-border");
-  //   }
-  // }
 }
