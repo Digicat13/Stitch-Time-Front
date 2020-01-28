@@ -1,8 +1,9 @@
 import { FormControl, FormGroup } from "@angular/forms";
 
 export class SignInUpValidator {
+
   nameValidator(control: FormControl): { [key: string]: boolean } {
-    if (control !== null) {
+    if (control !== undefined) {
       let name: string = control.value;
 
       if (name !== null) {
@@ -53,7 +54,7 @@ export class SignInUpValidator {
 
       if (email !== null) {
         email = email.trim().toLowerCase();
-        const regex: RegExp = /^[a-zA-Z](([^=+&#$%!<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        const regex: RegExp = /^[a-zA-Z](([^=+&#$%!<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]#!\.,;:\s@\"]{2,})$/i;
         const isContains = regex.test(email);
         if (isContains) {
           document
@@ -100,13 +101,12 @@ export class SignInUpValidator {
 
     if (password !== null) {
       if (confirmPassword !== null && confirmPassword.length > 0) {
-        console.log(password + " " + confirmPassword);
         if (password !== confirmPassword) {
           document
             .getElementsByName("userConfirmPassword")[0]
             .classList.add("red-border");
 
-          return { passwordsdDoNotMatch: true };
+          return { passwordsDoNotMatch: true };
         }
         document
           .getElementsByName("userConfirmPassword")[0]

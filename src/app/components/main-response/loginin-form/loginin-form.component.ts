@@ -45,7 +45,10 @@ export class LogininFormComponent implements OnInit {
       errorData => {
         this.isLoading = false;
 
-        if (errorData.name !== undefined && errorData.name !== null) {
+        if (
+          errorData.name !== undefined &&
+          errorData.name === "HttpErrorResponse"
+        ) {
           this.openErrorResponseDialog(errorData.name);
         } else if (errorData.message === "email does not registered") {
           this.getRedBorderEmailInput();

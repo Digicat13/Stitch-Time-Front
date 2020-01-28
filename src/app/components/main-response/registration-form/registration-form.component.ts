@@ -16,7 +16,7 @@ import { LocalStorageService } from "src/app/services/local-storage.service";
 export class RegistrationFormComponent implements OnInit {
   registrationForm: FormGroup;
   emailAlreadyRegistered: boolean = false;
-  isLoading = false;
+  isLoading: boolean = false;
 
   constructor(
     private signInUpService: SignInUpService,
@@ -76,6 +76,8 @@ export class RegistrationFormComponent implements OnInit {
           this.localStorageService.getUserDataFromLocalStorage().name
         );
 
+        // TODO доробити
+
         this.registrationForm.reset();
       },
       error => {
@@ -84,7 +86,10 @@ export class RegistrationFormComponent implements OnInit {
         // TODO сюди треба додати обробку помилки, якщо ще щось сталось, хоча, тут єдиний трабл
         // це як раз або ВЖЕ ЗАРЕЄСТРОВАНИЙ емейл, або ж трабл з підключенням до сервака ;)
 
-        if (error.name !== undefined && error.name !== null) {
+        if (
+          error.name !== undefined &&
+          error.name === "HttpErrorResponse"
+        ) {
           this.openErrorResponseDialog(error.name);
         } else {
           this.getRedBorderEmailInput();
