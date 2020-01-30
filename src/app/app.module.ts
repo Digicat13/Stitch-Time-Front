@@ -19,6 +19,8 @@ import { ErrorResponseDialogComponent } from "./components/main-response/error-r
 import { LocalStorageService } from "./services/local-storage.service";
 import { LogininFormComponent } from './components/main-response/loginin-form/loginin-form.component';
 import { HomeComponent } from './components/main-response/home/home.component';
+import { ReportComponent } from './components/main-response/report/report.component';
+import { ReportsComponent } from './components/main-response/reports/reports.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 
 const appRoutes: Routes = [
@@ -36,7 +38,9 @@ const appRoutes: Routes = [
     SuccessfullyRegisteredDialogComponent,
     ErrorResponseDialogComponent,
     LogininFormComponent,
-    HomeComponent
+    HomeComponent,
+    ReportComponent,
+    ReportsComponent
   ],
   imports: [
     BrowserModule,
