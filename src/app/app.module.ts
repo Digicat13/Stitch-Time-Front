@@ -3,7 +3,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { MatDialogModule, MatFormFieldModule } from "@angular/material";
+import { MatDialogModule, MatFormFieldModule, MatNativeDateModule } from "@angular/material";
 import { StorageServiceModule } from "ngx-webstorage-service";
 import { Routes, RouterModule } from "@angular/router";
 
@@ -18,9 +18,13 @@ import { SuccessfullyRegisteredDialogComponent } from "./components/main-respons
 import { ErrorResponseDialogComponent } from "./components/main-response/error-response-dialog/error-response-dialog.component";
 import { LocalStorageService } from "./services/local-storage.service";
 import { LogininFormComponent } from './components/main-response/loginin-form/loginin-form.component';
+import { HomeComponent } from './components/main-response/home/home.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
-const appRoutes: Routes = [{ path: "", component: LogininFormComponent },
-{path: 'registration', component: RegistrationFormComponent }];
+const appRoutes: Routes = [
+  {path: "", component: LogininFormComponent },
+  {path: 'registration', component: RegistrationFormComponent },
+  {path: 'home', component: HomeComponent}];
 
 @NgModule({
   declarations: [
@@ -31,7 +35,8 @@ const appRoutes: Routes = [{ path: "", component: LogininFormComponent },
     LoadingSpinnerComponent,
     SuccessfullyRegisteredDialogComponent,
     ErrorResponseDialogComponent,
-    LogininFormComponent
+    LogininFormComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +47,9 @@ const appRoutes: Routes = [{ path: "", component: LogininFormComponent },
     MatDialogModule,
     MatFormFieldModule,
     StorageServiceModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   entryComponents: [
     SuccessfullyRegisteredDialogComponent,

@@ -1,0 +1,55 @@
+<div class="main">
+  <div class="main-body">
+    <div class="nav-bar">
+      <ul class="nav nav-tabs">
+        <li class="active"><a>Time Reports</a></li>
+        <li><a>Approval</a></li>
+        <li><a>Spent Hours</a></li>
+      </ul>
+    </div>
+    <div class="filter-line">
+      <div class="filter select-block">
+        <span>Project</span>
+        <select>
+          <option *ngFor="let project of projects" [value]="project">{{
+            project
+          }}</option>
+        </select>
+      </div>
+      <div class="filter select-block">
+        <span>Status</span>
+        <select>
+          <option *ngFor="let status of statuses" [value]="status">{{
+            status
+          }}</option>
+        </select>
+      </div>
+      <div class="filter select-block">
+        <span>Billable??</span>
+        <select>
+          <option *ngFor="let project of projects" [value]="project">{{
+            project
+          }}</option>
+        </select>
+      </div>
+    </div>
+    <div>
+      <div class="filter">
+        <span>From</span>
+        <!-- <input [matDatapicker]="myDatepicker"> -->
+        <mat-datepicker #myDatepicker></mat-datepicker>
+      </div>
+    </div>
+    <div>
+      <div class="filter">
+        <span>To</span>
+        <!-- <input [matDatapicker]="myDatepicker"> -->
+        <mat-datepicker #myDatepicker></mat-datepicker>
+      </div>
+    </div>
+
+    <div>
+        
+    </div>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+$background-main:  #cac5b9;
+
+.nav-bar{
+    // margin-top: 5%;
+}
+
+.nav-tabs{
+    margin: 0% 0%;
+}
+
+div{
+    .filter-line{
+        margin: 5% 0%;
+    }
+
+    .filter-header{
+        display:inline;
+        // display: flex;
+    }
+    .select-block{
+     margin: 0% 0% 0% 0%;
+    display: inline;  
+    }
+
+    .filter{
+        // margin-top: 10%;
+        // padding-top: 10%;
+    }
+}
+
+.main{
+    // margin: 0% 5%;
+    background: $background-main;
+}
+
+.main-body{
+    margin: 0% 5% ;
+}
