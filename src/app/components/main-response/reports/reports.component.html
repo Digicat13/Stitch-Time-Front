@@ -1,3 +1,42 @@
-<button (click)="onCreateReportTemplate">Add Report template</button >
-<app-report *ngFor="let report of reports" []>
-</app-report>
+<button (click)="onCreateReportTemplate()">Add Report template</button>
+<form>
+  <select>
+    <option *ngFor="let project of projects" [value]="project">
+      {{ project }}</option>
+  </select>
+  <select>
+    <option *ngFor="let task of tasks" [value]="task">
+      {{ task }}</option>
+  </select>
+</form>
+
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Sender</th>
+      <th scope="col">Project</th>
+      <th scope="col">Task</th>
+      <th scope="col">Time</th>
+      <th scope="col">Overtime</th>
+      <th scope="col">Description</th>
+      <th scope="col">Start date</th>
+      <th scope="col">End date</th>
+      <th scope="col">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let report of reports">
+      <th scope="row">{{ report.sender }}</th>
+      <th scope="row">{{ report.project }}</th>
+      <th scope="row">{{ report.task }}</th>
+      <th scope="row">{{ report.time.hours }}.{{ report.time.minutes }}</th>
+      <th scope="row">
+        {{ report.overtime.hours }}.{{ report.overtime.minutes }}
+      </th>
+      <th scope="row">{{ report.description }}</th>
+      <th scope="row">{{ report.startDate }}</th>
+      <th scope="row">{{ report.endDate }}</th>
+      <th scope="row">{{ report.status }}</th>
+    </tr>
+  </tbody>
+</table>

@@ -8,9 +8,6 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 })
 export class HomeComponent implements OnInit {
 projects: string[] = ["EDU-pr", "MED", "cancerheal", "adasdad"];
-statuses: string[] = ["Opened","Notified", "Accepted", "Declined"];
-
-
 
   constructor() { }
 
