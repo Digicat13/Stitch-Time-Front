@@ -1,5 +1,5 @@
 <button (click)="onCreateReportTemplate()">Add Report template</button>
-<form>
+<!-- <form>
   <select>
     <option *ngFor="let project of projects" [value]="project">
       {{ project }}</option>
@@ -8,8 +8,12 @@
     <option *ngFor="let task of tasks" [value]="task">
       {{ task }}</option>
   </select>
-</form>
+</form> -->
 
+<form 
+    [formGroup]="reportForm"
+    (ngSubmit)="onSubmit()"
+    >
 <table class="table">
   <thead class="thead-light">
     <tr>
@@ -26,17 +30,103 @@
   </thead>
   <tbody>
     <tr *ngFor="let report of reports">
-      <th scope="row">{{ report.sender }}</th>
-      <th scope="row">{{ report.project }}</th>
-      <th scope="row">{{ report.task }}</th>
-      <th scope="row">{{ report.time.hours }}.{{ report.time.minutes }}</th>
-      <th scope="row">
+      <td scope="row">{{ report.sender }}</td>
+      <td scope="row">{{ report.project }}</td>
+      <td scope="row">{{ report.task }}</td>
+      <td scope="row">{{ report.time.hours }}.{{ report.time.minutes }}</td>
+      <td scope="row">
         {{ report.overtime.hours }}.{{ report.overtime.minutes }}
-      </th>
-      <th scope="row">{{ report.description }}</th>
-      <th scope="row">{{ report.startDate }}</th>
-      <th scope="row">{{ report.endDate }}</th>
-      <th scope="row">{{ report.status }}</th>
+      </td>
+      <td scope="row">{{ report.description }}</td>
+      <td scope="row">{{ report.startDate }}</td>
+      <td scope="row">{{ report.endDate }}</td>
+      <td scope="row">
+          {{ report.status }} 
+          <button 
+          class="btn"
+          *ngIf="report.status==='opened'" 
+          (click)="onNotify(report)"
+          >Notify</button ></td>
+      <td> 
+          <button 
+          class="btn" 
+          *ngIf="report.status==='opened'"
+         (click)="onEditReport(report)">Edit</button></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <select 
+            class="form-control"
+            formControlName="projectControl"
+            name="projectControl"
+            >
+                <option *ngFor="let project of projects" [value]="project">
+                  {{ project }}</option>
+              </select>
+        </td>
+        <td>
+            <select
+            class="form-control"
+            formControlName="taskControl"
+            name="taskControl"
+            >
+                <option *ngFor="let task of tasks" [value]="task">
+                  {{ task }}</option>
+            </select
+            >
+        </td>
+        <td>
+            <input 
+            class="form-control"
+            type="time"
+            value="00:00"
+            formControlName="timeControl"
+            name="timeControl"
+            >
+        </td>
+        <td>
+            <input 
+            class="form-control"
+            type="time"
+            formControlName="overtimeControl"
+            name="overtimeControl"
+            value="00:00"
+            >
+        </td>
+        <td>
+            <textarea
+            class="form-control"
+            formControlName="descriptionControl"
+            name="descriptionControl"
+            >
+            </textarea
+            >
+        </td>
+        <td>
+            <input 
+            class="form-control"
+            type="date"
+            formControlName="startDateControl"
+            name="startDateControl"
+            >
+        </td>
+        <td>
+            <input 
+            class="form-control"
+            type="date"
+            formControlName="endDateControl"
+            name="endDateControl"
+            >
+        </td>
+        <td>
+            <input
+             class="btn"
+             type="submit"
+             value="Add report"
+             >
+        </td>
+        
     </tr>
   </tbody>
 </table>
+</form>
