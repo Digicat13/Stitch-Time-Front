@@ -1,14 +1,9 @@
 import {
   Component,
   OnInit,
-  ɵɵNgOnChangesFeature,
-  OnChanges,
-  DoCheck
 } from "@angular/core";
-import { Time, DatePipe } from "@angular/common";
 import { IReportData } from "src/app/interfaces/report-data";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { DateAdapter, MatDatepicker } from "@angular/material";
 import * as moment from "moment";
 
 @Component({
@@ -105,14 +100,14 @@ export class ReportsComponent implements OnInit {
   onNotify(report: IReportData) {
     const index: number = this.reports.indexOf(report);
     if (index !== -1) {
-      this.reports[index].status = "notified";
+      this.reports[index].status = 'notified';
     }
   }
 
   // patching default values(html value doesnt work)
   resetFormTimeDate() {
     const date = moment().format("YYYY-MM-DD");
-    this.reportForm.patchValue({ timeControl: "00:00" });
+    this.reportForm.patchValue({ timeControl: "01:00" });
     this.reportForm.patchValue({ overtimeControl: "00:00" });
     this.reportForm.patchValue({ startDateControl: date });
     this.reportForm.patchValue({ endDateControl: date });

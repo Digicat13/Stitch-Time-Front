@@ -11,6 +11,7 @@
         <th scope="col">Start date</th>
         <th scope="col">End date</th>
         <th scope="col">Status</th>
+        <th scope="col" width="10%"></th>
       </tr>
     </thead>
     <tbody>
@@ -19,29 +20,26 @@
         <td scope="row">{{ report.project }}</td>
         <td scope="row">{{ report.task }}</td>
         <td scope="row">
-          {{
-              getTimeString(report.time.hours, report.time.minutes)          
-          }}
+          {{ getTimeString(report.time.hours, report.time.minutes) }}
         </td>
         <td scope="row">
-            {{
-                getTimeString(report.overtime.hours, report.overtime.minutes)  
-          }}
+          {{ getTimeString(report.overtime.hours, report.overtime.minutes) }}
         </td>
         <td scope="row">{{ report.description }}</td>
         <td scope="row">{{ report.startDate }}</td>
         <td scope="row">{{ report.endDate }}</td>
-        <td scope="row">
-          {{ report.status }}
-          <button
-            class="btn"
-            *ngIf="report.status === 'opened'"
-            (click)="onNotify(report)"
-          >
-            Notify
-          </button>
+        <td scope="row"
+        [ngClass]="{
+            'alert-info': report.status == 'notified',
+            'alert-warning': report.status == 'opened',
+            'alert-danger': report.status == 'declined',
+            'alert-success': report.status == 'approved'
+          }">
+       <div class="status">
+           <span> {{ report.status }}</span>
+        </div>
         </td>
-        <td>
+        <td class="status">
           <button
             class="btn"
             *ngIf="report.status === 'opened'"
@@ -49,6 +47,13 @@
           >
             Edit
           </button>
+          <button
+          class="btn"
+          *ngIf="report.status === 'opened'"
+          (click)="onNotify(report)"
+        >
+          Notify
+        </button>
         </td>
       </tr>
       <tr>
@@ -100,8 +105,9 @@
             name="descriptionControl"
             [ngClass]="{
               'alert-danger':
-                reportForm.get('descriptionControl').value === '' &&
-                reportForm.get('descriptionControl').invalid
+                (reportForm.get('descriptionControl').touched &&
+                  !reportForm.get('descriptionControl').dirty) ||
+                reportForm.get('descriptionControl').value === ''
             }"
             placeholder="enter description"
           >
@@ -125,6 +131,7 @@
             required
           />
         </td>
+        <td></td>
         <td>
           <input
             class="btn"
