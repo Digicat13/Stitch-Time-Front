@@ -1,4 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ɵɵNgOnChangesFeature,
+  OnChanges,
+  DoCheck
+} from "@angular/core";
 import { Time, DatePipe } from "@angular/common";
 import { IReportData } from "src/app/interfaces/report-data";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
@@ -28,11 +34,13 @@ export class ReportsComponent implements OnInit {
       overtimeControl: new FormControl(null, Validators.required),
       descriptionControl: new FormControl(null, Validators.required),
       startDateControl: new FormControl(null, Validators.required),
-      endDateControl: new FormControl(null, Validators.required),
-      statusControl: new FormControl(null, Validators.required)
+      endDateControl: new FormControl(null, Validators.required)
     });
+
+    this.resetFormTimeDate();
   }
 
+  // pushing new report to array
   onSubmit() {
     const timeDate = this.timeToDate(this.reportForm.get("timeControl").value);
     const overtimeDate = this.timeToDate(
@@ -55,23 +63,11 @@ export class ReportsComponent implements OnInit {
 
     this.reports.push(reportData);
     this.reportForm.reset();
+    this.resetFormTimeDate();
   }
 
-  onCreateReportTemplate() {
-    const report: IReportData = {
-      sender: "dev",
-      project: "edu",
-      task: "testing",
-      time: { hours: 3, minutes: 30 },
-      overtime: { hours: 2, minutes: 0 },
-      description: "Creating a report",
-      startDate: "13.01.2020",
-      endDate: "14.01.2020",
-      status: "approved"
-    };
-    this.reports.push(report);
-  }
-
+  // converting string "00:00" to date format with default date
+  // (to take hours and minutes)
   timeToDate(time: string) {
     time = time === null ? "00:00" : time;
     const date = "2020-02-08";
@@ -79,11 +75,17 @@ export class ReportsComponent implements OnInit {
     return today;
   }
 
+  // delete current report from array, set its values on form
   onEditReport(report: IReportData) {
     this.reportForm.reset();
-    const time: string = report.time.hours + ":" + report.time.minutes;
-    const overtime: string =
-      report.overtime.hours + ":" + report.overtime.minutes;
+    const time: string = this.getTimeString(
+      report.time.hours,
+      report.time.minutes
+    );
+    const overtime: string = this.getTimeString(
+      report.overtime.hours,
+      report.overtime.minutes
+    );
 
     this.reportForm.patchValue({ projectControl: report.project });
     this.reportForm.patchValue({ taskControl: report.task });
@@ -99,10 +101,27 @@ export class ReportsComponent implements OnInit {
     }
   }
 
+  // change report status
   onNotify(report: IReportData) {
     const index: number = this.reports.indexOf(report);
     if (index !== -1) {
-      this.reports[index].status="notified";
-    } 
+      this.reports[index].status = "notified";
+    }
+  }
+
+  // patching default values(html value doesnt work)
+  resetFormTimeDate() {
+    const date = moment().format("YYYY-MM-DD");
+    this.reportForm.patchValue({ timeControl: "00:00" });
+    this.reportForm.patchValue({ overtimeControl: "00:00" });
+    this.reportForm.patchValue({ startDateControl: date });
+    this.reportForm.patchValue({ endDateControl: date });
+  }
+
+  getTimeString(hours: number, minutes: number) {
+    const hour: string = hours < 10 ? "0" + hours : "" + hours;
+    const min: string = minutes < 10 ? "0" + minutes : "" + minutes;
+    const time: string = hour + ":" + min;
+    return time;
   }
 }

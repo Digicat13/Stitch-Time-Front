@@ -38,7 +38,6 @@ const appRoutes: Routes = [
     ErrorResponseDialogComponent,
     LogininFormComponent,
     HomeComponent,
-    ReportComponent,
     ReportsComponent
   ],
   imports: [
