@@ -17,9 +17,7 @@ export class ReportsComponent implements OnInit {
   reports: Array<IReportData> = new Array<IReportData>();
   reportForm: FormGroup;
 
-  constructor(
-    private reportHttpService: ReportHttpService
-    ) {}
+  constructor(private reportHttpService: ReportHttpService) {}
 
   ngOnInit() {
     this.reportForm = new FormGroup({
@@ -32,7 +30,7 @@ export class ReportsComponent implements OnInit {
       endDateControl: new FormControl(null, Validators.required)
     });
 
-    this.resetFormTimeDate(); 
+    this.resetFormTimeDate();
   }
 
   // pushing new report to array

@@ -19,7 +19,7 @@ import { ErrorResponseDialogComponent } from "./components/main-response/error-r
 import { LocalStorageService } from "./services/local-storage.service";
 import { LogininFormComponent } from './components/main-response/loginin-form/loginin-form.component';
 import { HomeComponent } from './components/main-response/home/home.component';
-import { ReportsComponent } from './components/main-response/reports/reports.component';
+import { ReportsComponent } from './components/main-response/home/reports/reports.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { ReportHttpService } from './services/report-http.service';
 
