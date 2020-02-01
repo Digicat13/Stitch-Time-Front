@@ -21,6 +21,7 @@ import { LogininFormComponent } from './components/main-response/loginin-form/lo
 import { HomeComponent } from './components/main-response/home/home.component';
 import { ReportsComponent } from './components/main-response/reports/reports.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import { ReportHttpService } from './services/report-http.service';
 
 const appRoutes: Routes = [
   {path: "", component: LogininFormComponent },
@@ -57,7 +58,7 @@ const appRoutes: Routes = [
     SuccessfullyRegisteredDialogComponent,
     ErrorResponseDialogComponent
   ],
-  providers: [SignInUpService, SignInUpValidator, LocalStorageService],
+  providers: [SignInUpService, SignInUpValidator, LocalStorageService, ReportHttpService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

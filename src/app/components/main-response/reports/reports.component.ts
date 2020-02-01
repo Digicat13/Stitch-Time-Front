@@ -1,10 +1,8 @@
-import {
-  Component,
-  OnInit,
-} from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { IReportData } from "src/app/interfaces/report-data";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import * as moment from "moment";
+import { ReportHttpService } from "src/app/services/report-http.service";
 
 @Component({
   selector: "app-reports",
@@ -19,7 +17,9 @@ export class ReportsComponent implements OnInit {
   reports: Array<IReportData> = new Array<IReportData>();
   reportForm: FormGroup;
 
-  constructor() {}
+  constructor(
+    private reportHttpService: ReportHttpService
+    ) {}
 
   ngOnInit() {
     this.reportForm = new FormGroup({
@@ -32,7 +32,7 @@ export class ReportsComponent implements OnInit {
       endDateControl: new FormControl(null, Validators.required)
     });
 
-    this.resetFormTimeDate();
+    this.resetFormTimeDate(); 
   }
 
   // pushing new report to array
@@ -56,7 +56,16 @@ export class ReportsComponent implements OnInit {
       status: "opened"
     };
 
+    // pushing into local array, sending request
     this.reports.push(reportData);
+    this.reportHttpService.postReport(reportData).subscribe(
+      (data: IReportData) => {
+        console.log(data);
+      },
+      error => console.log(error)
+    );
+
+    // reseting form
     this.reportForm.reset();
     this.resetFormTimeDate();
   }
@@ -100,7 +109,7 @@ export class ReportsComponent implements OnInit {
   onNotify(report: IReportData) {
     const index: number = this.reports.indexOf(report);
     if (index !== -1) {
-      this.reports[index].status = 'notified';
+      this.reports[index].status = "notified";
     }
   }
 
