@@ -126,4 +126,10 @@ export class ReportsComponent implements OnInit {
     const time: string = hour + ":" + min;
     return time;
   }
+
+  
+onGet() {
+  this.reportHttpService.getData().subscribe((data)=>console.log(data));
+}
+
 }
