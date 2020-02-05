@@ -4,8 +4,8 @@ export interface IReportData {
     sender?: string;
     project?: string;
     task?: string;
-    time?: Time;
-    overtime?: Time;
+    time?: number;
+    overtime?: number;
     description?: string;
     startDate?: string;
     endDate?: string;

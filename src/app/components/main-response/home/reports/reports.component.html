@@ -19,12 +19,8 @@
         <td scope="row">{{ report.sender }}</td>
         <td scope="row">{{ report.project }}</td>
         <td scope="row">{{ report.task }}</td>
-        <td scope="row">
-          {{ getTimeString(report.time.hours, report.time.minutes) }}
-        </td>
-        <td scope="row">
-          {{ getTimeString(report.overtime.hours, report.overtime.minutes) }}
-        </td>
+        <td scope="row">{{report.time }}</td>
+        <td scope="row">{{ report.overtime }}</td>
         <td scope="row">{{ report.description }}</td>
         <td scope="row">{{ report.startDate }}</td>
         <td scope="row">{{ report.endDate }}</td>
@@ -79,30 +75,28 @@
           </select>
         </td>
         <td>
-          <!-- <input type=number min="1" value="1" step="1">
-          <span>.</span>
-          <select>
-            <option>0</option>
-            <option>5</option>
-          </select> -->
           <input
-            class="form-control"
-            type="time"
-            value="00:00"
-            formControlName="timeControl"
-            name="timeControl"
-            required
-          />
+          class="form-control"
+          formControlName="timeControl" 
+          type=text
+          pattern="^(([1-9][0-9]?)|(0))((\.(?=0|5)+(0|5))?)$"
+          name="timeControl"
+          [ngClass]="{
+            'alert-danger': reportForm.get('timeControl').invalid
+          }"
+          required>
         </td>
         <td>
-          <input
-            class="form-control"
-            type="time"
-            formControlName="overtimeControl"
-            name="overtimeControl"
-            value="00:00"
-            required
-          />
+          <input      
+          class="form-control"
+          formControlName="overtimeControl" 
+          type=text
+          pattern="^(([1-9][0-9]?)|(0))((\.(?=0|5)+(0|5))?)$"
+          name="overtimeControl"
+          [ngClass]="{
+            'alert-danger': reportForm.get('overtimeControl').invalid
+          }"
+          required>
         </td>
         <td>
           <textarea
@@ -125,6 +119,9 @@
             type="date"
             formControlName="startDateControl"
             name="startDateControl"
+            [ngClass]="{
+              'alert-danger': reportForm.get('startDateControl').invalid
+            }"
             required
           />
         </td>
@@ -134,6 +131,9 @@
             type="date"
             formControlName="endDateControl"
             name="endDateControl"
+            [ngClass]="{
+              'alert-danger': reportForm.get('endDateControl').invalid
+            }"
             required
           />
         </td>
