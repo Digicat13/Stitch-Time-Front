@@ -52,7 +52,7 @@ export class ReportsComponent implements OnInit {
     this.reports.push(reportData);
 
     // posting data
-    // this.reportHttpService.postReport(reportData).subscribe(
+    // this.reportHttpService.postData(reportData).subscribe(
     //   (data: IReportData) => {
     //     console.log(data);
     //   },
