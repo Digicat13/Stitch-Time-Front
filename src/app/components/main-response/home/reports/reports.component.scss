@@ -1,16 +1,17 @@
-$color-opened: 'yellow';
-$color-notified: 'skyblue';
-$color-approved: 'green';
-$color-declined: 'red';
+@import url("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css");
+
+$color-opened: "yellow";
+$color-notified: "skyblue";
+$color-approved: "green";
+$color-declined: "red";
 $color-theme: #ca5c50;
 
-.status{
- button{
+
+ .btn-custom {
     background-color: $color-theme;
     color: white;
-    font-size: 10pt;
-    padding: 3px;
-    margin: 2px;
- }
+   //  font-size: 10pt;
+   //  padding: 3px;
+   //  margin: 2px;
+  }
 
-}

@@ -45,7 +45,7 @@ export class ReportHttpService {
   }
 
   getData() {
-    return this.http.get<IReports>(this.apiUrl);
+    return this.http.get<IReportData[]>(this.apiUrl);
   }
 
   putData(report: IReportData, id) {

@@ -9,6 +9,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import * as moment from "moment";
 import { ReportHttpService } from "src/app/services/report-http.service";
 import { Time } from "@angular/common";
+import "bootstrap/dist/js/bootstrap.bundle";
 
 @Component({
   selector: "app-reports",
@@ -90,7 +91,7 @@ export class ReportsComponent implements OnInit {
   }
 
   // delete current report from array, set its values on form
-  onEditReport(report: IReportData) {
+  onEdit(report: IReportData) {
     this.reportForm.reset();
 
     this.reportForm.patchValue({ projectControl: report.projectId });
@@ -127,20 +128,34 @@ export class ReportsComponent implements OnInit {
   }
 
   onGet() {
-    this.reportHttpService.getData().subscribe(data => console.log(data));
+    this.reportHttpService.getData().subscribe(data => {
+      console.log(data);
+      this.reports = data;
+    });
   }
 
-  getProjectById(id : number){
-    return this.projects.find(project => project.id == id ).name;
+  onDelete(report: IReportData) {
+    if (!report.id) {
+      alert("Report id is" + report.id);
+    } else {
+      this.reportHttpService.deleteData(report.id).subscribe(
+        (data: IReportData) => {
+          console.log(data);
+        },
+        error => console.log(error)
+      );
+    }
   }
 
-  getTaskById(id : number){
-    return this.tasks.find(task => task.id == id ).name;
+  getProjectById(id: number) {
+    return this.projects.find(project => project.id == id).name;
   }
 
-  getStatusById(id : number){
-    
-    return this.statuses.find(status => status.id == id ).name;
+  getTaskById(id: number) {
+    return this.tasks.find(task => task.id == id).name;
   }
 
+  getStatusById(id: number) {
+    return this.statuses.find(status => status.id == id).name;
+  }
 }

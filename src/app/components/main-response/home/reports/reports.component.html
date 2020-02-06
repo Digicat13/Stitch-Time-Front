@@ -32,25 +32,30 @@
           'alert-success': getStatusById(report.statusId) == 'Approved'
         }"
        >
-       <div class="status">
+       <div>
            <span> {{ getStatusById(report.statusId) }}</span>
         </div>
         </td>
-        <td class="status">
-          <button
-            class="btn"
-            *ngIf="getStatusById(report.statusId) == 'Opened'"
-            (click)="onEditReport(report)"
-          >
-            Edit
-          </button>
-          <button
-          class="btn"
-          *ngIf="getStatusById(report.statusId) == 'Opened'"
-          (click)="onNotify(report)"
-        >
-          Notify
-        </button>
+        <td>
+          <div class="dropdown" 
+          *ngIf="getStatusById(report.statusId) == 'Opened'">
+            <button type="button" class="btn btn-custom dropdown-toggle status" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Edit
+            </button>
+            <div class="dropdown-menu">
+              <button 
+                class="dropdown-item" 
+                type="button" 
+                (click)="onEdit(report)">Edit</button>
+              <button 
+              class="dropdown-item" 
+              type="button" (click)="onNotify(report)">Notify</button>
+              <button 
+              class="dropdown-item" 
+              type="button"
+              (click)="onDelete(report)">Delete</button>
+            </div>
+          </div>  
         </td>
       </tr>
       <tr>
@@ -146,7 +151,7 @@
         <td></td>
         <td>
           <input
-            class="btn"
+            class="btn btn-custom"
             type="submit"
             value="Add report"
             [disabled]="reportForm.invalid"
