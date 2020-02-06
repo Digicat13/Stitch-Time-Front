@@ -16,40 +16,46 @@
     </thead>
     <tbody>
       <tr *ngFor="let report of reports">
-        <td scope="row">{{ report.sender }}</td>
-        <td scope="row">{{ report.project }}</td>
-        <td scope="row">{{ report.task }}</td>
-        <td scope="row">{{report.time }}</td>
+        <td scope="row">{{ report.userId }}</td>
+        <td scope="row">{{ getProjectById(report.projectId) }}</td>
+        <td scope="row">{{ getTaskById(report.assignmentId) }}</td>
+        <td scope="row">{{ report.time }}</td>
         <td scope="row">{{ report.overtime }}</td>
         <td scope="row">{{ report.description }}</td>
         <td scope="row">{{ report.startDate }}</td>
         <td scope="row">{{ report.endDate }}</td>
         <td scope="row"
         [ngClass]="{
-            'alert-info': report.status == 'notified',
-            'alert-warning': report.status == 'opened',
-            'alert-danger': report.status == 'declined',
-            'alert-success': report.status == 'approved'
-          }">
-       <div class="status">
-           <span> {{ report.status }}</span>
+          'alert-info': getStatusById(report.statusId) == 'Notified',
+          'alert-warning': getStatusById(report.statusId) == 'Opened',
+          'alert-danger': getStatusById(report.statusId) == 'Declined',
+          'alert-success': getStatusById(report.statusId) == 'Approved'
+        }"
+       >
+       <div>
+           <span> {{ getStatusById(report.statusId) }}</span>
         </div>
         </td>
-        <td class="status">
-          <button
-            class="btn"
-            *ngIf="report.status === 'opened'"
-            (click)="onEditReport(report)"
-          >
-            Edit
-          </button>
-          <button
-          class="btn"
-          *ngIf="report.status === 'opened'"
-          (click)="onNotify(report)"
-        >
-          Notify
-        </button>
+        <td>
+          <div class="dropdown" 
+          *ngIf="getStatusById(report.statusId) == 'Opened'">
+            <button type="button" class="btn btn-custom dropdown-toggle status" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Edit
+            </button>
+            <div class="dropdown-menu">
+              <button 
+                class="dropdown-item" 
+                type="button" 
+                (click)="onEdit(report)">Edit</button>
+              <button 
+              class="dropdown-item" 
+              type="button" (click)="onNotify(report)">Notify</button>
+              <button 
+              class="dropdown-item" 
+              type="button"
+              (click)="onDelete(report)">Delete</button>
+            </div>
+          </div>  
         </td>
       </tr>
       <tr>
@@ -60,7 +66,10 @@
             name="projectControl"
           >
             <option value="-1" hidden selected>Choose a project</option>
-            <option *ngFor="let project of projects"> {{ project }}</option>
+            <option *ngFor="let project of projects"
+            [value]='project.id'
+            > 
+              {{ project.name }}</option>
           </select>
         </td>
         <td>
@@ -71,7 +80,9 @@
             required
           >
             <option value="-1" hidden selected>Choose a task</option>
-            <option *ngFor="let task of tasks"> {{ task }}</option>
+            <option *ngFor="let task of tasks"
+            [value]='task.id'
+            > {{ task.name }}</option>
           </select>
         </td>
         <td>
@@ -140,7 +151,7 @@
         <td></td>
         <td>
           <input
-            class="btn"
+            class="btn btn-custom"
             type="submit"
             value="Add report"
             [disabled]="reportForm.invalid"
