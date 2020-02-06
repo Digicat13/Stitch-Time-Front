@@ -1,5 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { IReportData } from "src/app/interfaces/report-data";
+import {
+  IReportData,
+  IProject,
+  IAssignment,
+  IStatus
+} from "src/app/interfaces/report-data";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import * as moment from "moment";
 import { ReportHttpService } from "src/app/services/report-http.service";
@@ -11,9 +16,30 @@ import { Time } from "@angular/common";
   styleUrls: ["./reports.component.scss"]
 })
 export class ReportsComponent implements OnInit {
-  projects: string[] = ["EDU-pr", "MED", "cancerheal", "adasdad"];
-  tasks: string[] = ["bug fixing", "testing", "dev", "design"];
-  statuses: string[] = ["Opened", "Notified", "Accepted", "Declined"];
+  // projects: string[] = ["EDU-pr", "MED", "cancerheal", "adasdad"];
+  // tasks: string[] = ["bug fixing", "testing", "dev", "design"];
+  // statuses: string[] = ["Opened", "Notified", "Accepted", "Declined"];
+
+  projects: Array<IProject> = [
+    { id: 1, name: "EDU-pr", projectManagerId: 5 },
+    { id: 3, name: "MED", projectManagerId: 5 },
+    { id: 2, name: "adasdasd", projectManagerId: 5 },
+    { id: 4, name: "cancerheal", projectManagerId: 5 }
+  ];
+
+  tasks: Array<IAssignment> = [
+    { id: 1, name: "bug fixing" },
+    { id: 2, name: "testing" },
+    { id: 3, name: "dev" },
+    { id: 4, name: "design" }
+  ];
+
+  statuses: Array<IStatus> = [
+    { id: 1, name: "Opened" },
+    { id: 2, name: "Notified" },
+    { id: 3, name: "Accepted" },
+    { id: 4, name: "Declined" }
+  ];
 
   reports: Array<IReportData> = new Array<IReportData>();
   reportForm: FormGroup;
@@ -36,16 +62,15 @@ export class ReportsComponent implements OnInit {
 
   // pushing new report to array
   onSubmit() {
-
-     const reportData: IReportData = {
-      project: this.reportForm.get("projectControl").value,
-      task: this.reportForm.get("taskControl").value,
+    const reportData: IReportData = {
+      projectId: this.reportForm.get("projectControl").value,
+      assignmentId: this.reportForm.get("taskControl").value,
       time: this.reportForm.get("timeControl").value,
       overtime: this.reportForm.get("overtimeControl").value,
       description: this.reportForm.get("descriptionControl").value,
       startDate: this.reportForm.get("startDateControl").value,
       endDate: this.reportForm.get("endDateControl").value,
-      status: "opened"
+      statusId: this.statuses.find(status => status.name === "Opened").id
     };
 
     // pushing into local array, sending request
@@ -68,8 +93,8 @@ export class ReportsComponent implements OnInit {
   onEditReport(report: IReportData) {
     this.reportForm.reset();
 
-    this.reportForm.patchValue({ projectControl: report.project });
-    this.reportForm.patchValue({ taskControl: report.task });
+    this.reportForm.patchValue({ projectControl: report.projectId });
+    this.reportForm.patchValue({ taskControl: report.assignmentId });
     this.reportForm.patchValue({ timeControl: report.time });
     this.reportForm.patchValue({ overtimeControl: report.overtime });
     this.reportForm.patchValue({ descriptionControl: report.description });
@@ -86,7 +111,9 @@ export class ReportsComponent implements OnInit {
   onNotify(report: IReportData) {
     const index: number = this.reports.indexOf(report);
     if (index !== -1) {
-      this.reports[index].status = "notified";
+      this.reports[index].statusId = this.statuses.find(
+        status => status.name === "Notified"
+      ).id;
     }
   }
 
@@ -102,4 +129,18 @@ export class ReportsComponent implements OnInit {
   onGet() {
     this.reportHttpService.getData().subscribe(data => console.log(data));
   }
+
+  getProjectById(id : number){
+    return this.projects.find(project => project.id == id ).name;
+  }
+
+  getTaskById(id : number){
+    return this.tasks.find(task => task.id == id ).name;
+  }
+
+  getStatusById(id : number){
+    
+    return this.statuses.find(status => status.id == id ).name;
+  }
+
 }

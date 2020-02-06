@@ -62,11 +62,11 @@ export class ReportHttpService {
     };
 
 
-    return this.http.put(this.apiUrl + '/' + {id}, body);
+    return this.http.put(this.apiUrl + '/' + {id}, report);
   }
 
   patchData(report: IReportData, id){
-    return this.http.patch(this.apiUrl + '/' + {id}, body);
+    return this.http.patch(this.apiUrl + '/' + {id}, report);
   }
 
   deleteData(id: number):Observable<any>{
