@@ -40,7 +40,7 @@ export class LogininFormComponent implements OnInit {
       responseData => {
         this.isLoading = false;
 
-        this.localStorageService.storeUserDataOnLocalStorage(responseData);
+        // this.localStorageService.storeUserDataOnLocalStorage(responseData);
       },
       errorData => {
         this.isLoading = false;
