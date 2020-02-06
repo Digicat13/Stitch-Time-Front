@@ -70,7 +70,7 @@ export class RegistrationFormComponent implements OnInit {
       responseUserData => {
         this.isLoading = false;
 
-        this.localStorageService.storeUserDataOnLocalStorage(responseUserData);
+        // this.localStorageService.storeUserDataOnLocalStorage(responseUserData);
 
         this.openSuccessfullyRegisteredDialog(
           this.localStorageService.getUserDataFromLocalStorage().name
