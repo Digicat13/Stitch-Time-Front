@@ -27,10 +27,10 @@ export class ReportsComponent implements OnInit {
   tasks: Array<IAssignment> = [{ id: 1, name: "Developing" }];
 
   statuses: Array<IStatus> = [
-    { id: 1, name: "Opened" },
+    { id: 4, name: "Opened" },
     { id: 2, name: "Notified" },
     { id: 3, name: "Accepted" },
-    { id: 4, name: "Declined" }
+    { id: 1, name: "Declined" }
   ];
 
   reports: Array<IReportData> = new Array<IReportData>();

@@ -8,7 +8,7 @@ import { Observable } from "rxjs";
 export class ReportHttpService {
   constructor(private http: HttpClient) {}
 
-  apiUrl: string = environment.apiUrl;
+  apiUrl: string = environment.apiUrl + '/Report';
 
   postData(reportData: IReportData) {
     // maybe better just send reportData, without creating new object
@@ -28,11 +28,11 @@ export class ReportHttpService {
     // console.log(body);
     console.log(reportData);
 
-    return this.http.post<IReportData>(environment.apiUrl + "/report", reportData);
+    return this.http.post<IReportData>(this.apiUrl, reportData);
   }
 
   getData() {
-    return this.http.get<IReportData[]>(environment.apiUrl + "/report");
+    return this.http.get<IReportData[]>(this.apiUrl);
   }
 
   putData(report: IReportData, id) {
@@ -48,14 +48,16 @@ export class ReportHttpService {
       statusId: 4
     };
 
-    return this.http.put(this.apiUrl + "/" + { id }, report);
+
+    return this.http.put(this.apiUrl + "/" +  id , report);
   }
 
   patchData(report: IReportData, id) {
-    return this.http.patch(this.apiUrl + "/" + { id }, report);
+    return this.http.patch(this.apiUrl + "/" +  id , report);
   }
 
   deleteData(id: number): Observable<any> {
-    return this.http.delete<IReportData>(environment.apiUrl + "/report/" +  id );
+    return this.http.delete<IReportData>(this.apiUrl + "/" +  id );
+
   }
 }
