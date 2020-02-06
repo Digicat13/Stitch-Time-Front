@@ -24,38 +24,57 @@
         <td scope="row">{{ report.description }}</td>
         <td scope="row">{{ report.startDate }}</td>
         <td scope="row">{{ report.endDate }}</td>
-        <td scope="row"
-        [ngClass]="{
-          'alert-info': getStatusById(report.statusId) == 'Notified',
-          'alert-warning': getStatusById(report.statusId) == 'Opened',
-          'alert-danger': getStatusById(report.statusId) == 'Declined',
-          'alert-success': getStatusById(report.statusId) == 'Approved'
-        }"
-       >
-       <div>
-           <span> {{ getStatusById(report.statusId) }}</span>
-        </div>
+        <td
+          scope="row"
+          [ngClass]="{
+            'alert-info': getStatusById(report.statusId) == 'Notified',
+            'alert-warning': getStatusById(report.statusId) == 'Opened',
+            'alert-danger': getStatusById(report.statusId) == 'Declined',
+            'alert-success': getStatusById(report.statusId) == 'Approved'
+          }"
+        >
+          <div>
+            <span> {{ getStatusById(report.statusId) }}</span>
+          </div>
         </td>
         <td>
-          <div class="dropdown" 
-          *ngIf="getStatusById(report.statusId) == 'Opened'">
-            <button type="button" class="btn btn-custom dropdown-toggle status" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <div
+            class="dropdown"
+            *ngIf="getStatusById(report.statusId) == 'Opened'"
+          >
+            <button
+              type="button"
+              class="btn btn-custom dropdown-toggle status"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
               Edit
             </button>
             <div class="dropdown-menu">
-              <button 
-                class="dropdown-item" 
-                type="button" 
-                (click)="onEdit(report)">Edit</button>
-              <button 
-              class="dropdown-item" 
-              type="button" (click)="onNotify(report)">Notify</button>
-              <button 
-              class="dropdown-item" 
-              type="button"
-              (click)="onDelete(report)">Delete</button>
+              <button
+                class="dropdown-item"
+                type="button"
+                (click)="onEdit(report)"
+              >
+                Edit
+              </button>
+              <button
+                class="dropdown-item"
+                type="button"
+                (click)="onNotify(report)"
+              >
+                Notify
+              </button>
+              <button
+                class="dropdown-item"
+                type="button"
+                (click)="onDelete(report)"
+              >
+                Delete
+              </button>
             </div>
-          </div>  
+          </div>
         </td>
       </tr>
       <tr>
@@ -66,10 +85,9 @@
             name="projectControl"
           >
             <option value="-1" hidden selected>Choose a project</option>
-            <option *ngFor="let project of projects"
-            [value]='project.id'
-            > 
-              {{ project.name }}</option>
+            <option *ngFor="let project of projects" [value]="project.id">
+              {{ project.name }}</option
+            >
           </select>
         </td>
         <td>
@@ -80,34 +98,40 @@
             required
           >
             <option value="-1" hidden selected>Choose a task</option>
-            <option *ngFor="let task of tasks"
-            [value]='task.id'
-            > {{ task.name }}</option>
+            <option *ngFor="let task of tasks" [value]="task.id">
+              {{ task.name }}</option
+            >
           </select>
         </td>
         <td>
           <input
-          class="form-control"
-          formControlName="timeControl" 
-          type=text
-          pattern="^(([1-9][0-9]?)|(0))((\.(?=0|5)+(0|5))?)$"
-          name="timeControl"
-          [ngClass]="{
-            'alert-danger': reportForm.get('timeControl').invalid
-          }"
-          required>
+            class="form-control"
+            formControlName="timeControl"
+            type="number"
+            min="0"
+            step="0.5"
+            pattern="^(([1-9][0-9]?)|(0))((\.(?=0|5)+(0|5))?)$"
+            name="timeControl"
+            [ngClass]="{
+              'alert-danger': reportForm.get('timeControl').invalid
+            }"
+            required
+          />
         </td>
         <td>
-          <input      
-          class="form-control"
-          formControlName="overtimeControl" 
-          type=text
-          pattern="^(([1-9][0-9]?)|(0))((\.(?=0|5)+(0|5))?)$"
-          name="overtimeControl"
-          [ngClass]="{
-            'alert-danger': reportForm.get('overtimeControl').invalid
-          }"
-          required>
+          <input
+            class="form-control"
+            formControlName="overtimeControl"
+            type="number"
+            min="0"
+            step="0.5"
+            pattern="^(([1-9][0-9]?)|(0))((\.(?=0|5)+(0|5))?)$"
+            name="overtimeControl"
+            [ngClass]="{
+              'alert-danger': reportForm.get('overtimeControl').invalid
+            }"
+            required
+          />
         </td>
         <td>
           <textarea
@@ -135,6 +159,12 @@
             }"
             required
           />
+          <span
+            *ngIf="
+              reportForm.get('startDateControl').hasError('incorrectStartDate')
+            "
+            >Start date: today or day before the current day</span
+          >
         </td>
         <td>
           <input

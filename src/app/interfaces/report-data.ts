@@ -2,14 +2,14 @@ import { Time } from "@angular/common";
 
 export interface IReportData {
   id?: number;
-  userId?: number;
   projectId?: number;
   assignmentId?: number;
+  description?: string;
   time?: number;
   overtime?: number;
-  description?: string;
   startDate?: string;
   endDate?: string;
+  userId?: number;
   statusId?: number;
 
   //     projectId: 3,
