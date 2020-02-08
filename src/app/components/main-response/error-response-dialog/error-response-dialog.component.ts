@@ -15,11 +15,7 @@ export class ErrorResponseDialogComponent implements OnInit {
     private localStorageService: LocalStorageService) {}
 
   ngOnInit() {
-    switch (this.errorName) {
-      case "HttpErrorResponse":
-        this.errorMessage = "We so sorry, but server does not response ;(";
-        break;
-    }
+        this.errorMessage = this.errorName;
   }
 
   onNoClick(): void {

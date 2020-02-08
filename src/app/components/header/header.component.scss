@@ -11,6 +11,7 @@
     font-family: "Montserrat", sans-serif;
     color: #f0e9d7;
     font-size: 3.2vw;
+    cursor: pointer;
 
     @media (max-width: 450px) {
       font-size: 10vw;
@@ -20,6 +21,7 @@
       // padding-top: 1vw;
     }
   }
+
 
   @media (max-width: 450px) {
     min-height: fit-content;
