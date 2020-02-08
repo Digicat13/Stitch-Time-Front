@@ -40,7 +40,10 @@
         <td>
           <div
             class="dropdown"
-            *ngIf="getStatusById(report.statusId) == 'Opened'"
+            *ngIf="
+              getStatusById(report.statusId) === 'Opened' ||
+              getStatusById(report.statusId) === 'Declined'
+            "
           >
             <button
               type="button"

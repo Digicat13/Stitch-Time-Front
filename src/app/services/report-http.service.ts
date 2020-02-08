@@ -25,7 +25,6 @@ export class ReportHttpService {
     //   userId: 2,
     //   statusId: 1
     // };
-    // console.log(body);
     console.log(reportData);
 
     return this.http.post<IReportData>(environment.apiUrl + "/report", reportData);
