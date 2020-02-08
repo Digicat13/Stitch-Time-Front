@@ -1,3 +1,109 @@
+
+<!-- Filter input for table -->
+<mat-form-field>
+  <input
+    matInput
+    (keyup)="applyFilter($event.target.value)"
+    placeholder="Filter"
+  />
+</mat-form-field>
+
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource">
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- Project Column -->
+    <ng-container matColumnDef="project">
+      <th mat-header-cell *matHeaderCellDef>Project</th>
+      <td mat-cell *matCellDef="let report"
+      >{{ getProjectById(report.projectId)}}</td>
+    </ng-container>
+
+    <!-- Task Column -->
+    <ng-container matColumnDef="task">
+      <th mat-header-cell *matHeaderCellDef>Task</th>
+      <td mat-cell *matCellDef="let report">{{ getTaskById(report.assignmentId)}}</td>
+    </ng-container>
+
+    <!-- Time Column -->
+    <ng-container matColumnDef="time">
+      <th mat-header-cell *matHeaderCellDef>Time</th>
+      <td mat-cell *matCellDef="let report">{{ report.time }}</td>
+    </ng-container>
+
+    <!-- Overtime Column -->
+    <ng-container matColumnDef="overtime">
+      <th mat-header-cell *matHeaderCellDef>Overtime</th>
+      <td mat-cell *matCellDef="let report">{{ report.overtime }}</td>
+    </ng-container>
+
+    <!-- Description Column -->
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef>Description</th>
+      <td mat-cell *matCellDef="let report"
+      class="description"
+        matTooltip="{{report.description}}"
+      >{{ report.description }}</td>
+    </ng-container>
+
+    <!-- StartDate Column -->
+    <ng-container matColumnDef="startDate">
+      <th mat-header-cell *matHeaderCellDef>Start date</th>
+      <td mat-cell *matCellDef="let report">{{ report.startDate }}</td>
+    </ng-container>
+
+    <!-- EndDate Column -->
+    <ng-container matColumnDef="endDate">
+      <th mat-header-cell *matHeaderCellDef>End date</th>
+      <td mat-cell *matCellDef="let report">{{ report.endDate }}</td>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let report">{{  getStatusById(report.statusId) }}</td>
+    </ng-container>
+
+    <!-- Actions-menu Column -->
+    <ng-container matColumnDef="actions">
+        <th mat-header-cell  *matHeaderCellDef > Actions </th>
+        <td mat-cell *matCellDef="let report" >
+          <button *ngIf="getStatusById(report.statusId) === 'Opened'|| 
+                         getStatusById(report.statusId) ==='Declined'"
+          class="btn btn-custom" mat-button [matMenuTriggerFor]="menu">...</button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item 
+            (click)="onEdit(report)"
+            >&#9998; Edit</button>
+            <button mat-menu-item
+            *ngIf="getStatusById(report.statusId) === 'Opened'"
+              (click)="onNotify(report)"
+            >&#9993; Notify</button>
+            <button mat-menu-item
+             (click)="onDelete(report)"
+            >&#10006; Delete</button>
+          </mat-menu>
+        </td>
+      </ng-container>
+
+    <!--  CHANGE CLASSES PICKER -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let report; columns: displayedColumns"
+    [class.declined]="getStatusById(report.statusId) == 'Declined'"
+    [class.notified]="getStatusById(report.statusId) == 'Notified'"
+    [class.approved]="getStatusById(report.statusId) == 'Accepted'"
+  >
+    ></tr>
+  </table>
+
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+  ></mat-paginator>
+</div>
+
+
 <form [formGroup]="reportForm" (ngSubmit)="onSubmit()">
   <table class="table">
     <thead class="thead-light">
@@ -15,68 +121,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let report of reports">
-        <td scope="row">{{ report.userId }}</td>
-        <td scope="row">{{ getProjectById(report.projectId) }}</td>
-        <td scope="row">{{ getTaskById(report.assignmentId) }}</td>
-        <td scope="row">{{ report.time }}</td>
-        <td scope="row">{{ report.overtime }}</td>
-        <td scope="row">{{ report.description }}</td>
-        <td scope="row">{{ report.startDate }}</td>
-        <td scope="row">{{ report.endDate }}</td>
-        <td
-          scope="row"
-          [ngClass]="{
-            'alert-info': getStatusById(report.statusId) == 'Notified',
-            'alert-warning': getStatusById(report.statusId) == 'Opened',
-            'alert-danger': getStatusById(report.statusId) == 'Declined',
-            'alert-success': getStatusById(report.statusId) == 'Approved'
-          }"
-        >
-          <div>
-            <span> {{ getStatusById(report.statusId) }}</span>
-          </div>
-        </td>
-        <td>
-          <div
-            class="dropdown"
-            *ngIf="getStatusById(report.statusId) == 'Opened'"
-          >
-            <button
-              type="button"
-              class="btn btn-custom dropdown-toggle status"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Edit
-            </button>
-            <div class="dropdown-menu">
-              <button
-                class="dropdown-item"
-                type="button"
-                (click)="onEdit(report)"
-              >
-                Edit
-              </button>
-              <button
-                class="dropdown-item"
-                type="button"
-                (click)="onNotify(report)"
-              >
-                Notify
-              </button>
-              <button
-                class="dropdown-item"
-                type="button"
-                (click)="onDelete(report)"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </td>
-      </tr>
+      
+      <!-- Form to input report -->
       <tr>
         <td colspan="2">
           <select
@@ -181,24 +227,30 @@
         <td></td>
         <td>
           <input
+          *ngIf="!isEdited"
             class="btn btn-custom"
             type="submit"
             value="Add report"
             [disabled]="reportForm.invalid"
           />
+          <input
+          *ngIf="isEdited"
+          class="btn btn-custom edit"
+          type="submit"
+          value="&#10004;"
+          [disabled]="reportForm.invalid"
+        />
+        <input
+        *ngIf="isEdited"
+        class="btn btn-custom edit"
+        type="button"
+        value="&#10006;"
+        [disabled]="reportForm.invalid"
+        (click)="onCancel()"
+      />
         </td>
       </tr>
     </tbody>
   </table>
 </form>
 <button (click)="onGet()">GET</button>
-<div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Dropdown button
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a style="display: block;" class="dropdown-item" href="#">Action</a>
-    <a  style="display: block;" class="dropdown-item" href="#">Another action</a>
-    <a style="display: block;" class="dropdown-item" href="#">Something else here</a>
-  </div>
-</div>

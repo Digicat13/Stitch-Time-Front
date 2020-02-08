@@ -3,7 +3,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { MatDialogModule, MatFormFieldModule, MatNativeDateModule, MatTableModule, MatPaginatorModule, MatInputModule } from "@angular/material";
+import { MatDialogModule, MatFormFieldModule, MatNativeDateModule, MatTableModule, MatPaginatorModule, MatInputModule, MatMenuModule, MatTooltipModule } from "@angular/material";
 import { StorageServiceModule } from "ngx-webstorage-service";
 import { Routes, RouterModule } from "@angular/router";
 
@@ -23,14 +23,12 @@ import { ReportsComponent } from './components/main-response/home/reports/report
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { ReportHttpService } from './services/report-http.service';
 import { ReportValidator } from './validators/reports.validator';
-import { ReportsTableComponent } from './components/main-response/home/reports-table/reports-table.component';
 
 
 const appRoutes: Routes = [
   {path: "", component: LogininFormComponent },
   {path: 'registration', component: RegistrationFormComponent },
-  {path: 'home', component: HomeComponent},
-  {path: 'reports', component: ReportsTableComponent}];
+  {path: 'home', component: HomeComponent}];
 
 @NgModule({
   declarations: [
@@ -43,8 +41,7 @@ const appRoutes: Routes = [
     ErrorResponseDialogComponent,
     LogininFormComponent,
     HomeComponent,
-    ReportsComponent,
-    ReportsTableComponent
+    ReportsComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +57,9 @@ const appRoutes: Routes = [
     MatNativeDateModule,
     MatTableModule,
     MatPaginatorModule,
-    MatInputModule
+    MatInputModule,
+    MatMenuModule,
+    MatTooltipModule
   ],
   entryComponents: [
     SuccessfullyRegisteredDialogComponent,
