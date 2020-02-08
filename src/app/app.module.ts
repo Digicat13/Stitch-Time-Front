@@ -3,11 +3,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import {
-  MatDialogModule,
-  MatFormFieldModule,
-  MatNativeDateModule
-} from "@angular/material";
+import { MatDialogModule, MatFormFieldModule, MatNativeDateModule, MatTableModule, MatPaginatorModule, MatInputModule, MatMenuModule, MatTooltipModule } from "@angular/material";
 import { StorageServiceModule } from "ngx-webstorage-service";
 import { Routes, RouterModule } from "@angular/router";
 
@@ -28,6 +24,7 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { ReportHttpService } from "./services/report-http.service";
 import { ReportValidator } from "./validators/reports.validator";
 import { IsPageLoading } from "./services/is-loading-emitter.service";
+
 
 const appRoutes: Routes = [
   { path: "", component: LogininFormComponent },
@@ -59,7 +56,12 @@ const appRoutes: Routes = [
     StorageServiceModule,
     RouterModule.forRoot(appRoutes),
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatInputModule,
+    MatMenuModule,
+    MatTooltipModule
   ],
   entryComponents: [
     SuccessfullyRegisteredDialogComponent,
