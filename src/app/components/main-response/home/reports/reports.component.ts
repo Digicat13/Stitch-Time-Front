@@ -254,9 +254,15 @@ export class ReportsComponent implements OnInit {
       this.reportHttpService.postData(reportData).subscribe(
         (data: IReportData) => {
           console.log(data);
+    	  let startDate = data.startDate.split("T");
+          data.startDate = startDate[0];
+          let endDate = data.endDate.split("T");
+          data.endDate = endDate[0];
+          
           this.dataSource.data.push(reportData);
           this.dataSource._updateChangeSubscription();
           //this.reports.push(reportData);
+
         },
         error => console.log(error)
       );

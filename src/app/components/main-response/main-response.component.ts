@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterViewInit } from "@angular/core";
+import { IsPageLoading } from 'src/app/services/is-loading-emitter.service';
 
 @Component({
   selector: "app-main-response",
@@ -6,9 +7,14 @@ import { Component, OnInit, AfterViewInit } from "@angular/core";
   styleUrls: ["./main-response.component.scss"]
 })
 export class MainResponseComponent implements OnInit {
-  constructor() {}
+  isLoading = false;
+  constructor(private loading: IsPageLoading) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+   this.loading.isLoading.subscribe( loading => {
+    this.isLoading =  loading;
+   })
+  }
 
 
 }

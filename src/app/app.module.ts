@@ -17,18 +17,20 @@ import { SignInUpValidator } from "./validators/sign-in-up.validator";
 import { SuccessfullyRegisteredDialogComponent } from "./components/main-response/successfully-registered-dialog/successfully-registered-dialog.component";
 import { ErrorResponseDialogComponent } from "./components/main-response/error-response-dialog/error-response-dialog.component";
 import { LocalStorageService } from "./services/local-storage.service";
-import { LogininFormComponent } from './components/main-response/loginin-form/loginin-form.component';
-import { HomeComponent } from './components/main-response/home/home.component';
-import { ReportsComponent } from './components/main-response/home/reports/reports.component';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import { ReportHttpService } from './services/report-http.service';
-import { ReportValidator } from './validators/reports.validator';
+import { LogininFormComponent } from "./components/main-response/loginin-form/loginin-form.component";
+import { HomeComponent } from "./components/main-response/home/home.component";
+import { ReportsComponent } from "./components/main-response/home/reports/reports.component";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { ReportHttpService } from "./services/report-http.service";
+import { ReportValidator } from "./validators/reports.validator";
+import { IsPageLoading } from "./services/is-loading-emitter.service";
 
 
 const appRoutes: Routes = [
-  {path: "", component: LogininFormComponent },
-  {path: 'registration', component: RegistrationFormComponent },
-  {path: 'home', component: HomeComponent}];
+  { path: "", component: LogininFormComponent },
+  { path: "registration", component: RegistrationFormComponent },
+  { path: "home", component: HomeComponent }
+];
 
 @NgModule({
   declarations: [
@@ -65,7 +67,14 @@ const appRoutes: Routes = [
     SuccessfullyRegisteredDialogComponent,
     ErrorResponseDialogComponent
   ],
-  providers: [SignInUpService, SignInUpValidator, LocalStorageService, ReportHttpService, ReportValidator],
+  providers: [
+    SignInUpService,
+    SignInUpValidator,
+    LocalStorageService,
+    ReportHttpService,
+    ReportValidator,
+    IsPageLoading
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -7,6 +7,8 @@ import { SuccessfullyRegisteredDialogComponent } from "../successfully-registere
 import { MatDialog } from "@angular/material";
 import { ErrorResponseDialogComponent } from "../error-response-dialog/error-response-dialog.component";
 import { LocalStorageService } from "src/app/services/local-storage.service";
+import { IsPageLoading } from "src/app/services/is-loading-emitter.service";
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-registration-form",
@@ -16,13 +18,14 @@ import { LocalStorageService } from "src/app/services/local-storage.service";
 export class RegistrationFormComponent implements OnInit {
   registrationForm: FormGroup;
   emailAlreadyRegistered: boolean = false;
-  isLoading: boolean = false;
 
   constructor(
     private signInUpService: SignInUpService,
     private singInUpValidator: SignInUpValidator,
     public dialog: MatDialog,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private loading: IsPageLoading,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -55,6 +58,9 @@ export class RegistrationFormComponent implements OnInit {
   }
 
   onSubmit() {
+    if (this.registrationForm.invalid) {
+      return;
+    }
     const inputData: IUserData = {
       name: this.registrationForm.get("userName").value,
       surname: this.registrationForm.get("userSurname").value,
@@ -64,11 +70,12 @@ export class RegistrationFormComponent implements OnInit {
       position: this.registrationForm.get("userPosition").value
     };
 
-    this.isLoading = true;
+    // this.isLoading = true;
+    this.loading.isLoading.next(true);
 
     this.signInUpService.signUp(inputData).subscribe(
       responseUserData => {
-        this.isLoading = false;
+        this.loading.isLoading.next(false);
 
         // this.localStorageService.storeUserDataOnLocalStorage(responseUserData);
 
@@ -79,18 +86,17 @@ export class RegistrationFormComponent implements OnInit {
         // TODO доробити
 
         this.registrationForm.reset();
+
+        this.router.navigate(['/home']);
       },
-      error => {
-        this.isLoading = false;
+      errorData => {
+        this.loading.isLoading.next(false);
 
         // TODO сюди треба додати обробку помилки, якщо ще щось сталось, хоча, тут єдиний трабл
         // це як раз або ВЖЕ ЗАРЕЄСТРОВАНИЙ емейл, або ж трабл з підключенням до сервака ;)
 
-        if (
-          error.name !== undefined &&
-          error.name === "HttpErrorResponse"
-        ) {
-          this.openErrorResponseDialog(error.name);
+        if (errorData.name === "HttpErrorResponse") {
+          this.openErrorResponseDialog(errorData.message);
         } else {
           this.getRedBorderEmailInput();
         }

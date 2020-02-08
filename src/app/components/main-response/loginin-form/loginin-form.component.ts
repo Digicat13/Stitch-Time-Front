@@ -5,6 +5,8 @@ import { SignInUpService } from "src/app/services/sign-in-up.service";
 import { MatDialog } from "@angular/material";
 import { ErrorResponseDialogComponent } from "../error-response-dialog/error-response-dialog.component";
 import { LocalStorageService } from "src/app/services/local-storage.service";
+import { IsPageLoading } from "src/app/services/is-loading-emitter.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-loginin-form",
@@ -12,13 +14,15 @@ import { LocalStorageService } from "src/app/services/local-storage.service";
   styleUrls: ["./loginin-form.component.scss"]
 })
 export class LogininFormComponent implements OnInit {
-  isLoading = false;
   loginInForm: FormGroup;
+  error: string = null;
 
   constructor(
     private signInUpService: SignInUpService,
     public dialog: MatDialog,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private loading: IsPageLoading,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -29,32 +33,33 @@ export class LogininFormComponent implements OnInit {
   }
 
   onSubmit() {
+    if (this.loginInForm.invalid) {
+      return;
+    }
     const loginInData: IUserData = {
       email: this.loginInForm.get("userEmail").value,
       password: this.loginInForm.get("userPassword").value
     };
 
-    this.isLoading = true;
+    this.loading.isLoading.next(true);
 
     this.signInUpService.singIn(loginInData).subscribe(
       responseData => {
-        this.isLoading = false;
+        this.loading.isLoading.next(false);
+
+        this.loginInForm.reset();
+        this.router.navigate(["/home"]);
 
         // this.localStorageService.storeUserDataOnLocalStorage(responseData);
       },
       errorData => {
-        this.isLoading = false;
-
-        if (
-          errorData.name !== undefined &&
-          errorData.name === "HttpErrorResponse"
-        ) {
-          this.openErrorResponseDialog(errorData.name);
-        } else if (errorData.message === "email does not registered") {
+        this.loading.isLoading.next(false);
+        console.log(errorData);
+        if (errorData.name === "HttpErrorResponse") {
+          this.openErrorResponseDialog(errorData.message);
+        } else if (errorData === "email does not registered") {
           this.getRedBorderEmailInput();
-        } else if (
-          errorData.message === "incorrect password for this account"
-        ) {
+        } else if (errorData === "incorrect password for this account") {
           this.getRedBorderPasswordInput();
         }
       }

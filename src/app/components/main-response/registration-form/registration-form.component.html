@@ -1,6 +1,4 @@
-<div class="loading-div" *ngIf="isLoading">
-  <app-loading-spinner></app-loading-spinner>
-</div>
+
 
 <main class="container">
   <form
@@ -130,7 +128,7 @@
         type="submit"
         value="Submit"
         class="submit-button"
-        [disabled]="registrationForm.invalid || isLoading"
+        [disabled]="registrationForm.invalid"
       />
     </div>
 

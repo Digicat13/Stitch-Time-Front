@@ -19,7 +19,7 @@ div{
     }
     .select-block{
      margin: 0% 0% 0% 0%;
-    display: inline;  
+    display: inline;
     }
 
     .filter{
@@ -35,4 +35,25 @@ div{
 
 .main-body{
     margin: 0% 5% ;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  .logout-btn {
+    display: flex;
+    justify-self: center;
+    align-items: center;
+    background: none;
+    width: fit-content;
+    height: fit-content;
+    a {
+      color: #ece9e1;
+      cursor: pointer;
+      font-family: "Montserrat", sans-serif;
+      font-size: calc(1.2vw + 1.3vh);
+      margin: 3em;
+      text-decoration: none;
+    }
+  }
 }
