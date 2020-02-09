@@ -3,7 +3,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { MatDialogModule, MatFormFieldModule, MatNativeDateModule, MatTableModule, MatPaginatorModule, MatInputModule, MatMenuModule, MatTooltipModule } from "@angular/material";
+import { MatDialogModule, MatFormFieldModule, MatNativeDateModule, MatTableModule, MatPaginatorModule, MatInputModule, MatMenuModule, MatTooltipModule, MatSelectModule, MatButtonModule } from "@angular/material";
 import { StorageServiceModule } from "ngx-webstorage-service";
 import { Routes, RouterModule } from "@angular/router";
 
@@ -61,7 +61,9 @@ const appRoutes: Routes = [
     MatPaginatorModule,
     MatInputModule,
     MatMenuModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSelectModule,
+    MatButtonModule
   ],
   entryComponents: [
     SuccessfullyRegisteredDialogComponent,

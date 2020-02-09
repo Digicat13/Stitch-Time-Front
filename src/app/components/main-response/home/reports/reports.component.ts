@@ -19,10 +19,10 @@ const REPORT_DATA: IReportData[] = [
     assignmentId: 1,
     description:
       "sdadasdasdasdsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddd",
-    time: 0,
-    overtime: 0,
-    startDate: "2020-02-04T17:43:53.491Z",
-    endDate: "2020-02-04T17:43:53.491Z",
+    time: 2,
+    overtime: 1,
+    startDate: "2020-02-04",
+    endDate: "2020-02-04",
     userId: 7,
     statusId: 4
   },
@@ -203,7 +203,7 @@ export class ReportsComponent implements OnInit {
       endDateControl: new FormControl(null, Validators.required)
     });
 
-    this.resetFormTimeDate();
+    this.resetForm();
     this.onGet();
     this.dataSource.data = this.dataSource.data;
   }
@@ -234,43 +234,43 @@ export class ReportsComponent implements OnInit {
     // checking if this post new or old-on-editing (need to test)
     else if (this.isEdited) {
       this.isEdited = false;
-      this.reportHttpService.patchData(reportData, this.currentReportId).subscribe(
-        (data: IReportData) => {
-          console.log(data);
-          this.dataSource.data[this.currentReportIndex] = reportData;
-          this.dataSource._updateChangeSubscription();
-        },
-        error => console.log(error)
-      );
-    } else {
+      this.reportHttpService
+        .patchData(reportData, this.currentReportId)
+        .subscribe(
+          (data: IReportData) => {
+            console.log(data);
+            this.dataSource.data[this.currentReportIndex] = reportData;
+            this.dataSource._updateChangeSubscription();
+          },
+          error => console.log(error)
+        );
+    } else { // posting data
       // TODO треба дочекатись валідації на бекенді, яка буде вертати нам час
       // що залишився на поточну дату
       // tempTime = this.howMuchTimeYouHave(reportData.startDate);
 
       // pushing into local array, sending request
 
-      // posting data
       // CHANGE TO GET ID FROM POST RESPONSE
       this.reportHttpService.postData(reportData).subscribe(
         (data: IReportData) => {
           console.log(data);
-    	  let startDate = data.startDate.split("T");
+          let startDate = data.startDate.split("T");
           data.startDate = startDate[0];
           let endDate = data.endDate.split("T");
           data.endDate = endDate[0];
-          
+
+          reportData.id = +data.id;
+          console.log(reportData);
           this.dataSource.data.push(reportData);
           this.dataSource._updateChangeSubscription();
           //this.reports.push(reportData);
-
         },
         error => console.log(error)
       );
-
-      // reseting form
-      this.reportForm.reset();
-      this.resetFormTimeDate();
     }
+    // reseting form
+    this.resetForm();
   }
 
   // LATER CHANGE
@@ -305,22 +305,36 @@ export class ReportsComponent implements OnInit {
     this.isEdited = false;
     this.currentReportIndex = -1;
     this.currentReportId = -1;
-    this.reportForm.reset();
-    this.resetFormTimeDate();
+
+    this.resetForm();
   }
 
   // change report status CHANGE
   onNotify(report: IReportData) {
-    const index: number = this.reports.indexOf(report);
+    const index: number = this.dataSource.data.indexOf(report);
     if (index !== -1) {
-      this.reports[index].statusId = this.statuses.find(
-        status => status.name === "Notified"
-      ).id;
+      // sending new status to DB 
+      this.reportHttpService
+        .patchData(report, report.id)
+        .subscribe(
+          (data: IReportData) => {
+            this.dataSource.data[index].statusId = this.statuses.find(
+              status => status.name === "Notified"
+            ).id;
+
+            console.log(data);
+            this.dataSource._updateChangeSubscription();
+          },
+          error => console.log(error)
+        );
     }
+    this.dataSource._updateChangeSubscription();
   }
 
   // patching default values
-  resetFormTimeDate() {
+  resetForm() {
+    this.reportForm.reset();
+
     const date = moment().format("YYYY-MM-DD");
     this.reportForm.patchValue({ timeControl: "1.0" });
     this.reportForm.patchValue({ overtimeControl: "0" });
@@ -338,7 +352,7 @@ export class ReportsComponent implements OnInit {
           report.endDate = endDate[0];
         });
         console.log(data);
-        this.reports = data;
+        // this.reports = data;
         this.dataSource.data = data;
       }
     });
@@ -351,14 +365,16 @@ export class ReportsComponent implements OnInit {
       this.reportHttpService.deleteData(report.id).subscribe(
         (data: IReportData) => {
           console.log(data);
-          const index: number = this.reports.indexOf(report);
+          const index: number = this.dataSource.data.indexOf(report);
           if (index !== -1) {
-            this.reports.splice(index, 1);
+            this.dataSource.data.splice(index, 1);
+            this.dataSource._updateChangeSubscription();
           }
         },
         error => console.log(error)
       );
     }
+    this.dataSource._updateChangeSubscription();
   }
 
   getProjectById(id: number) {

@@ -41,6 +41,5 @@ export class ReportHttpService {
 
   deleteData(id: number): Observable<any> {
     return this.http.delete<IReportData>(this.apiUrl + "/" +  id );
-
   }
 }
