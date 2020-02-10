@@ -11,8 +11,9 @@ import { ReportHttpService } from "src/app/services/report-http.service";
 import { Time } from "@angular/common";
 import "bootstrap/dist/js/bootstrap.bundle";
 import { ReportValidator } from "../../../../validators/reports.validator";
-import { MatTableDataSource, MatPaginator } from "@angular/material";
+import { MatTableDataSource, MatPaginator, MatDialog } from "@angular/material";
 import { IsPageLoading } from "src/app/services/is-loading-emitter.service";
+import { ErrorResponseDialogComponent } from '../../error-response-dialog/error-response-dialog.component';
 
 const REPORT_DATA: IReportData[] = [
   {
@@ -164,7 +165,7 @@ export class ReportsComponent implements OnInit {
     { id: 4, name: "Declined" }
   ];
 
-  // projects: Array<IProject> = [{ id: 3, name: "RDM", projectManagerId: 2 }];
+  // projects: Array<IProject> = [{ id: 3, name: "RDM", projectManagerId: 3 }];
 
   // tasks: Array<IAssignment> = [{ id: 1, name: "Developing" }];
 
@@ -186,7 +187,8 @@ export class ReportsComponent implements OnInit {
   constructor(
     private reportHttpService: ReportHttpService,
     private reportValidator: ReportValidator,
-    private pageLoading: IsPageLoading
+    private pageLoading: IsPageLoading,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -372,7 +374,10 @@ export class ReportsComponent implements OnInit {
   }
 
   onGet() {
+
+    this.pageLoading.isLoading.next(true);
     this.reportHttpService.getData().subscribe(data => {
+    this.pageLoading.isLoading.next(false);
       if (data.length > 0) {
         data.forEach(report => {
           let startDate = report.startDate.split("T");
@@ -384,6 +389,10 @@ export class ReportsComponent implements OnInit {
         // this.reports = data;
         this.dataSource.data = data;
       }
+    },
+    error => {
+    this.pageLoading.isLoading.next(false);
+    this.openErrorResponseDialog(error.message);
     });
   }
 
@@ -422,5 +431,16 @@ export class ReportsComponent implements OnInit {
     currentDate: string
   ): { time: number; overtime: number } {
     return { time: 1, overtime: 0 };
+  }
+
+  openErrorResponseDialog(errorName: string) {
+    const dialogRef = this.dialog.open(ErrorResponseDialogComponent, {
+      width: "fit-content",
+      data: errorName
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log("The dialog was closed");
+    });
   }
 }
