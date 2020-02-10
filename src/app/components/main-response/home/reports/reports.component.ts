@@ -12,6 +12,7 @@ import { Time } from "@angular/common";
 import "bootstrap/dist/js/bootstrap.bundle";
 import { ReportValidator } from "../../../../validators/reports.validator";
 import { MatTableDataSource, MatPaginator } from "@angular/material";
+import { IsPageLoading } from "src/app/services/is-loading-emitter.service";
 
 const REPORT_DATA: IReportData[] = [
   {
@@ -143,24 +144,24 @@ export class ReportsComponent implements OnInit {
   ];
 
   projects: Array<IProject> = [
-    { id: 3, name: "MED", projectManagerId: 5 },
-    { id: 1, name: "EDU-pr", projectManagerId: 5 },
-    { id: 2, name: "adasdasd", projectManagerId: 5 },
-    { id: 4, name: "cancerheal", projectManagerId: 5 }
+    { id: 3, name: "RDM", projectManagerId: 2 }
+    // { id: 1, name: "EDU-pr", projectManagerId: 5 },
+    // { id: 2, name: "adasdasd", projectManagerId: 5 },
+    // { id: 4, name: "cancerheal", projectManagerId: 5 }
   ];
 
   tasks: Array<IAssignment> = [
-    { id: 1, name: "bug fixing" },
-    { id: 2, name: "testing" },
-    { id: 3, name: "dev" },
-    { id: 4, name: "design" }
+    // { id: 3, name: "bug fixing" },
+    // { id: 2, name: "testing" },
+    { id: 1, name: "dev" }
+    // { id: 4, name: "design" }
   ];
 
   statuses: Array<IStatus> = [
-    { id: 4, name: "Opened" },
+    { id: 1, name: "Opened" },
     { id: 2, name: "Notified" },
     { id: 3, name: "Accepted" },
-    { id: 1, name: "Declined" }
+    { id: 4, name: "Declined" }
   ];
 
   // projects: Array<IProject> = [{ id: 3, name: "RDM", projectManagerId: 2 }];
@@ -184,10 +185,13 @@ export class ReportsComponent implements OnInit {
 
   constructor(
     private reportHttpService: ReportHttpService,
-    private reportValidator: ReportValidator
+    private reportValidator: ReportValidator,
+    private pageLoading: IsPageLoading
   ) {}
 
   ngOnInit() {
+    this.pageLoading.isLoading.next(true);
+
     this.dataSource.paginator = this.paginator;
 
     this.reportForm = new FormGroup({
@@ -206,6 +210,7 @@ export class ReportsComponent implements OnInit {
     this.resetForm();
     this.onGet();
     this.dataSource.data = this.dataSource.data;
+    this.pageLoading.isLoading.next(false);
   }
 
   applyFilter(filterValue: string) {
@@ -214,6 +219,8 @@ export class ReportsComponent implements OnInit {
 
   // pushing new report to array
   onSubmit() {
+    this.pageLoading.isLoading.next(true);
+
     const reportData: IReportData = {
       projectId: +this.reportForm.get("projectControl").value,
       assignmentId: +this.reportForm.get("taskControl").value,
@@ -222,9 +229,9 @@ export class ReportsComponent implements OnInit {
       overtime: +this.reportForm.get("overtimeControl").value,
       startDate: this.reportForm.get("startDateControl").value,
       endDate: this.reportForm.get("endDateControl").value,
-      userId: 7,
+      userId: 1
       // userId: 2,
-      statusId: +this.statuses.find(status => status.name === "Opened").id
+      // statusId: +this.statuses.find(status => status.name === "Opened").id
     };
     if (reportData.startDate !== reportData.endDate) {
       alert(
@@ -234,17 +241,29 @@ export class ReportsComponent implements OnInit {
     // checking if this post new or old-on-editing (need to test)
     else if (this.isEdited) {
       this.isEdited = false;
+      reportData.id = this.currentReportId;
+
       this.reportHttpService
-        .patchData(reportData, this.currentReportId)
+        .putData(reportData, this.currentReportId)
         .subscribe(
           (data: IReportData) => {
+            this.pageLoading.isLoading.next(false);
+            let startDate = data.startDate.split("T");
+            data.startDate = startDate[0];
+            let endDate = data.endDate.split("T");
+            data.endDate = endDate[0];
             console.log(data);
-            this.dataSource.data[this.currentReportIndex] = reportData;
+            this.dataSource.data[this.currentReportIndex] = data;
             this.dataSource._updateChangeSubscription();
           },
-          error => console.log(error)
+          error => {
+            this.pageLoading.isLoading.next(false);
+
+            console.log(error.message);
+          }
         );
-    } else { // posting data
+    } else {
+      // posting data
       // TODO треба дочекатись валідації на бекенді, яка буде вертати нам час
       // що залишився на поточну дату
       // tempTime = this.howMuchTimeYouHave(reportData.startDate);
@@ -254,19 +273,23 @@ export class ReportsComponent implements OnInit {
       // CHANGE TO GET ID FROM POST RESPONSE
       this.reportHttpService.postData(reportData).subscribe(
         (data: IReportData) => {
+          this.pageLoading.isLoading.next(false);
+
           console.log(data);
           let startDate = data.startDate.split("T");
           data.startDate = startDate[0];
           let endDate = data.endDate.split("T");
           data.endDate = endDate[0];
 
-          reportData.id = +data.id;
-          console.log(reportData);
-          this.dataSource.data.push(reportData);
+          this.dataSource.data.push(data);
           this.dataSource._updateChangeSubscription();
           //this.reports.push(reportData);
         },
-        error => console.log(error)
+        error => {
+          this.pageLoading.isLoading.next(false);
+
+          console.log(error);
+        }
       );
     }
     // reseting form
@@ -311,22 +334,28 @@ export class ReportsComponent implements OnInit {
 
   // change report status CHANGE
   onNotify(report: IReportData) {
+    this.pageLoading.isLoading.next(true);
+
     const index: number = this.dataSource.data.indexOf(report);
     if (index !== -1) {
-      // sending new status to DB 
-      this.reportHttpService
-        .patchData(report, report.id)
-        .subscribe(
-          (data: IReportData) => {
-            this.dataSource.data[index].statusId = this.statuses.find(
-              status => status.name === "Notified"
-            ).id;
+      // sending new status to DB
+      this.reportHttpService.patchData(report, report.id).subscribe(
+        (data: IReportData) => {
+          this.pageLoading.isLoading.next(false);
 
-            console.log(data);
-            this.dataSource._updateChangeSubscription();
-          },
-          error => console.log(error)
-        );
+          this.dataSource.data[index].statusId = this.statuses.find(
+            status => status.name === "Notified"
+          ).id;
+
+          console.log(data);
+          this.dataSource._updateChangeSubscription();
+        },
+        error => {
+          this.pageLoading.isLoading.next(false);
+
+          console.log(error);
+        }
+      );
     }
     this.dataSource._updateChangeSubscription();
   }

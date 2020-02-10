@@ -8,7 +8,7 @@ import { Observable } from "rxjs";
 export class ReportHttpService {
   constructor(private http: HttpClient) {}
 
-  apiUrl: string = environment.apiUrl + '/Report';
+  apiUrl: string = environment.apiUrl + '/report';
 
   postData(reportData: IReportData) {
     return this.http.post<IReportData>(this.apiUrl, reportData);

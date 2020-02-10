@@ -108,9 +108,9 @@
     <tr
       mat-row
       *matRowDef="let report; columns: displayedColumns"
-      [class.declined]="getStatusById(report.statusId) == 'Declined'"
-      [class.notified]="getStatusById(report.statusId) == 'Notified'"
-      [class.approved]="getStatusById(report.statusId) == 'Accepted'"
+      [class.declined]="getStatusById(report.statusId) === 'Declined'"
+      [class.notified]="getStatusById(report.statusId) === 'Notified'"
+      [class.approved]="getStatusById(report.statusId) === 'Accepted'"
     >
       >
     </tr>
@@ -133,7 +133,7 @@
           {{ project.name }}</mat-option>
       </mat-select>
     </mat-form-field>
-    
+
     <mat-form-field>
       <mat-label>Select task</mat-label>
       <mat-select formControlName="taskControl" name="taskControl" required>
