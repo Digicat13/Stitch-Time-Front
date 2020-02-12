@@ -8,14 +8,13 @@ import {
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import * as moment from "moment";
 import { ReportHttpService } from "src/app/services/report-http.service";
-import { Time } from "@angular/common";
 import "bootstrap/dist/js/bootstrap.bundle";
 import { ReportValidator } from "../../../../validators/reports.validator";
 import { MatTableDataSource, MatPaginator } from "@angular/material";
 
 const REPORT_DATA: IReportData[] = [
   {
-    projectId: 3,
+    projectId: 1,
     assignmentId: 1,
     description:
       "sdadasdasdasdsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddd",
@@ -27,8 +26,8 @@ const REPORT_DATA: IReportData[] = [
     statusId: 4
   },
   {
-    projectId: 3,
-    assignmentId: 1,
+    projectId: 2,
+    assignmentId: 2,
     description: "ssdasdsad",
     time: 0,
     overtime: 0,
@@ -39,7 +38,7 @@ const REPORT_DATA: IReportData[] = [
   },
   {
     projectId: 3,
-    assignmentId: 1,
+    assignmentId: 3,
     description: "lol",
     time: 0,
     overtime: 0,
@@ -123,11 +122,17 @@ const REPORT_DATA: IReportData[] = [
 })
 export class ReportsComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  isEdited: boolean = false;
+  isEdited = false;
   currentReportId: number;
   currentReportIndex: number;
 
-  //@ViewChild("table", { static: true }) table;
+  filterValues = {
+    projectId: "",
+    assignmentId: "",
+    statusId: "",
+    startDate: "",
+    endDate: ""
+  };
 
   // Displayed columns in the main table
   displayedColumns: string[] = [
@@ -177,10 +182,11 @@ export class ReportsComponent implements OnInit {
   reports: Array<IReportData> = new Array<IReportData>();
 
   // dataSourse here is source for table - observable
-  //dataSource = new MatTableDataSource<IReportData>(REPORT_DATA);
-  dataSource = new MatTableDataSource<IReportData>(this.reports);
+  dataSource = new MatTableDataSource<IReportData>(REPORT_DATA);
+  // dataSource = new MatTableDataSource<IReportData>(this.reports);
 
   reportForm: FormGroup;
+  filterForm: FormGroup;
 
   constructor(
     private reportHttpService: ReportHttpService,
@@ -190,6 +196,17 @@ export class ReportsComponent implements OnInit {
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
 
+    this.createReportForm();
+    this.createFilterForm();
+    this.subscribeFilters();
+
+    this.resetForm();
+    this.onGet();
+    this.dataSource.data = this.dataSource.data;
+    this.dataSource.filterPredicate = this.tableFilters();
+  }
+
+  createReportForm() {
     this.reportForm = new FormGroup({
       projectControl: new FormControl(null, Validators.required),
       taskControl: new FormControl(null, Validators.required),
@@ -202,14 +219,118 @@ export class ReportsComponent implements OnInit {
       ]),
       endDateControl: new FormControl(null, Validators.required)
     });
-
-    this.resetForm();
-    this.onGet();
-    this.dataSource.data = this.dataSource.data;
   }
 
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  createFilterForm() {
+    this.filterForm = new FormGroup({
+      filterProjectControl: new FormControl(null),
+      filterTaskControl: new FormControl(null),
+      filterStatusControl: new FormControl(null)
+    });
+  }
+  
+  // subscribing for filter input change
+  subscribeFilters() {
+    this.filterForm
+      .get("filterProjectControl")
+      .valueChanges.subscribe(projectId => {
+        this.filterValues.projectId = projectId;
+        this.dataSource.filter = JSON.stringify(this.filterValues);
+      });
+    this.filterForm
+      .get("filterTaskControl")
+      .valueChanges.subscribe(assignmentId => {
+        this.filterValues.assignmentId = assignmentId;
+        this.dataSource.filter = JSON.stringify(this.filterValues);
+      });
+    this.filterForm
+      .get("filterStatusControl")
+      .valueChanges.subscribe(statusId => {
+        this.filterValues.statusId = statusId;
+        this.dataSource.filter = JSON.stringify(this.filterValues);
+      });
+  }
+
+  // function for table filterPredicate
+  tableFilters(): (data: any, filter: string) => boolean {
+    let filterFunction = function(data, filter): boolean {
+      let searchTerms = JSON.parse(filter);
+      if (
+        searchTerms.projectId &&
+        searchTerms.assignmentId &&
+        searchTerms.statusId
+      ) {
+        return (
+          data.projectId
+            .toString()
+            .toLowerCase()
+            .indexOf(searchTerms.projectId) !== -1 &&
+          data.assignmentId
+            .toString()
+            .toLowerCase()
+            .indexOf(searchTerms.assignmentId) !== -1 &&
+          data.statusId
+            .toString()
+            .toLowerCase()
+            .indexOf(searchTerms.statusId) !== -1
+        );
+      } else if (searchTerms.projectId && searchTerms.assignmentId) {
+        return (
+          data.projectId
+            .toString()
+            .toLowerCase()
+            .indexOf(searchTerms.projectId) !== -1 &&
+          data.assignmentId
+            .toString()
+            .toLowerCase()
+            .indexOf(searchTerms.assignmentId) !== -1
+        );
+      } else if (searchTerms.projectId && searchTerms.statusId) {
+        return (
+          data.projectId
+            .toString()
+            .toLowerCase()
+            .indexOf(searchTerms.projectId) !== -1 &&
+          data.statusId
+            .toString()
+            .toLowerCase()
+            .indexOf(searchTerms.statusId) !== -1
+        );
+      } else if (searchTerms.assignmentId && searchTerms.statusId) {
+        return (
+          data.assignmentId
+            .toString()
+            .toLowerCase()
+            .indexOf(searchTerms.assignmentId) !== -1 &&
+          data.statusId
+            .toString()
+            .toLowerCase()
+            .indexOf(searchTerms.statusId) !== -1
+        );
+      } else if (searchTerms.projectId) {
+        return (
+          data.projectId
+            .toString()
+            .toLowerCase()
+            .indexOf(searchTerms.projectId) !== -1
+        );
+      } else if (searchTerms.assignmentId) {
+        return (
+          data.assignmentId
+            .toString()
+            .toLowerCase()
+            .indexOf(searchTerms.assignmentId) !== -1
+        );
+      } else if (searchTerms.statusId) {
+        return (
+          data.statusId
+            .toString()
+            .toLowerCase()
+            .indexOf(searchTerms.statusId) !== -1
+        );
+      }  else {return data;}
+    };
+    return filterFunction;
   }
 
   // pushing new report to array
@@ -230,21 +351,20 @@ export class ReportsComponent implements OnInit {
       alert(
         "Sorry, but on this project you can choose only same start and end date!"
       );
-    }
-    // checking if this post new or old-on-editing (need to test)
-    else if (this.isEdited) {
+    } else if (this.isEdited) {
       this.isEdited = false;
       this.reportHttpService
         .patchData(reportData, this.currentReportId)
         .subscribe(
           (data: IReportData) => {
             console.log(data);
-            this.dataSource.data[this.currentReportIndex] = reportData;
+            this.dataSource.data[this.currentReportIndex] = data;
             this.dataSource._updateChangeSubscription();
           },
           error => console.log(error)
         );
-    } else { // posting data
+    } else {
+      // posting data
       // TODO треба дочекатись валідації на бекенді, яка буде вертати нам час
       // що залишився на поточну дату
       // tempTime = this.howMuchTimeYouHave(reportData.startDate);
@@ -255,16 +375,15 @@ export class ReportsComponent implements OnInit {
       this.reportHttpService.postData(reportData).subscribe(
         (data: IReportData) => {
           console.log(data);
-          let startDate = data.startDate.split("T");
+          const startDate = data.startDate.split("T");
           data.startDate = startDate[0];
-          let endDate = data.endDate.split("T");
+          const endDate = data.endDate.split("T");
           data.endDate = endDate[0];
 
-          reportData.id = +data.id;
           console.log(reportData);
-          this.dataSource.data.push(reportData);
+          this.dataSource.data.push(data);
           this.dataSource._updateChangeSubscription();
-          //this.reports.push(reportData);
+          // this.reports.push(reportData);
         },
         error => console.log(error)
       );
@@ -289,13 +408,13 @@ export class ReportsComponent implements OnInit {
     this.reportForm.patchValue({ startDateControl: report.startDate });
     this.reportForm.patchValue({ endDateControl: report.endDate });
 
-    //const index: number = this.reports.indexOf(report);
+    // const index: number = this.reports.indexOf(report);
     const index: number = this.dataSource.data.indexOf(report);
     if (index !== -1) {
       this.currentReportIndex = index;
-      //this.dataSource.data.splice(index, 1);
-      //this.dataSource._updateChangeSubscription();
-      //this.reports.splice(index, 1);
+      // this.dataSource.data.splice(index, 1);
+      // this.dataSource._updateChangeSubscription();
+      // this.reports.splice(index, 1);
     } else {
       console.log("onEdit: cant find index of report in dataSource");
     }
@@ -313,20 +432,18 @@ export class ReportsComponent implements OnInit {
   onNotify(report: IReportData) {
     const index: number = this.dataSource.data.indexOf(report);
     if (index !== -1) {
-      // sending new status to DB 
-      this.reportHttpService
-        .patchData(report, report.id)
-        .subscribe(
-          (data: IReportData) => {
-            this.dataSource.data[index].statusId = this.statuses.find(
-              status => status.name === "Notified"
-            ).id;
+      // sending new status to DB
+      this.reportHttpService.patchData(report, report.id).subscribe(
+        (data: IReportData) => {
+          this.dataSource.data[index].statusId = this.statuses.find(
+            status => status.name === "Notified"
+          ).id;
 
-            console.log(data);
-            this.dataSource._updateChangeSubscription();
-          },
-          error => console.log(error)
-        );
+          console.log(data);
+          this.dataSource._updateChangeSubscription();
+        },
+        error => console.log(error)
+      );
     }
     this.dataSource._updateChangeSubscription();
   }
@@ -346,9 +463,9 @@ export class ReportsComponent implements OnInit {
     this.reportHttpService.getData().subscribe(data => {
       if (data.length > 0) {
         data.forEach(report => {
-          let startDate = report.startDate.split("T");
+          const startDate = report.startDate.split("T");
           report.startDate = startDate[0];
-          let endDate = report.endDate.split("T");
+          const endDate = report.endDate.split("T");
           report.endDate = endDate[0];
         });
         console.log(data);

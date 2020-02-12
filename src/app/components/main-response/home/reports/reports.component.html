@@ -1,11 +1,38 @@
-<!-- Filter input for table -->
-<mat-form-field>
-  <input
-    matInput
-    (keyup)="applyFilter($event.target.value)"
-    placeholder="Filter"
-  />
-</mat-form-field>
+<!-- Filter Form -->
+<form [formGroup]="filterForm">
+  <mat-form-field>
+    <mat-label>Project</mat-label>
+    <mat-select formControlName="filterProjectControl"
+    >
+      <mat-option>All</mat-option>
+      <mat-option *ngFor="let project of projects" [value]="project.id"
+      >
+        {{ project.name }}</mat-option
+      >
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Task</mat-label>
+    <mat-select formControlName="filterTaskControl">
+      <mat-option>All</mat-option>
+      <mat-option *ngFor="let task of tasks" [value]="task.id">
+        {{ task.name }}</mat-option
+      >
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Status</mat-label>
+    <mat-select formControlName="filterStatusControl">
+      <mat-option>None</mat-option>
+      <mat-option *ngFor="let status of statuses" [value]="status.id">
+        {{ status.name }}</mat-option
+      >
+    </mat-select>
+  </mat-form-field>
+
+</form>
 
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="dataSource">
@@ -14,7 +41,9 @@
 
     <!-- Project Column -->
     <ng-container matColumnDef="project">
-      <th mat-header-cell *matHeaderCellDef>Project</th>
+      <th mat-header-cell *matHeaderCellDef>
+        <input (keyup)="applyFilter($event.target.value)" (focus)="setupFilter('name')" />
+        Project</th>
       <td mat-cell *matCellDef="let report">
         {{ getProjectById(report.projectId) }}
       </td>
@@ -122,29 +151,35 @@
   ></mat-paginator>
 </div>
 
- <!-- Form to input report -->
+<!-- Form to input report -->
 <div class="mat-elevation-z8 report-form">
   <form [formGroup]="reportForm" (ngSubmit)="onSubmit()">
-
     <mat-form-field>
       <mat-label>Select project</mat-label>
-      <mat-select formControlName="projectControl" name="projectControl" required>
+      <mat-select
+        formControlName="projectControl"
+        name="projectControl"
+        required
+      >
         <mat-option *ngFor="let project of projects" [value]="project.id">
-          {{ project.name }}</mat-option>
+          {{ project.name }}</mat-option
+        >
       </mat-select>
     </mat-form-field>
-    
+
     <mat-form-field>
       <mat-label>Select task</mat-label>
       <mat-select formControlName="taskControl" name="taskControl" required>
         <mat-option *ngFor="let task of tasks" [value]="task.id">
-          {{ task.name }}</mat-option>
+          {{ task.name }}</mat-option
+        >
       </mat-select>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Time</mat-label>
-      <input  matInput
+      <input
+        matInput
         formControlName="timeControl"
         type="number"
         min="0"
@@ -157,7 +192,8 @@
 
     <mat-form-field>
       <mat-label>Overtime</mat-label>
-      <input matInput
+      <input
+        matInput
         formControlName="overtimeControl"
         type="number"
         min="0"
@@ -170,7 +206,8 @@
 
     <mat-form-field class="description">
       <mat-label>Description</mat-label>
-      <textarea matInput
+      <textarea
+        matInput
         class="description"
         formControlName="descriptionControl"
         name="descriptionControl"
@@ -181,7 +218,8 @@
 
     <mat-form-field>
       <mat-label>Start date</mat-label>
-      <input matInput
+      <input
+        matInput
         type="date"
         formControlName="startDateControl"
         name="startDateControl"
@@ -189,14 +227,16 @@
       />
       <span
         *ngIf="
-          reportForm.get('startDateControl').hasError('incorrectStartDate')"
+          reportForm.get('startDateControl').hasError('incorrectStartDate')
+        "
         >Start date: today or day before the current day</span
       >
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>End date</mat-label>
-      <input matInput
+      <input
+        matInput
         type="date"
         formControlName="endDateControl"
         name="endDateControl"
@@ -204,25 +244,34 @@
       />
     </mat-form-field>
 
-    <button  mat-button
+    <button
+      mat-button
       *ngIf="!isEdited"
       class="btn-custom"
       type="submit"
       [disabled]="reportForm.invalid"
-    >Add report</button>
+    >
+      Add report
+    </button>
 
-    <button mat-button
+    <button
+      mat-button
       *ngIf="isEdited"
       class="btn-custom edit"
       type="submit"
       [disabled]="reportForm.invalid"
-    >&#10004;</button>
-    <button mat-button
+    >
+      &#10004;
+    </button>
+    <button
+      mat-button
       *ngIf="isEdited"
       class="btn-custom edit"
       [disabled]="reportForm.invalid"
       (click)="onCancel()"
-    >&#10006;</button>
+    >
+      &#10006;
+    </button>
   </form>
 </div>
 <button (click)="onGet()">GET</button>

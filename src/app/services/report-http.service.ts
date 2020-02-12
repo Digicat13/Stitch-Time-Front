@@ -15,23 +15,10 @@ export class ReportHttpService {
   }
 
   getData() {
-    return this.http.get<IReportData[]>(this.apiUrl);
+    return this.http.get<IReportData[]>(this.apiUrl+'/GetReports');
   }
 
   putData(report: IReportData, id) {
-    const body = {
-      projectId: 3,
-      assignmentId: 1,
-      description: "lol",
-      time: 0,
-      overtime: 0,
-      startDate: "2020-02-04T17:43:53.491Z",
-      endDate: "2020-02-04T17:43:53.491Z",
-      userId: 7,
-      statusId: 4
-    };
-
-
     return this.http.put(this.apiUrl + "/" +  id , report);
   }
 
