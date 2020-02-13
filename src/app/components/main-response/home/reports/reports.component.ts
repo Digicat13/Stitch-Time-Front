@@ -225,7 +225,26 @@ export class ReportsComponent implements OnInit {
     this.filterForm = new FormGroup({
       filterProjectControl: new FormControl(null),
       filterTaskControl: new FormControl(null),
-      filterStatusControl: new FormControl(null)
+      filterStatusControl: new FormControl(null),
+      fromCheckControl: new FormControl(null),
+      toCheckControl: new FormControl(null),
+      filterFromControl: new FormControl(null),
+      filterToControl: new FormControl(null)
+    });
+
+    this.filterForm.get('fromCheckControl').valueChanges.subscribe(v=> {
+      if(v){
+        this.filterForm.get('filterFromControl').disable();
+      } else {
+        this.filterForm.get('filterFromControl').enable();
+      }
+    });
+    this.filterForm.get('toCheckControl').valueChanges.subscribe(v=> {
+      if(v){
+        this.filterForm.get('filterToControl').disable();
+      } else {
+        this.filterForm.get('filterToControl').enable();
+      }
     });
   }
   
