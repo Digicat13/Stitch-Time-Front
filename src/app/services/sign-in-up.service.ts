@@ -45,6 +45,7 @@ export class SignInUpService {
     const user = new User(email, name, surname);
     this.user.next(user);
   }
+
   private errorHandling(errorResponse: HttpErrorResponse) {
     if (
       errorResponse.name !== undefined &&

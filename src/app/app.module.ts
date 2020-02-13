@@ -24,12 +24,18 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { ReportHttpService } from "./services/report-http.service";
 import { ReportValidator } from "./validators/reports.validator";
 import { IsPageLoading } from "./services/is-loading-emitter.service";
+import { ProjectsListComponent } from './components/main-response/home/projects-list/projects-list.component';
+import { ProjectForPMService } from './services/project-4-pm.service';
 
 
 const appRoutes: Routes = [
   { path: "", component: LogininFormComponent },
+  { path: "login", component: LogininFormComponent },
   { path: "registration", component: RegistrationFormComponent },
-  { path: "home", component: HomeComponent }
+  { path: "home", component: HomeComponent, children: [
+    {path: "reportslist" , component: ReportsComponent},
+    {path: "projectslist", component: ProjectsListComponent}
+  ] }
 ];
 
 @NgModule({
@@ -43,7 +49,8 @@ const appRoutes: Routes = [
     ErrorResponseDialogComponent,
     LogininFormComponent,
     HomeComponent,
-    ReportsComponent
+    ReportsComponent,
+    ProjectsListComponent
   ],
   imports: [
     BrowserModule,
@@ -75,7 +82,8 @@ const appRoutes: Routes = [
     LocalStorageService,
     ReportHttpService,
     ReportValidator,
-    IsPageLoading
+    IsPageLoading,
+    ProjectForPMService
   ],
   bootstrap: [AppComponent]
 })
