@@ -3,7 +3,9 @@
   justify-content: center;
   align-content: center;
   min-height: fit-content;
-
+  z-index: -1;
+   position:relative;
+  width: 100%; 
   background-color: #ca5c50;
 
   .logo {

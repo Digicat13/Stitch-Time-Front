@@ -24,10 +24,12 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { ReportHttpService } from "./services/report-http.service";
 import { ReportValidator } from "./validators/reports.validator";
 import { IsPageLoading } from "./services/is-loading-emitter.service";
+import { WelcomePageComponent } from './components/main-response/welcome-page/welcome-page.component';
 
 
 const appRoutes: Routes = [
-  { path: "", component: LogininFormComponent },
+  { path: "", component: WelcomePageComponent },
+  { path: "login", component: LogininFormComponent },
   { path: "registration", component: RegistrationFormComponent },
   { path: "home", component: HomeComponent }
 ];
@@ -43,7 +45,8 @@ const appRoutes: Routes = [
     ErrorResponseDialogComponent,
     LogininFormComponent,
     HomeComponent,
-    ReportsComponent
+    ReportsComponent,
+    WelcomePageComponent
   ],
   imports: [
     BrowserModule,
