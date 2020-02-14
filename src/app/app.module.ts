@@ -25,7 +25,7 @@ import { ReportHttpService } from "./services/report-http.service";
 import { ReportValidator } from "./validators/reports.validator";
 import { IsPageLoading } from "./services/is-loading-emitter.service";
 import { WelcomePageComponent } from './components/main-response/welcome-page/welcome-page.component';
-
+import { FilterTableService } from './services/filter-table..service';
 
 const appRoutes: Routes = [
   { path: "", component: WelcomePageComponent },
@@ -67,7 +67,7 @@ const appRoutes: Routes = [
     MatTooltipModule,
     MatSelectModule,
     MatButtonModule,
-    MatCheckboxModule
+    MatCheckboxModule,
   ],
   entryComponents: [
     SuccessfullyRegisteredDialogComponent,
@@ -79,7 +79,8 @@ const appRoutes: Routes = [
     LocalStorageService,
     ReportHttpService,
     ReportValidator,
-    IsPageLoading
+    IsPageLoading,
+    FilterTableService
   ],
   bootstrap: [AppComponent]
 })
