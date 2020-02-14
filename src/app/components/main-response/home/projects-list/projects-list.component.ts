@@ -114,7 +114,6 @@ export class ProjectsListComponent implements OnInit {
   }
 
   onSubmit() {
-    this.pageLoading.isLoading.next(true);
     if (
       this.projectForm
         .get("teammates")
@@ -123,6 +122,7 @@ export class ProjectsListComponent implements OnInit {
       alert(
         "You foggot something! Please, select your teamlead as a team member!)"
       );
+      return;
     }
   }
 
