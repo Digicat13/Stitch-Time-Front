@@ -3,9 +3,9 @@
   justify-content: center;
   align-content: center;
   min-height: fit-content;
-  z-index: -1;
+  // z-index: -1;
    position:relative;
-  width: 100%; 
+  width: 100%;
   background-color: #ca5c50;
 
   .logo {
@@ -15,6 +15,8 @@
     font-size: 3.2vw;
     cursor: pointer;
 
+
+
     @media (max-width: 450px) {
       font-size: 10vw;
       min-height: fit-content;
@@ -22,6 +24,11 @@
       // padding-bottom: 1vw;
       // padding-top: 1vw;
     }
+
+  }
+
+  .logo:focus {
+    outline: none;
   }
 
 

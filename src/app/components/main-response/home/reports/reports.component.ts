@@ -10,7 +10,9 @@ import * as moment from "moment";
 import { ReportHttpService } from "src/app/services/report-http.service";
 import "bootstrap/dist/js/bootstrap.bundle";
 import { ReportValidator } from "../../../../validators/reports.validator";
-import { MatTableDataSource, MatPaginator } from "@angular/material";
+import { MatTableDataSource, MatPaginator, MatDialog } from "@angular/material";
+import { ErrorResponseDialogComponent } from '../../error-response-dialog/error-response-dialog.component';
+import { IsPageLoading } from 'src/app/services/is-loading-emitter.service';
 
 const REPORT_DATA: IReportData[] = [
   {
@@ -190,12 +192,15 @@ export class ReportsComponent implements OnInit {
 
   constructor(
     private reportHttpService: ReportHttpService,
-    private reportValidator: ReportValidator
+    private reportValidator: ReportValidator,
+    private dialog: MatDialog,
+    private pageLoading: IsPageLoading
   ) {}
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
 
+    this.pageLoading.isLoading.next(true);
     this.createReportForm();
     this.createFilterForm();
     this.subscribeFilters();
@@ -204,6 +209,8 @@ export class ReportsComponent implements OnInit {
     this.onGet();
     this.dataSource.data = this.dataSource.data;
     this.dataSource.filterPredicate = this.tableFilters();
+    this.pageLoading.isLoading.next(false);
+
   }
 
   createReportForm() {
@@ -232,22 +239,22 @@ export class ReportsComponent implements OnInit {
       filterToControl: new FormControl(null)
     });
 
-    this.filterForm.get('fromCheckControl').valueChanges.subscribe(v=> {
-      if(v){
-        this.filterForm.get('filterFromControl').disable();
+    this.filterForm.get("fromCheckControl").valueChanges.subscribe(v => {
+      if (v) {
+        this.filterForm.get("filterFromControl").disable();
       } else {
-        this.filterForm.get('filterFromControl').enable();
+        this.filterForm.get("filterFromControl").enable();
       }
     });
-    this.filterForm.get('toCheckControl').valueChanges.subscribe(v=> {
-      if(v){
-        this.filterForm.get('filterToControl').disable();
+    this.filterForm.get("toCheckControl").valueChanges.subscribe(v => {
+      if (v) {
+        this.filterForm.get("filterToControl").disable();
       } else {
-        this.filterForm.get('filterToControl').enable();
+        this.filterForm.get("filterToControl").enable();
       }
     });
   }
-  
+
   // subscribing for filter input change
   subscribeFilters() {
     this.filterForm
@@ -347,7 +354,9 @@ export class ReportsComponent implements OnInit {
             .toLowerCase()
             .indexOf(searchTerms.statusId) !== -1
         );
-      }  else {return data;}
+      } else {
+        return data;
+      }
     };
     return filterFunction;
   }
@@ -370,6 +379,7 @@ export class ReportsComponent implements OnInit {
       alert(
         "Sorry, but on this project you can choose only same start and end date!"
       );
+      return;
     } else if (this.isEdited) {
       this.isEdited = false;
       this.reportHttpService
@@ -529,5 +539,16 @@ export class ReportsComponent implements OnInit {
     currentDate: string
   ): { time: number; overtime: number } {
     return { time: 1, overtime: 0 };
+  }
+
+  openErrorResponseDialog(errorName: string) {
+    const dialogRef = this.dialog.open(ErrorResponseDialogComponent, {
+      width: "fit-content",
+      data: errorName
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log("The dialog was closed");
+    });
   }
 }
