@@ -63,10 +63,21 @@ const REPORT_DATA: IReportData[] = [
     projectId: 3,
     assignmentId: 1,
     description: "lol",
-    time: 0,
+    time: 4,
     overtime: 0,
-    startDate: "2020-02-04",
-    endDate: "2020-02-04",
+    startDate: "2020-02-14",
+    endDate: "2020-02-14",
+    userId: 7,
+    statusId: 4
+  },
+  {
+    projectId: 3,
+    assignmentId: 1,
+    description: "lol",
+    time: 3,
+    overtime: 0,
+    startDate: "2020-02-14",
+    endDate: "2020-02-14",
     userId: 7,
     statusId: 4
   },
@@ -76,19 +87,8 @@ const REPORT_DATA: IReportData[] = [
     description: "lol",
     time: 0,
     overtime: 0,
-    startDate: "2020-02-04",
-    endDate: "2020-02-04",
-    userId: 7,
-    statusId: 4
-  },
-  {
-    projectId: 3,
-    assignmentId: 1,
-    description: "lol",
-    time: 0,
-    overtime: 0,
-    startDate: "2020-02-04",
-    endDate: "2020-02-04",
+    startDate: "2020-02-14",
+    endDate: "2020-02-14",
     userId: 7,
     statusId: 4
   }
@@ -208,31 +208,15 @@ export class ReportsComponent implements OnInit {
     this.filterForm = new FormGroup({
       filterProjectControl: new FormControl(null),
       filterTaskControl: new FormControl(null),
-      filterStatusControl: new FormControl(null),
-      dateCheckControl: new FormControl(null),
-      filterFromControl: new FormControl({value: "", disabled: true}),
-      filterToControl: new FormControl({value: "", disabled: true})
+      filterStatusControl: new FormControl(null)
     });
   }
 
   createFilterDateForm() {
     this.filterDateForm = new FormGroup({
-      dateCheckControl: new FormControl(null),
       filterFromControl: new FormControl(null),
       filterToControl: new FormControl(null)
     });
-
-    // this.filterDateForm.get("dateCheckControl").valueChanges.subscribe(v => {
-    //   if (v) {
-    //     this.filterDateForm.get("filterFromControl").enable();
-    //     this.filterDateForm.get("filterToControl").enable();
-    //     this.applyBtnDisabled = false;
-    //   } else {
-    //     this.filterDateForm.get("filterFromControl").disable();
-    //     this.filterDateForm.get("filterToControl").disable();
-    //     this.applyBtnDisabled = true;
-    //   }
-    // });
   }
 
   // subscribing for filter input change
@@ -293,6 +277,8 @@ export class ReportsComponent implements OnInit {
       alert(
         "Sorry, but on this project you can choose only same start and end date!"
       );
+    } else if (!this.reportValidator.timePerDayValidator(this.dataSource.data, reportData)) {
+      alert("You cannot make report for that day, it is already full");
     } else if (this.isEdited) {
       this.isEdited = false;
       this.reportHttpService

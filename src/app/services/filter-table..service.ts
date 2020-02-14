@@ -86,7 +86,6 @@ export class FilterTableService {
   }
 
   filterDate(range) {
-        // const date = new Date(valu);
         return function(value) {
           const start = new Date(value.startDate);
           const end = new Date(value.endDate);
