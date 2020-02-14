@@ -13,6 +13,7 @@ import { ReportValidator } from "../../../../validators/reports.validator";
 import { MatTableDataSource, MatPaginator, MatDialog } from "@angular/material";
 import { ErrorResponseDialogComponent } from '../../error-response-dialog/error-response-dialog.component';
 import { IsPageLoading } from 'src/app/services/is-loading-emitter.service';
+import { FilterTableService } from "src/app/services/filter-table..service";
 
 const REPORT_DATA: IReportData[] = [
   {
@@ -23,7 +24,7 @@ const REPORT_DATA: IReportData[] = [
     time: 2,
     overtime: 1,
     startDate: "2020-02-04",
-    endDate: "2020-02-04",
+    endDate: "2020-03-04",
     userId: 7,
     statusId: 4
   },
@@ -33,8 +34,8 @@ const REPORT_DATA: IReportData[] = [
     description: "ssdasdsad",
     time: 0,
     overtime: 0,
-    startDate: "2020-02-04T17:43:53.491Z",
-    endDate: "2020-02-04T17:43:53.491Z",
+    startDate: "2020-02-24",
+    endDate: "2020-03-30",
     userId: 7,
     statusId: 1
   },
@@ -44,8 +45,8 @@ const REPORT_DATA: IReportData[] = [
     description: "lol",
     time: 0,
     overtime: 0,
-    startDate: "2020-02-04T17:43:53.491Z",
-    endDate: "2020-02-04T17:43:53.491Z",
+    startDate: "2019-02-04",
+    endDate: "2020-02-04",
     userId: 7,
     statusId: 2
   },
@@ -55,8 +56,8 @@ const REPORT_DATA: IReportData[] = [
     description: "lol",
     time: 0,
     overtime: 0,
-    startDate: "2020-02-04T17:43:53.491Z",
-    endDate: "2020-02-04T17:43:53.491Z",
+    startDate: "2019-02-04",
+    endDate: "2019-08-04",
     userId: 7,
     statusId: 3
   },
@@ -64,10 +65,21 @@ const REPORT_DATA: IReportData[] = [
     projectId: 3,
     assignmentId: 1,
     description: "lol",
-    time: 0,
+    time: 4,
     overtime: 0,
-    startDate: "2020-02-04T17:43:53.491Z",
-    endDate: "2020-02-04T17:43:53.491Z",
+    startDate: "2020-02-14",
+    endDate: "2020-02-14",
+    userId: 7,
+    statusId: 4
+  },
+  {
+    projectId: 3,
+    assignmentId: 1,
+    description: "lol",
+    time: 3,
+    overtime: 0,
+    startDate: "2020-02-14",
+    endDate: "2020-02-14",
     userId: 7,
     statusId: 4
   },
@@ -77,41 +89,8 @@ const REPORT_DATA: IReportData[] = [
     description: "lol",
     time: 0,
     overtime: 0,
-    startDate: "2020-02-04T17:43:53.491Z",
-    endDate: "2020-02-04T17:43:53.491Z",
-    userId: 7,
-    statusId: 4
-  },
-  {
-    projectId: 3,
-    assignmentId: 1,
-    description: "lol",
-    time: 0,
-    overtime: 0,
-    startDate: "2020-02-04T17:43:53.491Z",
-    endDate: "2020-02-04T17:43:53.491Z",
-    userId: 7,
-    statusId: 4
-  },
-  {
-    projectId: 3,
-    assignmentId: 1,
-    description: "lol",
-    time: 0,
-    overtime: 0,
-    startDate: "2020-02-04T17:43:53.491Z",
-    endDate: "2020-02-04T17:43:53.491Z",
-    userId: 7,
-    statusId: 4
-  },
-  {
-    projectId: 3,
-    assignmentId: 1,
-    description: "lol",
-    time: 0,
-    overtime: 0,
-    startDate: "2020-02-04T17:43:53.491Z",
-    endDate: "2020-02-04T17:43:53.491Z",
+    startDate: "2020-02-14",
+    endDate: "2020-02-14",
     userId: 7,
     statusId: 4
   }
@@ -127,6 +106,7 @@ export class ReportsComponent implements OnInit {
   isEdited = false;
   currentReportId: number;
   currentReportIndex: number;
+  applyBtnDisabled: boolean = false;
 
   filterValues = {
     projectId: "",
@@ -189,12 +169,15 @@ export class ReportsComponent implements OnInit {
 
   reportForm: FormGroup;
   filterForm: FormGroup;
+  filterDateForm: FormGroup;
 
   constructor(
     private reportHttpService: ReportHttpService,
     private reportValidator: ReportValidator,
     private dialog: MatDialog,
     private pageLoading: IsPageLoading
+    private filterTableService: FilterTableService
+
   ) {}
 
   ngOnInit() {
@@ -204,12 +187,13 @@ export class ReportsComponent implements OnInit {
     this.createReportForm();
     this.createFilterForm();
     this.subscribeFilters();
+    this.createFilterDateForm();
 
     this.resetForm();
     this.onGet();
     this.dataSource.data = this.dataSource.data;
-    this.dataSource.filterPredicate = this.tableFilters();
     this.pageLoading.isLoading.next(false);
+    this.dataSource.filterPredicate = this.filterTableService.filterProjectTaskStatus();
 
   }
 
@@ -232,26 +216,14 @@ export class ReportsComponent implements OnInit {
     this.filterForm = new FormGroup({
       filterProjectControl: new FormControl(null),
       filterTaskControl: new FormControl(null),
-      filterStatusControl: new FormControl(null),
-      fromCheckControl: new FormControl(null),
-      toCheckControl: new FormControl(null),
+      filterStatusControl: new FormControl(null)
+    });
+  }
+
+  createFilterDateForm() {
+    this.filterDateForm = new FormGroup({
       filterFromControl: new FormControl(null),
       filterToControl: new FormControl(null)
-    });
-
-    this.filterForm.get("fromCheckControl").valueChanges.subscribe(v => {
-      if (v) {
-        this.filterForm.get("filterFromControl").disable();
-      } else {
-        this.filterForm.get("filterFromControl").enable();
-      }
-    });
-    this.filterForm.get("toCheckControl").valueChanges.subscribe(v => {
-      if (v) {
-        this.filterForm.get("filterToControl").disable();
-      } else {
-        this.filterForm.get("filterToControl").enable();
-      }
     });
   }
 
@@ -277,88 +249,22 @@ export class ReportsComponent implements OnInit {
       });
   }
 
-  // function for table filterPredicate
-  tableFilters(): (data: any, filter: string) => boolean {
-    let filterFunction = function(data, filter): boolean {
-      let searchTerms = JSON.parse(filter);
-      if (
-        searchTerms.projectId &&
-        searchTerms.assignmentId &&
-        searchTerms.statusId
-      ) {
-        return (
-          data.projectId
-            .toString()
-            .toLowerCase()
-            .indexOf(searchTerms.projectId) !== -1 &&
-          data.assignmentId
-            .toString()
-            .toLowerCase()
-            .indexOf(searchTerms.assignmentId) !== -1 &&
-          data.statusId
-            .toString()
-            .toLowerCase()
-            .indexOf(searchTerms.statusId) !== -1
-        );
-      } else if (searchTerms.projectId && searchTerms.assignmentId) {
-        return (
-          data.projectId
-            .toString()
-            .toLowerCase()
-            .indexOf(searchTerms.projectId) !== -1 &&
-          data.assignmentId
-            .toString()
-            .toLowerCase()
-            .indexOf(searchTerms.assignmentId) !== -1
-        );
-      } else if (searchTerms.projectId && searchTerms.statusId) {
-        return (
-          data.projectId
-            .toString()
-            .toLowerCase()
-            .indexOf(searchTerms.projectId) !== -1 &&
-          data.statusId
-            .toString()
-            .toLowerCase()
-            .indexOf(searchTerms.statusId) !== -1
-        );
-      } else if (searchTerms.assignmentId && searchTerms.statusId) {
-        return (
-          data.assignmentId
-            .toString()
-            .toLowerCase()
-            .indexOf(searchTerms.assignmentId) !== -1 &&
-          data.statusId
-            .toString()
-            .toLowerCase()
-            .indexOf(searchTerms.statusId) !== -1
-        );
-      } else if (searchTerms.projectId) {
-        return (
-          data.projectId
-            .toString()
-            .toLowerCase()
-            .indexOf(searchTerms.projectId) !== -1
-        );
-      } else if (searchTerms.assignmentId) {
-        return (
-          data.assignmentId
-            .toString()
-            .toLowerCase()
-            .indexOf(searchTerms.assignmentId) !== -1
-        );
-      } else if (searchTerms.statusId) {
-        return (
-          data.statusId
-            .toString()
-            .toLowerCase()
-            .indexOf(searchTerms.statusId) !== -1
-        );
-      } else {
-        return data;
-      }
+  onApplyDateFilters() {
+    this.reports = this.dataSource.data;
+    const range = {
+      from: this.filterDateForm.get("filterFromControl").value,
+      to: this.filterDateForm.get("filterToControl").value
     };
-    return filterFunction;
+
+    this.dataSource.data = this.dataSource.data.filter(
+      this.filterTableService.filterDate(range)
+    );
+    this.applyBtnDisabled = true;
+  }
+
+  onClearFilters() {
+    this.dataSource.data = this.reports;
+    this.applyBtnDisabled = false;
   }
 
   // pushing new report to array
@@ -380,6 +286,9 @@ export class ReportsComponent implements OnInit {
         "Sorry, but on this project you can choose only same start and end date!"
       );
       return;
+    } else if (!this.reportValidator.timePerDayValidator(this.dataSource.data, reportData)) {
+      alert("You cannot make report for that day, it is already full");
+	return;
     } else if (this.isEdited) {
       this.isEdited = false;
       this.reportHttpService

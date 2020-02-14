@@ -2,11 +2,9 @@
 <form [formGroup]="filterForm" class="filter-form">
   <mat-form-field>
     <mat-label>Project</mat-label>
-    <mat-select formControlName="filterProjectControl"
-    >
+    <mat-select formControlName="filterProjectControl">
       <mat-option>All</mat-option>
-      <mat-option *ngFor="let project of projects" [value]="project.id"
-      >
+      <mat-option *ngFor="let project of projects" [value]="project.id">
         {{ project.name }}</mat-option
       >
     </mat-select>
@@ -25,41 +23,38 @@
   <mat-form-field>
     <mat-label>Status</mat-label>
     <mat-select formControlName="filterStatusControl">
-      <mat-option>None</mat-option>
+      <mat-option>All</mat-option>
       <mat-option *ngFor="let status of statuses" [value]="status.id">
         {{ status.name }}</mat-option
       >
     </mat-select>
   </mat-form-field>
-  <hr>
+  <hr />
+</form>
 
-
-  <mat-checkbox formControlName="fromCheckControl" >
-    From
-  </mat-checkbox>
-
-
+<!-- Filter Date Form -->
+<form [formGroup]="filterDateForm" class="filter-form" (ngSubmit)="onApplyDateFilters()">
   <mat-form-field>
-    <!-- <mat-label>From</mat-label> -->
-    <input #From
-      matInput
-      type="date"
-      formControlName="filterFromControl"
-    />
+    <mat-label>From</mat-label>
+    <input matInput type="date" formControlName="filterFromControl" required/>
   </mat-form-field>
 
-  <mat-checkbox formControlName="toCheckControl">
-    To
-  </mat-checkbox>
   <mat-form-field>
-    <!-- <mat-label>End date</mat-label> -->
-    <input
-      matInput
-      type="date"
-      formControlName="filterToControl"
-    />
+    <mat-label>To</mat-label>
+    <input matInput type="date" formControlName="filterToControl"  required/>
   </mat-form-field>
 
+  <button mat-button class="btn-custom"
+  [disabled]="filterDateForm.invalid || applyBtnDisabled"
+  type="submit">
+    Apply
+  </button>
+  <button mat-button class="btn-custom" 
+  [disabled]="!applyBtnDisabled ||filterDateForm.invalid"
+  (click)="onClearFilters()"
+  >
+    Clear
+  </button>
 </form>
 
 <div class="mat-elevation-z8">
@@ -70,7 +65,8 @@
     <!-- Project Column -->
     <ng-container matColumnDef="project">
       <th mat-header-cell *matHeaderCellDef>
-        Project</th>
+        Project
+      </th>
       <td mat-cell *matCellDef="let report">
         {{ getProjectById(report.projectId) }}
       </td>
@@ -173,7 +169,7 @@
   </table>
 
   <mat-paginator
-    [pageSizeOptions]="[5, 10, 20]"
+    [pageSizeOptions]="[10, 20, 30]"
     showFirstLastButtons
   ></mat-paginator>
 </div>
