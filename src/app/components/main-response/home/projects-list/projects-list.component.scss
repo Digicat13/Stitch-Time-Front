@@ -19,8 +19,13 @@ $color-theme: #ca5c50;
 .btn-custom {
   background-color: $color-theme;
   color: white;
-
+  max-height: 40px;
 }
+
+// ng-container{
+//   flex-direction: column;
+//   // align-self: center;
+// }
 
 .mat-table {
   margin: 0;
@@ -61,6 +66,7 @@ mat-paginator {
 
 .mat-form-field {
   font-size: 14px;
+  align-self: flex-end;
 }
 
 th,
@@ -70,20 +76,8 @@ td {
   white-space: nowrap;
 }
 
-// STYLES FOR ROWS IN TABLE DEPENDS ON STATUS
-.notified {
-  background-color: $info !important;
-}
 
-.approved {
-  background-color: $success !important;
-}
-
-.declined {
-  background-color: $danger !important;
-}
-
-.report-form{
+.project-form{
   width: 100%;
   padding: 2vm;
 
@@ -95,6 +89,7 @@ td {
 
   .description {
     width: 16vw;
+    resize: none;
   }
 
   button{
@@ -108,6 +103,11 @@ td {
 
 }
 
+.add-prjct-form{
+  display: flex;
+  justify-content: center;
+  align-content: flex-end;
+}
 
 textarea {
   color: white;
@@ -115,18 +115,4 @@ textarea {
 
 input {
   color: white;
-}
-
-.checkbox-margin {
-  margin: 0 10px;
-}
-
-.filter-form{
-mat-form-field {
-  margin: 1vw;
-}
-
-button{
-  margin: 1vw;
-}
 }
