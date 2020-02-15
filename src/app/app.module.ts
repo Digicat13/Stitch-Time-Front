@@ -26,12 +26,20 @@ import { ReportValidator } from "./validators/reports.validator";
 import { IsPageLoading } from "./services/is-loading-emitter.service";
 import { WelcomePageComponent } from './components/main-response/welcome-page/welcome-page.component';
 import { FilterTableService } from './services/filter-table..service';
+import { NotifiedReportsListComponent } from './components/main-response/home/notified-reports-list/notified-reports-list.component';
+import { ProjectsListComponent } from './components/main-response/home/projects-list/projects-list.component';
+import { ProjectForPMService } from './services/project-4-pm.service';
+import { NotifiedReportsService } from './services/notified-reports.service';
 
 const appRoutes: Routes = [
   { path: "", component: WelcomePageComponent },
   { path: "login", component: LogininFormComponent },
   { path: "registration", component: RegistrationFormComponent },
-  { path: "home", component: HomeComponent }
+  { path: "home", component: HomeComponent, children: [
+    {path: "reportslist" , component: ReportsComponent},
+    {path: "projectslist", component: ProjectsListComponent},
+    {path: "notifiedreports", component: NotifiedReportsListComponent }
+  ] }
 ];
 
 @NgModule({
@@ -46,7 +54,9 @@ const appRoutes: Routes = [
     LogininFormComponent,
     HomeComponent,
     ReportsComponent,
-    WelcomePageComponent
+    WelcomePageComponent,
+    ProjectsListComponent,
+    NotifiedReportsListComponent
   ],
   imports: [
     BrowserModule,
@@ -80,7 +90,9 @@ const appRoutes: Routes = [
     ReportHttpService,
     ReportValidator,
     IsPageLoading,
-    FilterTableService
+    FilterTableService,
+    ProjectForPMService,
+    NotifiedReportsService
   ],
   bootstrap: [AppComponent]
 })

@@ -181,7 +181,6 @@ export class ReportsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.pageLoading.isLoading.next(true);
 
     this.dataSource.paginator = this.paginator;
 
