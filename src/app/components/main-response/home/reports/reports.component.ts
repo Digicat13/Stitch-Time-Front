@@ -17,7 +17,7 @@ import { FilterTableService } from "src/app/services/filter-table..service";
 
 const REPORT_DATA: IReportData[] = [
   {
-    projectId: 1,
+    projectId: 3,
     assignmentId: 1,
     description:
       "sdadasdasdasdsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddd",
@@ -29,7 +29,7 @@ const REPORT_DATA: IReportData[] = [
     statusId: 4
   },
   {
-    projectId: 2,
+    projectId: 3,
     assignmentId: 2,
     description: "ssdasdsad",
     time: 0,
@@ -41,7 +41,7 @@ const REPORT_DATA: IReportData[] = [
   },
   {
     projectId: 3,
-    assignmentId: 3,
+    assignmentId: 1,
     description: "lol",
     time: 0,
     overtime: 0,
@@ -130,17 +130,17 @@ export class ReportsComponent implements OnInit {
   ];
 
   projects: Array<IProject> = [
-    { id: 3, name: "RDM", projectManagerId: 2 }
-    // { id: 1, name: "EDU-pr", projectManagerId: 5 },
-    // { id: 2, name: "adasdasd", projectManagerId: 5 },
-    // { id: 4, name: "cancerheal", projectManagerId: 5 }
+    { id: 3, name: "RDM", projectManagerId: 2 },
+    { id: 1, name: "EDU-pr", projectManagerId: 5 },
+    { id: 2, name: "adasdasd", projectManagerId: 5 },
+    { id: 4, name: "cancerheal", projectManagerId: 5 }
   ];
 
   tasks: Array<IAssignment> = [
-    // { id: 3, name: "bug fixing" },
-    // { id: 2, name: "testing" },
-    { id: 1, name: "dev" }
-    // { id: 4, name: "design" }
+    { id: 3, name: "bug fixing" },
+    { id: 2, name: "testing" },
+    { id: 1, name: "dev" },
+    { id: 4, name: "design" }
   ];
 
   statuses: Array<IStatus> = [
