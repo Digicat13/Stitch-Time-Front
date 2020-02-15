@@ -184,7 +184,11 @@ export class ReportsComponent implements OnInit {
 
   constructor(
     private reportHttpService: ReportHttpService,
-    private reportValidator: ReportValidator
+    private reportValidator: ReportValidator,
+    private dialog: MatDialog,
+    private pageLoading: IsPageLoading,
+    private filterTableService: FilterTableService
+
   ) {}
 
   ngOnInit() {
