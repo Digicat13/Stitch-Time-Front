@@ -175,7 +175,7 @@ export class ReportsComponent implements OnInit {
     private reportHttpService: ReportHttpService,
     private reportValidator: ReportValidator,
     private dialog: MatDialog,
-    private pageLoading: IsPageLoading
+    private pageLoading: IsPageLoading,
     private filterTableService: FilterTableService
 
   ) {}
