@@ -1,0 +1,132 @@
+// @import url("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css");
+
+$color-basic: #e4e4e7;
+$text-basic: #fefefe;
+// $color-notified: #94b6db;
+// $text-notified: #004085;
+// $color-accepted: #5ee78c;
+// $text-accepted: #155724;
+// $color-declined: #c8727a;
+// $text-declined: #721c24;
+$table-header: #595959;
+
+$danger: #f8d7da;
+$info: #afd6ff;
+$success: #a8edb8;
+
+$color-theme: #ca5c50;
+
+.btn-custom {
+  background-color: $color-theme;
+  color: white;
+  max-height: 40px;
+}
+
+// ng-container{
+//   flex-direction: column;
+//   // align-self: center;
+// }
+
+.mat-table {
+  margin: 0;
+  table-layout: fixed;
+
+  .mat-row {
+    color: $text-basic;
+    background-color: $color-basic;
+    border-bottom: 2px solid $table-header;
+  }
+
+  .mat-header-cell {
+    background-color: $table-header;
+  }
+}
+
+
+.mat-cell {
+  color: #1b1b1b;
+}
+
+mat-paginator {
+  //color: $text-basic;
+  background-color: $table-header;
+}
+
+::ng-deep .mat-tooltip {
+  font-size: 12px;
+  text-overflow: clip;
+  white-space: normal;
+  word-break: break-all;
+}
+
+.basic-field {
+  color: $text-basic;
+  background-color: $color-basic;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  align-self: flex-end;
+}
+
+th,
+td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.project-form{
+  width: 100%;
+  padding: 2vm;
+
+  .mat-form-field{
+    margin: 1vw;
+    width: 8vw;
+
+  }
+
+  .description {
+    width: 16vw;
+    resize: none;
+  }
+
+  button{
+    margin: 1vw;
+  }
+
+  .edit{
+    margin: 5px;
+    width: 1vw;
+  }
+
+}
+
+.add-prjct-form{
+  display: flex;
+  justify-content: center;
+  align-content: flex-end;
+}
+
+textarea {
+  color: white;
+}
+
+input {
+  color: white;
+}
+
+
+// STYLES FOR ROWS IN TABLE DEPENDS ON STATUS
+.notified {
+  background-color: $info !important;
+}
+
+.approved {
+  background-color: $success !important;
+}
+
+.declined {
+  background-color: $danger !important;
+}

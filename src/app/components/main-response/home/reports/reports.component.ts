@@ -179,8 +179,8 @@ export class ReportsComponent implements OnInit {
   reports: Array<IReportData> = new Array<IReportData>();
 
   // dataSourse here is source for table - observable
-  //dataSource = new MatTableDataSource<IReportData>(REPORT_DATA);
-  dataSource = new MatTableDataSource<IReportData>(this.reports);
+  dataSource = new MatTableDataSource<IReportData>(REPORT_DATA);
+  // dataSource = new MatTableDataSource<IReportData>(this.reports);
 
   reportForm: FormGroup;
 

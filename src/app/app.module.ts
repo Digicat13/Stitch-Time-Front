@@ -26,6 +26,8 @@ import { ReportValidator } from "./validators/reports.validator";
 import { IsPageLoading } from "./services/is-loading-emitter.service";
 import { ProjectsListComponent } from './components/main-response/home/projects-list/projects-list.component';
 import { ProjectForPMService } from './services/project-4-pm.service';
+import { NotifiedReportsListComponent } from './components/main-response/home/notified-reports-list/notified-reports-list.component';
+import { NotifiedReportsService } from './services/notified-reports.service';
 
 
 const appRoutes: Routes = [
@@ -34,7 +36,8 @@ const appRoutes: Routes = [
   { path: "registration", component: RegistrationFormComponent },
   { path: "home", component: HomeComponent, children: [
     {path: "reportslist" , component: ReportsComponent},
-    {path: "projectslist", component: ProjectsListComponent}
+    {path: "projectslist", component: ProjectsListComponent},
+    {path: "notifiedreports", component: NotifiedReportsListComponent }
   ] }
 ];
 
@@ -50,7 +53,8 @@ const appRoutes: Routes = [
     LogininFormComponent,
     HomeComponent,
     ReportsComponent,
-    ProjectsListComponent
+    ProjectsListComponent,
+    NotifiedReportsListComponent
   ],
   imports: [
     BrowserModule,
@@ -83,7 +87,8 @@ const appRoutes: Routes = [
     ReportHttpService,
     ReportValidator,
     IsPageLoading,
-    ProjectForPMService
+    ProjectForPMService,
+    NotifiedReportsService
   ],
   bootstrap: [AppComponent]
 })

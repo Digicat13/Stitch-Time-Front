@@ -69,13 +69,12 @@ export class ProjectsListComponent implements OnInit {
   projectForm = new FormGroup({
     projectName: new FormControl(null, [
       Validators.required,
-      Validators.maxLength(15),
+      Validators.maxLength(15)
       // Validators.pattern(/^[0-9a-zA-Z]{1,15}$/)
-
     ]),
     projectAbbreviation: new FormControl(null, [
       Validators.required,
-      Validators.maxLength(6),
+      Validators.maxLength(6)
       // Validators.pattern(/^[0-9A-Z]{1,6}$/)
     ]),
     description: new FormControl(null, [

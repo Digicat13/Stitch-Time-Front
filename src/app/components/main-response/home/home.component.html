@@ -2,14 +2,16 @@
   <div class="main-body">
     <div class="nav-bar">
       <ul class="nav nav-tabs">
-        <li 
+        <li
         routerLink="reportslist"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{exact: true}"><a>Reports List</a></li>
         <li routerLinkActive="active"
-        [routerLinkActiveOptions]="{exact: true}"><a routerLink="projectslist">Project List</a></li>
+        routerLink="projectslist"
+        [routerLinkActiveOptions]="{exact: true}"><a>Project List</a></li>
         <li routerLinkActive="active"
-        [routerLinkActiveOptions]="{exact: true}"><a>Spent Hours</a></li>
+        routerLink="notifiedreports"
+        [routerLinkActiveOptions]="{exact: true}"><a>Notified Reports</a></li>
       </ul>
     </div>
     <div>
