@@ -11,9 +11,10 @@ import { ReportHttpService } from "src/app/services/report-http.service";
 import "bootstrap/dist/js/bootstrap.bundle";
 import { ReportValidator } from "../../../../validators/reports.validator";
 import { MatTableDataSource, MatPaginator, MatDialog } from "@angular/material";
-import { ErrorResponseDialogComponent } from '../../error-response-dialog/error-response-dialog.component';
-import { IsPageLoading } from 'src/app/services/is-loading-emitter.service';
+import { ErrorResponseDialogComponent } from "../../error-response-dialog/error-response-dialog.component";
+import { IsPageLoading } from "src/app/services/is-loading-emitter.service";
 import { FilterTableService } from "src/app/services/filter-table..service";
+import { SignInUpService } from "src/app/services/sign-in-up.service";
 
 const REPORT_DATA: IReportData[] = [
   {
@@ -176,12 +177,11 @@ export class ReportsComponent implements OnInit {
     private reportValidator: ReportValidator,
     private dialog: MatDialog,
     private pageLoading: IsPageLoading,
-    private filterTableService: FilterTableService
-
+    private filterTableService: FilterTableService,
+    private signInUpService: SignInUpService
   ) {}
 
   ngOnInit() {
-
     this.dataSource.paginator = this.paginator;
 
     this.pageLoading.isLoading.next(true);
@@ -195,7 +195,6 @@ export class ReportsComponent implements OnInit {
     this.dataSource.data = this.dataSource.data;
     this.pageLoading.isLoading.next(false);
     this.dataSource.filterPredicate = this.filterTableService.filterProjectTaskStatus();
-
   }
 
   createReportForm() {
@@ -289,9 +288,14 @@ export class ReportsComponent implements OnInit {
         "Sorry, but on this project you can choose only same start and end date!"
       );
       return;
-    } else if (!this.reportValidator.timePerDayValidator(this.dataSource.data, reportData)) {
+    } else if (
+      !this.reportValidator.timePerDayValidator(
+        this.dataSource.data,
+        reportData
+      )
+    ) {
       alert("You cannot make report for that day, it is already full");
-	return;
+      return;
     } else if (this.isEdited) {
       this.isEdited = false;
       reportData.id = this.currentReportId;
@@ -425,26 +429,47 @@ export class ReportsComponent implements OnInit {
   }
 
   onGet() {
-
     this.pageLoading.isLoading.next(true);
-    this.reportHttpService.getData().subscribe(data => {
-    this.pageLoading.isLoading.next(false);
-      if (data.length > 0) {
-        data.forEach(report => {
-          const startDate = report.startDate.split("T");
-          report.startDate = startDate[0];
-          const endDate = report.endDate.split("T");
-          report.endDate = endDate[0];
-        });
-        console.log(data);
-        // this.reports = data;
-        this.dataSource.data = data;
+    // this.reportHttpService.getData().subscribe(data => {
+    // this.pageLoading.isLoading.next(false);
+    //   if (data.length > 0) {
+    //     data.forEach(report => {
+    //       const startDate = report.startDate.split("T");
+    //       report.startDate = startDate[0];
+    //       const endDate = report.endDate.split("T");
+    //       report.endDate = endDate[0];
+    //     });
+    //     console.log(data);
+    //     // this.reports = data;
+    //     this.dataSource.data = data;
+    //   }
+    // },
+    // error => {
+    // this.pageLoading.isLoading.next(false);
+    // this.openErrorResponseDialog(error.message);
+    // });
+    this.signInUpService.getUserInfoById(1).subscribe(
+      responseData => {
+        this.pageLoading.isLoading.next(false);
+
+        console.log(responseData);
+        this.reports = responseData.reports;
+        if ( this.reports.length > 0) {
+          this.reports.forEach(report => {
+            const startDate = report.startDate.split("T");
+            report.startDate = startDate[0];
+            const endDate = report.endDate.split("T");
+            report.endDate = endDate[0];
+          });
+        }
+        this.dataSource.data = this.reports;
+
+      },
+      error => {
+        this.openErrorResponseDialog(error.message);
+        this.pageLoading.isLoading.next(false);
       }
-    },
-    error => {
-    this.pageLoading.isLoading.next(false);
-    this.openErrorResponseDialog(error.message);
-    });
+    );
   }
 
   onDelete(report: IReportData) {

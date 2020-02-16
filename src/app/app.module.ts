@@ -30,12 +30,13 @@ import { NotifiedReportsListComponent } from './components/main-response/home/no
 import { ProjectsListComponent } from './components/main-response/home/projects-list/projects-list.component';
 import { ProjectForPMService } from './services/project-4-pm.service';
 import { NotifiedReportsService } from './services/notified-reports.service';
+import { AuthGuard } from './services/auth.guard';
 
 const appRoutes: Routes = [
   { path: "", component: WelcomePageComponent },
   { path: "login", component: LogininFormComponent },
   { path: "registration", component: RegistrationFormComponent },
-  { path: "home", component: HomeComponent, children: [
+  { path: "home", component: HomeComponent, canActivate: [AuthGuard] , children: [
     {path: "reportslist" , component: ReportsComponent},
     {path: "projectslist", component: ProjectsListComponent},
     {path: "notifiedreports", component: NotifiedReportsListComponent }

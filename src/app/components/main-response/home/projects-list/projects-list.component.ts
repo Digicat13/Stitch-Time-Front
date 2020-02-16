@@ -16,7 +16,7 @@ const PROJECT_DATA: Array<IProjectData> = [
     teamleadId: 1,
     teamleadName: "Francisco",
     teamleadSurname: "Smit",
-    teammates: [{ id: 1, name: "Daniil", surname: "Shlive" }]
+    teammates: [{ id: '1', firstName: "Daniil", secondName: "Shlive" }]
   },
   {
     id: 2,
@@ -26,7 +26,7 @@ const PROJECT_DATA: Array<IProjectData> = [
     teamleadId: 1,
     teamleadName: "Francisco",
     teamleadSurname: "Smit",
-    teammates: [{ id: 1, name: "Daniil", surname: "Shlive" }]
+    teammates: [{ id: '1', firstName: "Daniil", secondName: "Shlive" }]
   },
   {
     id: 3,
@@ -36,7 +36,7 @@ const PROJECT_DATA: Array<IProjectData> = [
     teamleadId: 1,
     teamleadName: "Francisco",
     teamleadSurname: "Smit",
-    teammates: [{ id: 1, name: "Daniil", surname: "Shlive" }]
+    teammates: [{ id: '1', firstName: "Daniil", secondName: "Shlive" }]
   }
 ];
 
@@ -51,11 +51,11 @@ export class ProjectsListComponent implements OnInit {
   displayedColumns: string[] = ["abbr", "name", "teamleadName", "actions"];
 
   developers: Array<IUserData> = [
-    { id: 1, name: "Daniil", surname: "Shlive" },
-    { id: 2, name: "Denis", surname: "Shlive" },
-    { id: 3, name: "Francisco", surname: "Dantes" },
-    { id: 4, name: "Will", surname: "Smit" },
-    { id: 5, name: "David", surname: "Pozhar" }
+    { id: "1", firstName: "Daniil", secondName: "Shlive" },
+    { id: "2", firstName: "Denis", secondName: "Shlive" },
+    { id: '3', firstName: "Francisco", secondName: "Dantes" },
+    { id: '4', firstName: "Will", secondName: "Smit" },
+    { id: '5', firstName: "David", secondName: "Pozhar" }
   ];
 
   isEdited = false;

@@ -50,7 +50,6 @@ export class LogininFormComponent implements OnInit {
         this.loginInForm.reset();
         this.router.navigate(["/home"]);
 
-        // this.localStorageService.storeUserDataOnLocalStorage(responseData);
       },
       errorData => {
         this.loading.isLoading.next(false);
