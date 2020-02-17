@@ -1,11 +1,81 @@
+<!-- Filter Form -->
+<form [formGroup]="filterForm" class="filter-form">
+  <mat-form-field>
+    <mat-label>Project</mat-label>
+    <mat-select formControlName="filterProjectControl">
+      <mat-option>All</mat-option>
+      <mat-option *ngFor="let project of projects" [value]="project.id">
+        {{ project.name }}</mat-option
+      >
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Task</mat-label>
+    <mat-select formControlName="filterTaskControl">
+      <mat-option>All</mat-option>
+      <mat-option *ngFor="let task of tasks" [value]="task.id">
+        {{ task.name }}</mat-option
+      >
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Status</mat-label>
+    <mat-select formControlName="filterStatusControl">
+      <mat-option>All</mat-option>
+      <mat-option *ngFor="let status of statuses" [value]="status.id">
+        {{ status.name }}</mat-option
+      >
+    </mat-select>
+  </mat-form-field>
+  <hr />
+</form>
+
+
+<!-- Filter Date Form -->
+<form [formGroup]="filterDateForm" class="filter-form" (ngSubmit)="onApplyDateFilters()">
+  <mat-form-field>
+    <mat-label>From</mat-label>
+    <input matInput type="date" formControlName="filterFromControl" required/>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>To</mat-label>
+    <input matInput type="date" formControlName="filterToControl"  required/>
+  </mat-form-field>
+
+  <button mat-button class="btn-custom"
+  [disabled]="filterDateForm.invalid || applyBtnDisabled"
+  type="submit">
+    Apply
+  </button>
+  <button mat-button class="btn-custom" 
+  [disabled]="!applyBtnDisabled ||filterDateForm.invalid"
+  (click)="onClearFilters()"
+  >
+    Clear
+  </button>
+</form>
+
 <div class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource">
+  <table mat-table [dataSource]="dataSource" >
     <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
 
+ <!-- Sender Column -->
+ <ng-container matColumnDef="user">
+  <th mat-header-cell *matHeaderCellDef>Sender</th>
+  <td mat-cell *matCellDef="let report"
+    matTooltip="{{getUserNameById(report.userId)}}"
+  >
+    {{getUserNameById(report.userId) }}
+  </td>
+</ng-container>
+
     <!-- Project Column -->
     <ng-container matColumnDef="abbr">
-      <th mat-header-cell *matHeaderCellDef>Project</th>
+      <th mat-header-cell *matHeaderCellDef class="small-coll">Project</th>
       <td mat-cell *matCellDef="let report">
         {{getProjectById(report.projectId) }}
       </td>
@@ -20,13 +90,13 @@
 
     <!-- Time Column -->
     <ng-container matColumnDef="time">
-      <th mat-header-cell *matHeaderCellDef>Time</th>
+      <th mat-header-cell *matHeaderCellDef  class="small-coll">Time</th>
       <td mat-cell *matCellDef="let report">{{ report.time }}</td>
     </ng-container>
 
     <!-- Overtime Column -->
     <ng-container matColumnDef="overtime">
-      <th mat-header-cell *matHeaderCellDef>Overtime</th>
+      <th mat-header-cell *matHeaderCellDef class="small-coll">Overtime</th>
       <td mat-cell *matCellDef="let report">{{ report.overtime }}</td>
     </ng-container>
 
@@ -44,14 +114,22 @@
 
     <!-- StartDate Column -->
     <ng-container matColumnDef="startDate">
-      <th mat-header-cell *matHeaderCellDef>Start date</th>
+      <th mat-header-cell *matHeaderCellDef class="small-coll">Start date</th>
       <td mat-cell *matCellDef="let report">{{ report.startDate }}</td>
     </ng-container>
 
     <!-- EndDate Column -->
     <ng-container matColumnDef="endDate">
-      <th mat-header-cell *matHeaderCellDef>End date</th>
+      <th mat-header-cell *matHeaderCellDef class="small-coll">End date</th>
       <td mat-cell *matCellDef="let report">{{ report.endDate }}</td>
+    </ng-container>
+    
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef class="small-coll">Status</th>
+      <td mat-cell *matCellDef="let report">
+        {{ getStatusById(report.statusId) }}
+      </td>
     </ng-container>
 
     <!-- Actions-menu Column -->
@@ -88,7 +166,7 @@
   </table>
 
   <mat-paginator
-    [pageSizeOptions]="[5, 10, 20]"
+    [pageSizeOptions]="[10, 20, 30]"
     showFirstLastButtons
   ></mat-paginator>
 </div>
