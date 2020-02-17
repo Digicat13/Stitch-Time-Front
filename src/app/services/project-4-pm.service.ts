@@ -13,7 +13,7 @@ export class ProjectForPMService {
 
   getProjectsList() {
     return this.http
-      .get<IProjectData[]>(this.apiUrl)
+      .get<IProjectData[]>(environment.apiUrl + '/user/GetPmProjectsInfo')
       .pipe(catchError(this.errorHandling));
   }
 

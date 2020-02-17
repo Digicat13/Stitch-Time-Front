@@ -31,6 +31,7 @@ export class SignInUpService {
   }
 
   singIn(userLoginInData: IUserData) {
+    console.log(userLoginInData);
     return this.http
       .post<IUserData>(environment.apiUrl + "/Account/SignIn", userLoginInData)
       .pipe(
@@ -47,8 +48,8 @@ export class SignInUpService {
       );
   }
 
-  getUserInfoById(id: number) {
-    return this.http.get<IFullUserData>(environment.apiUrl + "/user/" + id);
+  getUserInfoById() {
+    return this.http.get<IFullUserData>(environment.apiUrl + "/user/GetInfo");
   }
 
   autoLogin() {

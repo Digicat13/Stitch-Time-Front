@@ -31,6 +31,7 @@ import { ProjectsListComponent } from './components/main-response/home/projects-
 import { ProjectForPMService } from './services/project-4-pm.service';
 import { NotifiedReportsService } from './services/notified-reports.service';
 import { AuthGuard } from './services/auth.guard';
+import { FetchDefaultInfoService } from './services/fetch-default-info.service';
 
 const appRoutes: Routes = [
   { path: "", component: WelcomePageComponent },
@@ -93,7 +94,8 @@ const appRoutes: Routes = [
     IsPageLoading,
     FilterTableService,
     ProjectForPMService,
-    NotifiedReportsService
+    NotifiedReportsService,
+    FetchDefaultInfoService
   ],
   bootstrap: [AppComponent]
 })
