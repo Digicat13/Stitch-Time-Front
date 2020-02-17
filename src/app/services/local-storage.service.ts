@@ -18,7 +18,7 @@ export class LocalStorageService {
 
     currentUserData.push({
       email: userData.email,
-      name: userData.name
+      name: userData.firstName
     });
 
     // insert updated array to local storage

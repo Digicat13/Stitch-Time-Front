@@ -8,7 +8,7 @@ import { MatDialog } from "@angular/material";
 import { ErrorResponseDialogComponent } from "../error-response-dialog/error-response-dialog.component";
 import { LocalStorageService } from "src/app/services/local-storage.service";
 import { IsPageLoading } from "src/app/services/is-loading-emitter.service";
-import { Router } from '@angular/router';
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-registration-form",
@@ -18,6 +18,10 @@ import { Router } from '@angular/router';
 export class RegistrationFormComponent implements OnInit {
   registrationForm: FormGroup;
   emailAlreadyRegistered: boolean = false;
+  positions: Array<{ positionId: number; positionName: string }> = [
+    { positionId: 1, positionName: "Developer" },
+    { positionId: 2, positionName: "Project Manager" }
+  ];
 
   constructor(
     private signInUpService: SignInUpService,
@@ -62,12 +66,12 @@ export class RegistrationFormComponent implements OnInit {
       return;
     }
     const inputData: IUserData = {
-      name: this.registrationForm.get("userName").value,
-      surname: this.registrationForm.get("userSurname").value,
+      firstName: this.registrationForm.get("userName").value,
+      secondName: this.registrationForm.get("userSurname").value,
       email: this.registrationForm.get("userEmail").value,
       password: this.registrationForm.get("passwords").get("userPassword")
         .value,
-      position: this.registrationForm.get("userPosition").value
+      positionId: +this.registrationForm.get("userPosition").value
     };
 
     // this.isLoading = true;
@@ -77,20 +81,17 @@ export class RegistrationFormComponent implements OnInit {
       responseUserData => {
         this.loading.isLoading.next(false);
 
-        // this.localStorageService.storeUserDataOnLocalStorage(responseUserData);
-
-        this.openSuccessfullyRegisteredDialog(
-          this.localStorageService.getUserDataFromLocalStorage().name
-        );
+        this.openSuccessfullyRegisteredDialog(responseUserData.firstName);
 
         // TODO доробити
 
         this.registrationForm.reset();
 
-        this.router.navigate(['/home']);
+        this.router.navigate(["/home"]);
       },
       errorData => {
         this.loading.isLoading.next(false);
+        console.log(errorData);
 
         // TODO сюди треба додати обробку помилки, якщо ще щось сталось, хоча, тут єдиний трабл
         // це як раз або ВЖЕ ЗАРЕЄСТРОВАНИЙ емейл, або ж трабл з підключенням до сервака ;)

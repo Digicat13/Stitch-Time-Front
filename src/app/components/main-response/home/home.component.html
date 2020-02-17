@@ -1,17 +1,32 @@
+<nav>
+  <a (click)="onLogout()">Logout</a>
+</nav>
+
 <div class="main">
   <div class="main-body">
     <div class="nav-bar">
       <ul class="nav nav-tabs">
         <li
-        routerLink="reportslist"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{exact: true}"><a>Reports List</a></li>
-        <li routerLinkActive="active"
-        routerLink="projectslist"
-        [routerLinkActiveOptions]="{exact: true}"><a>Project List</a></li>
-        <li routerLinkActive="active"
-        routerLink="notifiedreports"
-        [routerLinkActiveOptions]="{exact: true}"><a>Notified Reports</a></li>
+          routerLink="reportslist"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <a>Reports List</a>
+        </li>
+        <li
+          routerLinkActive="active"
+          routerLink="projectslist"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <a>Project List</a>
+        </li>
+        <li
+          routerLinkActive="active"
+          routerLink="notifiedreports"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <a>Notified Reports</a>
+        </li>
       </ul>
     </div>
     <div>
@@ -19,9 +34,4 @@
     </div>
   </div>
 </div>
-<footer>
-    <div class="logout-btn">
-      <a>Logout</a>
-    </div>
-  </footer>
 
