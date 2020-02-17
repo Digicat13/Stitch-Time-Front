@@ -95,8 +95,12 @@ export class ProjectsListComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
-
     this.onGet();
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   onDelete(project: IProjectData) {

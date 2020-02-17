@@ -112,8 +112,6 @@ export class ReportsComponent implements OnInit {
     projectId: "",
     assignmentId: "",
     statusId: "",
-    startDate: "",
-    endDate: ""
   };
 
   // Displayed columns in the main table
