@@ -4,16 +4,24 @@ import { IProjectData } from "../interfaces/project-data";
 import { environment } from "src/environments/environment";
 import { throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
+import { IProject } from '../interfaces/report-data';
+import { IUserData } from '../interfaces/user-data';
+
+interface IProjectPmInfo {
+  projects: Array<IProjectData>;
+  users: Array<IUserData>;
+}
 
 @Injectable()
 export class ProjectForPMService {
-  apiUrl: string = environment.apiUrl + "/project";
+  apiUrl: string = environment.apiUrl + "/Project";
+
 
   constructor(private http: HttpClient) {}
 
   getProjectsList() {
     return this.http
-      .get<IProjectData[]>(this.apiUrl)
+      .get<IProjectPmInfo>(environment.apiUrl+'/user/getPmProjectsInfo')
       .pipe(catchError(this.errorHandling));
   }
 

@@ -10,7 +10,7 @@
           routerLink="reportslist"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
-          *ngIf="position === 1 || position === 2"
+          *ngIf="getPositionById(positionId)=== 'Developer' || getPositionById(positionId)=== 'Team Lead'"
         >
           <a>Reports List</a>
         </li>
@@ -18,7 +18,7 @@
           routerLinkActive="active"
           routerLink="projectslist"
           [routerLinkActiveOptions]="{ exact: true }"
-          *ngIf="position === 3"
+          *ngIf="getPositionById(positionId)=== 'Project Manager'"
         >
           <a>Project List</a>
         </li>
@@ -26,7 +26,7 @@
           routerLinkActive="active"
           routerLink="notifiedreports"
           [routerLinkActiveOptions]="{ exact: true }"
-          *ngIf="position === 2 || position === 3"
+          *ngIf="getPositionById(positionId)=== 'Team Lead' || getPositionById(positionId)=== 'Project Manager'"
         >
           <a>Notified Reports</a>
         </li>
