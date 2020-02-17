@@ -3,6 +3,7 @@ nav{
     top: 3vh;
     right: 5vw;
     font-size: 1.5em;
+    z-index: 100;
 
     :hover{
         color: black;
@@ -16,6 +17,8 @@ a{
 }
 
 main {
+  margin-top: 4.2vw;
+
   display: flex;
   align-items: center;
   justify-content: center;

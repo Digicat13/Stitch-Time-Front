@@ -6,6 +6,7 @@ nav{
   right: 5vw;
   font-size: 1.5em;
   cursor: pointer;
+  z-index: 100;
 
   :hover{
       color: black;
@@ -55,10 +56,10 @@ div{
 .main{
     // margin: 0% 5%;
     background: $background-main;
-    position: sticky;
+    // position: sticky;
     margin-top: 4.1vw;
     margin-bottom: 3vw ;
-    z-index: -2;
+    z-index: -4;
 }
 
 .main-body{
