@@ -43,9 +43,11 @@ export class LogininFormComponent implements OnInit {
 
     this.loading.isLoading.next(true);
 
+    console.log('start login in');
     this.signInUpService.singIn(loginInData).subscribe(
       responseData => {
         this.loading.isLoading.next(false);
+        console.log('end');
 
         this.loginInForm.reset();
         this.router.navigate(["/home"]);
