@@ -9,7 +9,7 @@ export interface IReportData {
   overtime?: number;
   startDate?: string;
   endDate?: string;
-  userId?: number;
+  userId?: string;
   statusId?: number;
 
   //     projectId: 3,
