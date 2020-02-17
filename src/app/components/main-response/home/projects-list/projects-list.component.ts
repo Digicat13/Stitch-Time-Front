@@ -1,43 +1,42 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { IProjectData } from "src/app/interfaces/project-data";
+import { IProjectData, ITeamMember } from "src/app/interfaces/project-data";
 import { MatTableDataSource, MatDialog, MatPaginator } from "@angular/material";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { IUserData } from "src/app/interfaces/user-data";
 import { ProjectForPMService } from "src/app/services/project-4-pm.service";
 import { IsPageLoading } from "src/app/services/is-loading-emitter.service";
 import { ErrorResponseDialogComponent } from "../../error-response-dialog/error-response-dialog.component";
+import { IProject } from "src/app/interfaces/report-data";
 
 const PROJECT_DATA: Array<IProjectData> = [
-  {
-    id: 1,
-    name: "Recl dry motor",
-    abbreviation: "RDM",
-    projectManagerId: 1,
-    teamleadId: 1,
-    teamleadName: "Francisco",
-    teamleadSurname: "Smit",
-    teammates: [{ id: '1', firstName: "Daniil", secondName: "Shlive" }]
-  },
-  {
-    id: 2,
-    name: "AlcoKer",
-    abbreviation: "AK",
-    projectManagerId: 1,
-    teamleadId: 1,
-    teamleadName: "Francisco",
-    teamleadSurname: "Smit",
-    teammates: [{ id: '1', firstName: "Daniil", secondName: "Shlive" }]
-  },
-  {
-    id: 3,
-    name: "Mango",
-    abbreviation: "MNG",
-    projectManagerId: 1,
-    teamleadId: 1,
-    teamleadName: "Francisco",
-    teamleadSurname: "Smit",
-    teammates: [{ id: '1', firstName: "Daniil", secondName: "Shlive" }]
-  }
+  // {
+  //   id: 1,
+  //   name: "Recl dry motor",
+  //   abbreviation: "RDM",
+  //   projectManagerId: 1,
+  //   teamLeadId: 1,
+  //   teamLeadName: "Francisco",
+  //   teamLeadSurname: "Smit",
+  //   teamMates: [{ id: "1", firstName: "Daniil", secondName: "Shlive" }]
+  // },
+  // {
+  //   id: 2,
+  //   name: "AlcoKer",
+  //   abbreviation: "AK",
+  //   projectManagerId: 1,
+  //   teamLeadId: 1,
+  //   teamLeadName: "Francisco",
+  //   teamLeadSurname: "Smit",
+  //   teamMates: [{ id: "1", firstName: "Daniil", secondName: "Shlive" }]
+  // },
+  // {
+  //   id: 3,
+  //   name: "Mango",
+  //   abbreviation: "MNG",
+  //   projectManagerId: '1',
+  //   teamLeadId: '1',
+  //   teamMates: [{ id: "1", firstName: "Daniil", secondName: "Shlive" }]
+  // }
 ];
 
 @Component({
@@ -53,9 +52,9 @@ export class ProjectsListComponent implements OnInit {
   developers: Array<IUserData> = [
     { id: "1", firstName: "Daniil", secondName: "Shlive" },
     { id: "2", firstName: "Denis", secondName: "Shlive" },
-    { id: '3', firstName: "Francisco", secondName: "Dantes" },
-    { id: '4', firstName: "Will", secondName: "Smit" },
-    { id: '5', firstName: "David", secondName: "Pozhar" }
+    { id: "3", firstName: "Francisco", secondName: "Dantes" },
+    { id: "4", firstName: "Will", secondName: "Smit" },
+    { id: "5", firstName: "David", secondName: "Pozhar" }
   ];
 
   isEdited = false;
@@ -84,7 +83,9 @@ export class ProjectsListComponent implements OnInit {
       Validators.maxLength(25)
     ]),
     teamlead: new FormControl(null, [Validators.required]),
-    teammates: new FormControl(null, [Validators.required])
+    teammates: new FormControl(null, [Validators.required]),
+    effort: new FormControl(null, Validators.required),
+    risk: new FormControl(null, Validators.required)
   });
 
   constructor(
@@ -131,15 +132,52 @@ export class ProjectsListComponent implements OnInit {
       );
       return;
     }
+
+    this.pageLoading.isLoading.next(true);
+
+    let teamMembers: Array<ITeamMember> = [];
+    for (let i = 0; i < this.projectForm.get("teammates").value.length; i++) {
+      teamMembers.push({ userId: this.projectForm.get("teammates").value[i] });
+    }
+
+    const projectData: IProjectData = {
+      name: this.projectForm.get("projectName").value,
+      abbrevation: this.projectForm.get("projectAbbreviation").value,
+      description: this.projectForm.get("description").value,
+      initialEffort: this.projectForm.get("effort").value,
+      initialRisk: this.projectForm.get("risk").value,
+      projectManagerId: JSON.parse(localStorage.getItem("userData")).id,
+      teamLeadId: this.projectForm.get("teamlead").value,
+      team: {
+        teamLeadId: this.projectForm.get("teamlead").value,
+        teamMembers: teamMembers
+      }
+    };
+
+    console.log(projectData);
+    this.projectService.setNewProject(projectData).subscribe(
+      responseData => {
+    this.pageLoading.isLoading.next(false);
+
+        console.log(responseData);
+      },
+      error => {
+    this.pageLoading.isLoading.next(false);
+console.log('blyaha');
+        console.log(error);
+      }
+    );
   }
 
   private onGet() {
     this.pageLoading.isLoading.next(true);
     this.projectService.getProjectsList().subscribe(
       responseData => {
+        console.log(responseData);
         this.pageLoading.isLoading.next(false);
-
-        this.projects = responseData;
+        this.projects = responseData.projects;
+        this.developers = responseData.users;
+        this.dataSource.data = this.projects;
       },
       errorData => {
         this.pageLoading.isLoading.next(false);
