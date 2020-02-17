@@ -26,7 +26,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 1,
     startDate: "2020-02-04",
     endDate: "2020-03-04",
-    userId: '7',
+    userId: "7",
     statusId: 4
   },
   {
@@ -37,7 +37,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2020-02-24",
     endDate: "2020-03-30",
-    userId: '7',
+    userId: "7",
     statusId: 1
   },
   {
@@ -48,7 +48,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2019-02-04",
     endDate: "2020-02-04",
-    userId: '7',
+    userId: "7",
     statusId: 2
   },
   {
@@ -59,7 +59,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2019-02-04",
     endDate: "2019-08-04",
-    userId: '7',
+    userId: "7",
     statusId: 3
   },
   {
@@ -70,7 +70,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2020-02-14",
     endDate: "2020-02-14",
-    userId: '7',
+    userId: "7",
     statusId: 4
   },
   {
@@ -81,7 +81,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2020-02-14",
     endDate: "2020-02-14",
-    userId: '7',
+    userId: "7",
     statusId: 4
   },
   {
@@ -92,7 +92,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2020-02-14",
     endDate: "2020-02-14",
-    userId: '7',
+    userId: "7",
     statusId: 4
   }
 ];
@@ -112,7 +112,7 @@ export class ReportsComponent implements OnInit {
   filterValues = {
     projectId: "",
     assignmentId: "",
-    statusId: "",
+    statusId: ""
   };
 
   // Displayed columns in the main table
@@ -149,22 +149,11 @@ export class ReportsComponent implements OnInit {
     { id: 4, name: "Declined" }
   ];
 
-  // projects: Array<IProject> = [{ id: 3, name: "RDM", projectManagerId: 3 }];
-
-  // tasks: Array<IAssignment> = [{ id: 1, name: "Developing" }];
-
-  // statuses: Array<IStatus> = [
-  //   { id: 4, name: "Opened" },
-  //   { id: 2, name: "Notified" },
-  //   { id: 3, name: "Accepted" },
-  //   { id: 1, name: "Declined" }
-  // ];
-
   reports: Array<IReportData> = new Array<IReportData>();
 
   // dataSourse here is source for table - observable
-  dataSource = new MatTableDataSource<IReportData>(REPORT_DATA);
-  // dataSource = new MatTableDataSource<IReportData>(this.reports);
+  // dataSource = new MatTableDataSource<IReportData>(REPORT_DATA);
+  dataSource = new MatTableDataSource<IReportData>(this.reports);
 
   reportForm: FormGroup;
   filterForm: FormGroup;
@@ -183,16 +172,24 @@ export class ReportsComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
 
     this.pageLoading.isLoading.next(true);
+
     this.createReportForm();
     this.createFilterForm();
     this.subscribeFilters();
     this.createFilterDateForm();
 
     this.resetForm();
+    this.defaultDataList();
     this.onGet();
-    this.dataSource.data = this.dataSource.data;
+    // this.dataSource.data = this.dataSource.data;
     this.pageLoading.isLoading.next(false);
     this.dataSource.filterPredicate = this.filterTableService.filterProjectTaskStatus();
+  }
+
+  defaultDataList() {
+
+    this.statuses = JSON.parse(localStorage.getItem('statusesData'));
+    this.tasks = JSON.parse(localStorage.getItem('tasksData'));
   }
 
   createReportForm() {
@@ -277,9 +274,7 @@ export class ReportsComponent implements OnInit {
       overtime: +this.reportForm.get("overtimeControl").value,
       startDate: this.reportForm.get("startDateControl").value,
       endDate: this.reportForm.get("endDateControl").value,
-      userId: "1"
-      // userId: 2,
-      // statusId: +this.statuses.find(status => status.name === "Opened").id
+      userId: JSON.parse(localStorage.getItem("userData")).id
     };
     if (reportData.startDate !== reportData.endDate) {
       alert(
@@ -318,10 +313,6 @@ export class ReportsComponent implements OnInit {
           }
         );
     } else {
-      // posting data
-      // TODO треба дочекатись валідації на бекенді, яка буде вертати нам час
-      // що залишився на поточну дату
-      // tempTime = this.howMuchTimeYouHave(reportData.startDate);
 
       // pushing into local array, sending request
 
@@ -338,7 +329,7 @@ export class ReportsComponent implements OnInit {
 
           this.dataSource.data.push(data);
           this.dataSource._updateChangeSubscription();
-          // this.reports.push(reportData);
+          this.reports.push(data);
         },
         error => {
           this.pageLoading.isLoading.next(false);
@@ -446,17 +437,18 @@ export class ReportsComponent implements OnInit {
     // this.pageLoading.isLoading.next(false);
     // this.openErrorResponseDialog(error.message);
     // });
-    this.signInUpService.getUserInfoById(1).subscribe(
+    this.signInUpService.getUserInfoById().subscribe(
       responseData => {
         this.pageLoading.isLoading.next(false);
-        if(responseData.user === null) {
+        console.log(responseData);
+        if (responseData.user === null) {
           this.reports = [];
           return;
         }
 
         console.log(responseData);
         this.reports = responseData.reports;
-        if ( this.reports.length > 0) {
+        if (this.reports.length > 0) {
           this.reports.forEach(report => {
             const startDate = report.startDate.split("T");
             report.startDate = startDate[0];
@@ -465,9 +457,9 @@ export class ReportsComponent implements OnInit {
           });
         }
         this.dataSource.data = this.reports;
-
       },
       error => {
+        console.log("error");
         this.openErrorResponseDialog(error.message);
         this.pageLoading.isLoading.next(false);
       }
