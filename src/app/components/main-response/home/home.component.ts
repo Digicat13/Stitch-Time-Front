@@ -9,10 +9,14 @@ import { SignInUpService } from "src/app/services/sign-in-up.service";
 })
 export class HomeComponent implements OnInit {
   projects: string[] = ["EDU-pr", "MED", "cancerheal", "adasdad"];
-
+  position: number;
   constructor(private signInUp: SignInUpService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.position = +JSON.parse(localStorage.getItem('userData')).positionId;
+    console.log(this.position);
+    this.position = 2;
+  }
   onLogout() {
     this.signInUp.logout();
   }

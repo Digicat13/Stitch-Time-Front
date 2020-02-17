@@ -100,6 +100,11 @@ export class SignInUpService {
 
   private errorHandling(errorResponse: HttpErrorResponse) {
     console.log(errorResponse);
+
+    // switch (errorResponse.message) {
+    //   case "": {
+    //   }
+    // }
     if (
       errorResponse.name !== undefined &&
       errorResponse.name === "HttpErrorResponse"

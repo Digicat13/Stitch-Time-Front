@@ -10,6 +10,7 @@
           routerLink="reportslist"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
+          *ngIf="position === 1 || position === 2"
         >
           <a>Reports List</a>
         </li>
@@ -17,6 +18,7 @@
           routerLinkActive="active"
           routerLink="projectslist"
           [routerLinkActiveOptions]="{ exact: true }"
+          *ngIf="position === 3"
         >
           <a>Project List</a>
         </li>
@@ -24,6 +26,7 @@
           routerLinkActive="active"
           routerLink="notifiedreports"
           [routerLinkActiveOptions]="{ exact: true }"
+          *ngIf="position === 2 || position === 3"
         >
           <a>Notified Reports</a>
         </li>

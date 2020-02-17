@@ -451,6 +451,10 @@ export class ReportsComponent implements OnInit {
     this.signInUpService.getUserInfoById(1).subscribe(
       responseData => {
         this.pageLoading.isLoading.next(false);
+        if(responseData.user === null) {
+          this.reports = [];
+          return;
+        }
 
         console.log(responseData);
         this.reports = responseData.reports;
