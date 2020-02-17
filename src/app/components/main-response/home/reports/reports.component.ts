@@ -26,7 +26,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 1,
     startDate: "2020-02-04",
     endDate: "2020-03-04",
-    userId: 7,
+    userId: '7',
     statusId: 4
   },
   {
@@ -37,7 +37,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2020-02-24",
     endDate: "2020-03-30",
-    userId: 7,
+    userId: '7',
     statusId: 1
   },
   {
@@ -48,7 +48,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2019-02-04",
     endDate: "2020-02-04",
-    userId: 7,
+    userId: '7',
     statusId: 2
   },
   {
@@ -59,7 +59,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2019-02-04",
     endDate: "2019-08-04",
-    userId: 7,
+    userId: '7',
     statusId: 3
   },
   {
@@ -70,7 +70,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2020-02-14",
     endDate: "2020-02-14",
-    userId: 7,
+    userId: '7',
     statusId: 4
   },
   {
@@ -81,7 +81,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2020-02-14",
     endDate: "2020-02-14",
-    userId: 7,
+    userId: '7',
     statusId: 4
   },
   {
@@ -92,7 +92,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2020-02-14",
     endDate: "2020-02-14",
-    userId: 7,
+    userId: '7',
     statusId: 4
   }
 ];
@@ -277,7 +277,7 @@ export class ReportsComponent implements OnInit {
       overtime: +this.reportForm.get("overtimeControl").value,
       startDate: this.reportForm.get("startDateControl").value,
       endDate: this.reportForm.get("endDateControl").value,
-      userId: 1
+      userId: "1"
       // userId: 2,
       // statusId: +this.statuses.find(status => status.name === "Opened").id
     };

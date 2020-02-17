@@ -21,7 +21,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 1,
     startDate: "2020-02-04",
     endDate: "2020-02-04",
-    userId: 7,
+    userId: '7',
     statusId: 2
   },
   {
@@ -32,7 +32,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2020-02-04T17:43:53.491Z",
     endDate: "2020-02-04T17:43:53.491Z",
-    userId: 7,
+    userId: '7',
     statusId: 3
   },
   {
@@ -43,7 +43,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2020-02-04T17:43:53.491Z",
     endDate: "2020-02-04T17:43:53.491Z",
-    userId: 7,
+    userId: '7',
     statusId: 2
   },
   {
@@ -54,7 +54,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2020-02-04T17:43:53.491Z",
     endDate: "2020-02-04T17:43:53.491Z",
-    userId: 7,
+    userId: '7',
     statusId: 3
   },
   {
@@ -65,7 +65,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2020-02-04T17:43:53.491Z",
     endDate: "2020-02-04T17:43:53.491Z",
-    userId: 7,
+    userId: "7",
     statusId: 3
   },
   {
@@ -76,7 +76,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2020-02-04T17:43:53.491Z",
     endDate: "2020-02-04T17:43:53.491Z",
-    userId: 7,
+    userId: '7',
     statusId: 2
   },
   {
@@ -87,7 +87,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2020-02-04T17:43:53.491Z",
     endDate: "2020-02-04T17:43:53.491Z",
-    userId: 7,
+    userId: '7',
     statusId: 3
   },
   {
@@ -98,7 +98,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2020-02-04T17:43:53.491Z",
     endDate: "2020-02-04T17:43:53.491Z",
-    userId: 7,
+    userId: "7",
     statusId: 3
   },
   {
@@ -109,7 +109,7 @@ const REPORT_DATA: IReportData[] = [
     overtime: 0,
     startDate: "2020-02-04T17:43:53.491Z",
     endDate: "2020-02-04T17:43:53.491Z",
-    userId: 7,
+    userId: '7',
     statusId: 2
   }
 ];
@@ -165,11 +165,11 @@ export class NotifiedReportsListComponent implements OnInit {
   ];
 
   users: Array<IUserData> = [
-    { id: 7, name: "John", surname: "Dou" },
-    { id: 1, name: "John2", surname: "Dou" },
-    { id: 2, name: "John3", surname: "Dou" },
-    { id: 3, name: "John4", surname: "Dou" },
-    { id: 4, name: "John5", surname: "Dou" }
+    { id: '7', firstName: "John", secondName: "Dou" },
+    { id: '1', firstName: "John2", secondName: "Dou" },
+    { id: '2', firstName: "John3", secondName: "Dou" },
+    { id: "3", firstName: "John4", secondName: "Dou" },
+    { id: '4', firstName: "John5", secondName: "Dou" }
   ];
 
   reports: Array<IReportData> = new Array<IReportData>();
@@ -212,7 +212,7 @@ export class NotifiedReportsListComponent implements OnInit {
 
     this.dataSource.filterPredicate = this.filterTableService.filterProjectTaskStatus();
     this.pageLoading.isLoading.next(false);
-    if(  this.statuses.find(s => s.name === "Notified").id 
+    if(  this.statuses.find(s => s.name === "Notified").id
         < this.statuses.find(s => s.name === "Accepted").id) {
           this.dataSource.data.sort((a, b) => (a.statusId < b.statusId ? -1 : 0));
         }
@@ -220,7 +220,7 @@ export class NotifiedReportsListComponent implements OnInit {
           this.dataSource.data.sort((a, b) => (a.statusId > b.statusId ? -1 : 0));
         }
   this.dataSource._updateChangeSubscription();
-    
+
 
   }
 
@@ -297,11 +297,11 @@ export class NotifiedReportsListComponent implements OnInit {
     return this.tasks.find(task => task.id == id).name;
   }
 
-  getUserNameById(id: number) {
+  getUserNameById(id: string) {
     return (
-      this.users.find(user => user.id == id).name +
+      this.users.find(user => user.id === id).firstName +
       " " +
-      this.users.find(user => user.id == id).surname
+      this.users.find(user => user.id === id).secondName
     );
   }
 }
