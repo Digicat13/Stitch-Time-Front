@@ -2,12 +2,6 @@
 
 $color-basic: #e4e4e7;
 $text-basic: #fefefe;
-// $color-notified: #94b6db;
-// $text-notified: #004085;
-// $color-accepted: #5ee78c;
-// $text-accepted: #155724;
-// $color-declined: #c8727a;
-// $text-declined: #721c24;
 $table-header: #595959;
 
 $danger: #f8d7da;
@@ -22,11 +16,6 @@ $color-theme: #ca5c50;
   max-height: 40px;
 }
 
-// ng-container{
-//   flex-direction: column;
-//   // align-self: center;
-// }
-
 .mat-table {
   margin: 0;
   table-layout: fixed;
@@ -40,6 +29,14 @@ $color-theme: #ca5c50;
   .mat-header-cell {
     background-color: $table-header;
   }
+
+  .small-coll{
+    width: 5vw;
+  }
+
+  button {
+    margin: 1vw;
+  }
 }
 
 
@@ -48,7 +45,6 @@ $color-theme: #ca5c50;
 }
 
 mat-paginator {
-  //color: $text-basic;
   background-color: $table-header;
 }
 
@@ -130,3 +126,14 @@ input {
 .declined {
   background-color: $danger !important;
 }
+
+
+.filter-form{
+  mat-form-field {
+    margin: 1vw;
+  }
+  
+  button{
+    margin: 1vw;
+  }
+  }

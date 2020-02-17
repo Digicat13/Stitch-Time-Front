@@ -78,7 +78,7 @@ const appRoutes: Routes = [
     MatTooltipModule,
     MatSelectModule,
     MatButtonModule,
-    MatCheckboxModule,
+    MatCheckboxModule
   ],
   entryComponents: [
     SuccessfullyRegisteredDialogComponent,
