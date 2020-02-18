@@ -18,6 +18,11 @@ interface IPmReportInfo {
   developersReports: Array<IReportData>;
 }
 
+interface ITeamLeadInfo {
+  users: Array<IUserData>;
+  usersReports: Array<IReportData>;
+}
+
 @Injectable()
 export class ProjectForPMService {
   apiUrl: string = environment.apiUrl + "/Project";
@@ -49,23 +54,35 @@ export class ProjectForPMService {
 
   getProject(id: number) {
     return this.http
-    .get<IProjectData>(environment.apiUrl + "/project/" + id)
-    .pipe(catchError(this.errorHandling));
+      .get<IProjectData>(environment.apiUrl + "/project/" + id)
+      .pipe(catchError(this.errorHandling));
   }
 
   getReportsForPm(id: string) {
     return this.http
-    .get<IPmReportInfo>(environment.apiUrl + "/User/GetPmReportsInfo/" + id)
-    .pipe(catchError(this.errorHandling));
+      .get<IPmReportInfo>(environment.apiUrl + "/User/GetPmReportsInfo/" + id)
+      .pipe(catchError(this.errorHandling));
+  }
+
+  getReportsForTeamLead(id: string) {
+    return this.http
+      .get<ITeamLeadInfo>(environment.apiUrl + "/User/GetTeamLeadInfo/" + id)
+      .pipe(catchError(this.errorHandling));
   }
 
   acceptedReport(report: IReportData) {
-      return this.http.put<IReportData>(environment.apiUrl + '/Report/Accept', report);
+    return this.http.put<IReportData>(
+      environment.apiUrl + "/Report/Accept",
+      report
+    );
   }
 
   declinedReport(report: IReportData) {
-    return this.http.put<IReportData>(environment.apiUrl + '/Report/Decline', report);
-}
+    return this.http.put<IReportData>(
+      environment.apiUrl + "/Report/Decline",
+      report
+    );
+  }
 
   private errorHandling(errorResponse: HttpErrorResponse) {
     if (

@@ -58,6 +58,8 @@ export class NotifiedReportsListComponent implements OnInit {
   filterForm: FormGroup;
   filterDateForm: FormGroup;
 
+  position: number;
+
   constructor(
     private dialog: MatDialog,
     private pageLoading: IsPageLoading,
@@ -75,7 +77,21 @@ export class NotifiedReportsListComponent implements OnInit {
     this.createFilterForm();
     this.subscribeFilters();
     this.createFilterDateForm();
+    this.position = JSON.parse(localStorage.getItem("userData")).positionId;
 
+    if (this.position === 2) {
+      this.displayedColumns = [
+        "user",
+        "task",
+        "time",
+        "overtime",
+        "description",
+        "startDate",
+        "endDate",
+        "status",
+        "actions"
+      ];
+    }
     this.onGet();
     this.statuses.splice(
       this.statuses.indexOf(
@@ -167,22 +183,41 @@ export class NotifiedReportsListComponent implements OnInit {
   }
 
   onGet() {
-    this.pmService
-      .getReportsForPm(JSON.parse(localStorage.getItem("userData")).id)
-      .subscribe(
-        responseData => {
-          console.log(responseData);
-          (this.reports = responseData.developersReports),
-            (this.developers = responseData.pmDevelopers),
-            (this.projects = responseData.projects);
+    if (JSON.parse(localStorage.getItem("userData")).positionId === 3) {
+      this.pmService
+        .getReportsForPm(JSON.parse(localStorage.getItem("userData")).id)
+        .subscribe(
+          responseData => {
+            console.log(responseData);
+            (this.reports = responseData.developersReports),
+              (this.developers = responseData.pmDevelopers),
+              (this.projects = responseData.projects);
 
-          this.dataSource.data = this.reports;
-          this.dataSource._updateChangeSubscription();
-        },
-        error => {
-          console.log(error);
-        }
-      );
+            this.dataSource.data = this.reports;
+            this.dataSource._updateChangeSubscription();
+          },
+          error => {
+            console.log(error);
+          }
+        );
+    } else {
+      this.pmService
+        .getReportsForTeamLead(JSON.parse(localStorage.getItem("userData")).id)
+        .subscribe(
+          responseData => {
+            console.log(responseData);
+            (this.reports = responseData.usersReports),
+              (this.developers = responseData.users);
+            // (this.projects = responseData.projects);
+
+            this.dataSource.data = this.reports;
+            this.dataSource._updateChangeSubscription();
+          },
+          error => {
+            console.log(error);
+          }
+        );
+    }
   }
 
   // to accept it
@@ -192,7 +227,8 @@ export class NotifiedReportsListComponent implements OnInit {
       responseData => {
         this.pageLoading.isLoading.next(false);
 
-        this.reports.find(elem => elem.id === report.id).statusId = responseData.statusId;
+        this.reports.find(elem => elem.id === report.id).statusId =
+          responseData.statusId;
         this.dataSource.data = this.reports;
         this.dataSource._updateChangeSubscription();
       },
