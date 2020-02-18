@@ -20,7 +20,11 @@ export class ProjectForPMService {
 
   getProjectsList() {
     return this.http
-      .get<IProjectPmInfo>(environment.apiUrl + "/User/GetPmProjectsInfo")
+      .get<IProjectPmInfo>(
+        environment.apiUrl +
+          "/User/GetPmProjectsInfo/" +
+          JSON.parse(localStorage.getItem("userData")).id
+      )
       .pipe(catchError(this.errorHandling));
   }
 

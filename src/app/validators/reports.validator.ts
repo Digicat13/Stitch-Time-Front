@@ -18,12 +18,28 @@ export class ReportValidator {
     }
   }
 
-  timePerDayValidator(reports: IReportData[], report: IReportData) {
+  timePerDayValidator(
+    reports: IReportData[],
+    report: IReportData,
+    idEdited: boolean
+  ) {
     let sum: number = 0;
-    const limit: number = 8; 
-    reports.filter(elem => elem.startDate==report.startDate).
-    forEach(r => (sum += r.time));
+    const limit: number = 8;
+
+    console.log(reports);
+    console.log(report);
+
+    reports
+      .filter(elem => elem.startDate == report.startDate)
+      .forEach(r => (sum += r.time));
+    if (idEdited) {
+      console.log(reports.filter(elem => elem.id === report.id));
+      const oldReportTime: number = reports.filter(
+        elem => elem.id === report.id
+      )[0].time;
+      sum -= oldReportTime;
+    }
     sum += report.time;
-    return sum <=limit;
+    return sum <= limit;
   }
 }

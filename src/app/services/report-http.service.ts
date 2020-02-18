@@ -22,7 +22,7 @@ export class ReportHttpService {
     return this.http.put(this.apiUrl + "/" +  id , report);
   }
 
-  patchData(report: IReportData, id) {
+  notifyReport(report: IReportData, id) {
     return this.http.patch(this.apiUrl + "/" +  id , report);
   }
 
