@@ -17,87 +17,6 @@ import { FilterTableService } from "src/app/services/filter-table..service";
 import { SignInUpService } from "src/app/services/sign-in-up.service";
 import { IProjectData } from "src/app/interfaces/project-data";
 
-const REPORT_DATA: IReportData[] = [
-  {
-    projectId: 3,
-    assignmentId: 1,
-    description:
-      "sdadasdasdasdsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddd",
-    time: 2,
-    overtime: 1,
-    startDate: "2020-02-04",
-    endDate: "2020-03-04",
-    userId: "7",
-    statusId: 4
-  },
-  {
-    projectId: 3,
-    assignmentId: 2,
-    description: "ssdasdsad",
-    time: 0,
-    overtime: 0,
-    startDate: "2020-02-24",
-    endDate: "2020-03-30",
-    userId: "7",
-    statusId: 1
-  },
-  {
-    projectId: 3,
-    assignmentId: 1,
-    description: "lol",
-    time: 0,
-    overtime: 0,
-    startDate: "2019-02-04",
-    endDate: "2020-02-04",
-    userId: "7",
-    statusId: 2
-  },
-  {
-    projectId: 3,
-    assignmentId: 1,
-    description: "lol",
-    time: 0,
-    overtime: 0,
-    startDate: "2019-02-04",
-    endDate: "2019-08-04",
-    userId: "7",
-    statusId: 3
-  },
-  {
-    projectId: 3,
-    assignmentId: 1,
-    description: "lol",
-    time: 4,
-    overtime: 0,
-    startDate: "2020-02-14",
-    endDate: "2020-02-14",
-    userId: "7",
-    statusId: 4
-  },
-  {
-    projectId: 3,
-    assignmentId: 1,
-    description: "lol",
-    time: 3,
-    overtime: 0,
-    startDate: "2020-02-14",
-    endDate: "2020-02-14",
-    userId: "7",
-    statusId: 4
-  },
-  {
-    projectId: 3,
-    assignmentId: 1,
-    description: "lol",
-    time: 0,
-    overtime: 0,
-    startDate: "2020-02-14",
-    endDate: "2020-02-14",
-    userId: "7",
-    statusId: 4
-  }
-];
-
 @Component({
   selector: "app-reports",
   templateUrl: "./reports.component.html",
@@ -414,7 +333,7 @@ export class ReportsComponent implements OnInit {
 
   onGet() {
     this.pageLoading.isLoading.next(true);
- 
+
     this.signInUpService.getUserInfoById().subscribe(
       responseData => {
         this.pageLoading.isLoading.next(false);

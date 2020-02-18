@@ -9,7 +9,7 @@ import { MatDialog } from "@angular/material";
 
 interface IDefaultInfo {
   assignmentDto: Array<IAssignment>;
-  possitionDto: Array<IPosition>;
+  positionDto: Array<IPosition>;
   statusDto: Array<IStatus>;
 }
 
@@ -25,7 +25,7 @@ export class FetchDefaultInfoService {
         responseData => {
           console.log(responseData);
           localStorage.setItem("tasksData", JSON.stringify(responseData.assignmentDto));
-          localStorage.setItem("possitionsData", JSON.stringify(responseData.possitionDto));
+          localStorage.setItem("possitionsData", JSON.stringify(responseData.positionDto));
           localStorage.setItem("statusesData", JSON.stringify(responseData.statusDto));
         },
         errorData => {
