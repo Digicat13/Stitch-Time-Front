@@ -8,36 +8,7 @@ import { IsPageLoading } from "src/app/services/is-loading-emitter.service";
 import { ErrorResponseDialogComponent } from "../../error-response-dialog/error-response-dialog.component";
 import { IProject } from "src/app/interfaces/report-data";
 
-const PROJECT_DATA: Array<IProjectData> = [
-  // {
-  //   id: 1,
-  //   name: "Recl dry motor",
-  //   abbreviation: "RDM",
-  //   projectManagerId: 1,
-  //   teamLeadId: 1,
-  //   teamLeadName: "Francisco",
-  //   teamLeadSurname: "Smit",
-  //   teamMates: [{ id: "1", firstName: "Daniil", secondName: "Shlive" }]
-  // },
-  // {
-  //   id: 2,
-  //   name: "AlcoKer",
-  //   abbreviation: "AK",
-  //   projectManagerId: 1,
-  //   teamLeadId: 1,
-  //   teamLeadName: "Francisco",
-  //   teamLeadSurname: "Smit",
-  //   teamMates: [{ id: "1", firstName: "Daniil", secondName: "Shlive" }]
-  // },
-  // {
-  //   id: 3,
-  //   name: "Mango",
-  //   abbreviation: "MNG",
-  //   projectManagerId: '1',
-  //   teamLeadId: '1',
-  //   teamMates: [{ id: "1", firstName: "Daniil", secondName: "Shlive" }]
-  // }
-];
+const PROJECT_DATA: Array<IProjectData> = [];
 
 @Component({
   selector: "app-projects-list",
@@ -47,15 +18,9 @@ const PROJECT_DATA: Array<IProjectData> = [
 export class ProjectsListComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  displayedColumns: string[] = ["abbr", "name", "teamleadName", "actions"];
+  displayedColumns: string[] = ["name", "actions"];
 
-  developers: Array<IUserData> = [
-    { id: "1", firstName: "Daniil", secondName: "Shlive" },
-    { id: "2", firstName: "Denis", secondName: "Shlive" },
-    { id: "3", firstName: "Francisco", secondName: "Dantes" },
-    { id: "4", firstName: "Will", secondName: "Smit" },
-    { id: "5", firstName: "David", secondName: "Pozhar" }
-  ];
+  developers: Array<IUserData> = [];
 
   isEdited = false;
   currentProjectId: number;
@@ -109,6 +74,11 @@ export class ProjectsListComponent implements OnInit {
       this.pageLoading.isLoading.next(true);
       this.projectService.deleteProject(project).subscribe(
         responseData => {
+          const index: number = this.dataSource.data.indexOf(project);
+          if(index !== -1) {
+            this.dataSource.data.splice(index,1);
+            this.dataSource._updateChangeSubscription();
+          }
           this.pageLoading.isLoading.next(false);
         },
         errorData => {
@@ -119,6 +89,7 @@ export class ProjectsListComponent implements OnInit {
         }
       );
     }
+    this.dataSource._updateChangeSubscription();
   }
 
   onSubmit() {
@@ -128,7 +99,7 @@ export class ProjectsListComponent implements OnInit {
         .value.indexOf(this.projectForm.get("teamlead").value) === -1
     ) {
       alert(
-        "You foggot something! Please, select your teamlead as a team member!)"
+        "You forgot something! Please, select your teamlead as a team member!)"
       );
       return;
     }
@@ -153,25 +124,27 @@ export class ProjectsListComponent implements OnInit {
         teamMembers: teamMembers
       }
     };
-
     console.log(projectData);
     this.projectService.setNewProject(projectData).subscribe(
       responseData => {
-        console.log(responseData);
+        this.dataSource.data.push(projectData);
+        this.dataSource._updateChangeSubscription();
       },
       error => {
-
-        console.log('blyaha');
+        console.log("blyaha");
         console.log(error);
       }
     );
     this.pageLoading.isLoading.next(false);
+
+    this.dataSource._updateChangeSubscription();
   }
 
   private onGet() {
     this.pageLoading.isLoading.next(true);
     this.projectService.getProjectsList().subscribe(
       responseData => {
+        this.pageLoading.isLoading.next(false);
         console.log(responseData);
         this.projects = responseData.projects;
         this.developers = responseData.users;
@@ -179,11 +152,14 @@ export class ProjectsListComponent implements OnInit {
       },
       errorData => {
         if (errorData.name === "HttpErrorResponse") {
+          this.pageLoading.isLoading.next(false);
           this.openErrorResponseDialog(errorData.message);
         }
       }
     );
     this.pageLoading.isLoading.next(false);
+
+    this.dataSource._updateChangeSubscription();
   }
 
   private openErrorResponseDialog(errorName: string) {
@@ -195,5 +171,27 @@ export class ProjectsListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log("The dialog was closed");
     });
+  }
+
+  onInfo(project: IProject) {
+    let projectData: IProjectData;
+    this.projectService.getProject(project.id).subscribe(
+      responseData => {
+        projectData = responseData;
+        console.log(projectData);
+        // alert("Project Name: "+ projectData.name + "\n"+
+        // "Abbrevation: "+ projectData.abbrevation + "\n"+
+        // "Description: "+ projectData.description + "\n"+
+        // "Initial effort: "+ projectData.initialEffrort + "\n"+
+        // "Initial risk: "+ projectData.initialRisk + "\n"+
+        // "Team Lead: "+ projectData.team.teamLeadId  +"\n"
+        // );
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+    console.log(projectData);
   }
 }

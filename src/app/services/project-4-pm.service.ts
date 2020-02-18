@@ -15,12 +15,13 @@ interface IProjectPmInfo {
 @Injectable()
 export class ProjectForPMService {
   apiUrl: string = environment.apiUrl + "/Project";
+  id: string = JSON.parse(localStorage.getItem("userData")).id;
 
   constructor(private http: HttpClient) {}
 
   getProjectsList() {
     return this.http
-      .get<IProjectPmInfo>(environment.apiUrl + "/User/GetPmProjectsInfo")
+      .get<IProjectPmInfo>(environment.apiUrl + "/User/GetPmProjectsInfo/" + this.id)
       .pipe(catchError(this.errorHandling));
   }
 
@@ -34,6 +35,12 @@ export class ProjectForPMService {
     return this.http
       .delete(this.apiUrl + "/" + project.id)
       .pipe(catchError(this.errorHandling));
+  }
+
+  getProject(id: number) {
+    return this.http
+    .get<IProjectData>(environment.apiUrl + "/project/" + id)
+    .pipe(catchError(this.errorHandling));
   }
 
   private errorHandling(errorResponse: HttpErrorResponse) {
