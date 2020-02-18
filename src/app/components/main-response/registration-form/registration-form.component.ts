@@ -57,7 +57,6 @@ export class RegistrationFormComponent implements OnInit {
         [Validators.required, this.singInUpValidator.matchPasswordsValidator]
       ),
 
-      userPosition: new FormControl(null, [Validators.required])
     });
   }
 
@@ -71,7 +70,6 @@ export class RegistrationFormComponent implements OnInit {
       email: this.registrationForm.get("userEmail").value,
       password: this.registrationForm.get("passwords").get("userPassword")
         .value,
-      positionId: +this.registrationForm.get("userPosition").value
     };
 
     // this.isLoading = true;

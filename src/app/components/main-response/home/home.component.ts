@@ -14,10 +14,7 @@ export class HomeComponent implements OnInit  {
   projects: string[] = ["EDU-pr", "MED", "cancerheal", "adasdad"];
 
   positionId: number;
-  positions: Array<IPosition> = [
-      {id: 1, name: "Developer"},
-      {id: 2, name: "Project Manager"}
-  ];
+  positions: Array<IPosition> = [ ];
 
 
 
@@ -31,10 +28,11 @@ export class HomeComponent implements OnInit  {
     this.positionId = +JSON.parse(localStorage.getItem("userData")).positionId;
     console.log(this.positionId);
     this.defaultInfoService.fetchDefaultInfo();
+    this.positions = JSON.parse(localStorage.getItem('possitionsData'));
     // this.position = 2;
   }
 
-  
+
   onLogout() {
     this.signInUp.logout();
   }

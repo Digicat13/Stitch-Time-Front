@@ -15,6 +15,7 @@ import { ErrorResponseDialogComponent } from "../../error-response-dialog/error-
 import { IsPageLoading } from "src/app/services/is-loading-emitter.service";
 import { FilterTableService } from "src/app/services/filter-table..service";
 import { SignInUpService } from "src/app/services/sign-in-up.service";
+import { IProjectData } from "src/app/interfaces/project-data";
 
 const REPORT_DATA: IReportData[] = [
   {
@@ -128,26 +129,11 @@ export class ReportsComponent implements OnInit {
     "actions"
   ];
 
-  projects: Array<IProject> = [
-    { id: 3, name: "RDM", projectManagerId: 2 },
-    { id: 1, name: "EDU-pr", projectManagerId: 5 },
-    { id: 2, name: "adasdasd", projectManagerId: 5 },
-    { id: 4, name: "cancerheal", projectManagerId: 5 }
-  ];
+  projects: Array<IProjectData> = [];
 
-  tasks: Array<IAssignment> = [
-    { id: 3, name: "bug fixing" },
-    { id: 2, name: "testing" },
-    { id: 1, name: "dev" },
-    { id: 4, name: "design" }
-  ];
+  tasks: Array<IAssignment> = [];
 
-  statuses: Array<IStatus> = [
-    { id: 1, name: "Opened" },
-    { id: 2, name: "Notified" },
-    { id: 3, name: "Accepted" },
-    { id: 4, name: "Declined" }
-  ];
+  statuses: Array<IStatus> = [];
 
   reports: Array<IReportData> = new Array<IReportData>();
 
@@ -187,8 +173,8 @@ export class ReportsComponent implements OnInit {
   }
 
   defaultDataList() {
-    this.statuses = JSON.parse(localStorage.getItem('statusesData'));
-    this.tasks = JSON.parse(localStorage.getItem('tasksData'));
+    this.statuses = JSON.parse(localStorage.getItem("statusesData"));
+    this.tasks = JSON.parse(localStorage.getItem("tasksData"));
   }
 
   createReportForm() {
@@ -275,6 +261,11 @@ export class ReportsComponent implements OnInit {
       endDate: this.reportForm.get("endDateControl").value,
       userId: JSON.parse(localStorage.getItem("userData")).id
     };
+
+    if (this.isEdited) {
+      reportData.id = this.currentReportId;
+    }
+
     if (reportData.startDate !== reportData.endDate) {
       this.pageLoading.isLoading.next(false);
       alert(
@@ -284,7 +275,8 @@ export class ReportsComponent implements OnInit {
     } else if (
       !this.reportValidator.timePerDayValidator(
         this.dataSource.data,
-        reportData
+        reportData,
+        this.isEdited
       )
     ) {
       this.pageLoading.isLoading.next(false);
@@ -305,6 +297,7 @@ export class ReportsComponent implements OnInit {
             data.endDate = endDate[0];
             console.log(data);
             this.dataSource.data[this.currentReportIndex] = data;
+            this.reports = this.dataSource.data;
             this.dataSource._updateChangeSubscription();
           },
           error => {
@@ -314,10 +307,10 @@ export class ReportsComponent implements OnInit {
           }
         );
     } else {
-
       // pushing into local array, sending request
 
       // CHANGE TO GET ID FROM POST RESPONSE
+      console.log("pooooooost");
       this.reportHttpService.postData(reportData).subscribe(
         (data: IReportData) => {
           this.pageLoading.isLoading.next(false);
@@ -386,7 +379,7 @@ export class ReportsComponent implements OnInit {
     const index: number = this.dataSource.data.indexOf(report);
     if (index !== -1) {
       // sending new status to DB
-      this.reportHttpService.patchData(report, report.id).subscribe(
+      this.reportHttpService.notifyReport(report, report.id).subscribe(
         (data: IReportData) => {
           this.pageLoading.isLoading.next(false);
 
@@ -396,6 +389,7 @@ export class ReportsComponent implements OnInit {
 
           console.log(data);
           this.dataSource._updateChangeSubscription();
+          this.reports = this.dataSource.data;
         },
         error => {
           this.pageLoading.isLoading.next(false);
@@ -420,24 +414,7 @@ export class ReportsComponent implements OnInit {
 
   onGet() {
     this.pageLoading.isLoading.next(true);
-    // this.reportHttpService.getData().subscribe(data => {
-    // this.pageLoading.isLoading.next(false);
-    //   if (data.length > 0) {
-    //     data.forEach(report => {
-    //       const startDate = report.startDate.split("T");
-    //       report.startDate = startDate[0];
-    //       const endDate = report.endDate.split("T");
-    //       report.endDate = endDate[0];
-    //     });
-    //     console.log(data);
-    //     // this.reports = data;
-    //     this.dataSource.data = data;
-    //   }
-    // },
-    // error => {
-    // this.pageLoading.isLoading.next(false);
-    // this.openErrorResponseDialog(error.message);
-    // });
+ 
     this.signInUpService.getUserInfoById().subscribe(
       responseData => {
         this.pageLoading.isLoading.next(false);
@@ -458,6 +435,7 @@ export class ReportsComponent implements OnInit {
           });
         }
         this.dataSource.data = this.reports;
+        this.projects = responseData.projects;
       },
       error => {
         console.log("error");
@@ -478,6 +456,7 @@ export class ReportsComponent implements OnInit {
           if (index !== -1) {
             this.dataSource.data.splice(index, 1);
             this.dataSource._updateChangeSubscription();
+            this.reports = this.dataSource.data;
           }
         },
         error => console.log(error)
@@ -514,5 +493,4 @@ export class ReportsComponent implements OnInit {
       console.log("The dialog was closed");
     });
   }
-
 }
