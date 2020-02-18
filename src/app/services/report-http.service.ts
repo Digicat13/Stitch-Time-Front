@@ -22,8 +22,8 @@ export class ReportHttpService {
     return this.http.put(this.apiUrl + "/" +  id , report);
   }
 
-  notifyReport(report: IReportData, id) {
-    return this.http.patch(this.apiUrl + "/" +  id , report);
+  notifyReport(report: IReportData) {
+    return this.http.put(this.apiUrl + "/notigy" , report);
   }
 
   deleteData(id: number): Observable<any> {

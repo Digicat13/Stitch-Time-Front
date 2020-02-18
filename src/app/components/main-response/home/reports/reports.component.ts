@@ -298,7 +298,7 @@ export class ReportsComponent implements OnInit {
     const index: number = this.dataSource.data.indexOf(report);
     if (index !== -1) {
       // sending new status to DB
-      this.reportHttpService.notifyReport(report, report.id).subscribe(
+      this.reportHttpService.notifyReport(report).subscribe(
         (data: IReportData) => {
           this.pageLoading.isLoading.next(false);
 

@@ -38,6 +38,6 @@ export class HomeComponent implements OnInit  {
   }
 
   getPositionById(id: number){
-    return this.positions.find(position => position.id == this.positionId).name;
+    return this.positions.find(position => position.id == this.positionId).positionName;
     }
 }
