@@ -10,9 +10,9 @@ import { FormGroup, FormControl } from "@angular/forms";
 import { FilterTableService } from "src/app/services/filter-table..service";
 import { IsPageLoading } from "src/app/services/is-loading-emitter.service";
 import { IUserData } from "src/app/interfaces/user-data";
+import { ProjectForPMService } from "src/app/services/project-4-pm.service";
 
 const REPORT_DATA: IReportData[] = [];
-
 
 @Component({
   selector: "app-notified-reports-list",
@@ -44,13 +44,11 @@ export class NotifiedReportsListComponent implements OnInit {
   ];
 
   statuses: Array<IStatus> = [];
+  tasks: Array<IAssignment> = [];
 
   projects: Array<IProject> = [];
 
-  tasks: Array<IAssignment> = [];
-
-  users: Array<IUserData> = [];
-
+  developers: Array<IUserData> = [];
   reports: Array<IReportData> = new Array<IReportData>();
 
   // dataSourse here is source for table - observable
@@ -63,7 +61,8 @@ export class NotifiedReportsListComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private pageLoading: IsPageLoading,
-    private filterTableService: FilterTableService
+    private filterTableService: FilterTableService,
+    private pmService: ProjectForPMService
   ) {}
 
   // TODO write & implement notified reports service
@@ -92,19 +91,20 @@ export class NotifiedReportsListComponent implements OnInit {
 
     this.dataSource.filterPredicate = this.filterTableService.filterProjectTaskStatus();
     this.pageLoading.isLoading.next(false);
-    if(  this.statuses.find(s => s.name === "Notified").id
-        < this.statuses.find(s => s.name === "Accepted").id) {
-          this.dataSource.data.sort((a, b) => (a.statusId < b.statusId ? -1 : 0));
-        }
-        else {
-          this.dataSource.data.sort((a, b) => (a.statusId > b.statusId ? -1 : 0));
-        }
-  this.dataSource._updateChangeSubscription();
+    if (
+      this.statuses.find(s => s.name === "Notified").id <
+      this.statuses.find(s => s.name === "Accepted").id
+    ) {
+      this.dataSource.data.sort((a, b) => (a.statusId < b.statusId ? -1 : 0));
+    } else {
+      this.dataSource.data.sort((a, b) => (a.statusId > b.statusId ? -1 : 0));
+    }
+    this.dataSource._updateChangeSubscription();
   }
 
   defaultDataList() {
-    this.statuses = JSON.parse(localStorage.getItem('statusesData'));
-    this.tasks = JSON.parse(localStorage.getItem('tasksData'));
+    this.statuses = JSON.parse(localStorage.getItem("statusesData"));
+    this.tasks = JSON.parse(localStorage.getItem("tasksData"));
   }
 
   createFilterForm() {
@@ -161,6 +161,22 @@ export class NotifiedReportsListComponent implements OnInit {
     this.applyBtnDisabled = false;
   }
 
+  onGet() {
+    this.pmService.getReportsForPm(JSON.parse(localStorage.getItem("userData")).id).subscribe(
+      responseData => {
+        (this.reports = responseData.developersReports),
+          (this.developers = responseData.pmDevelopers),
+          (this.projects = responseData.projects);
+
+        this.dataSource.data = this.reports;
+        this.dataSource._updateChangeSubscription();
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
   // to accept it
   onAccept(report: IReportData) {}
 
@@ -182,9 +198,9 @@ export class NotifiedReportsListComponent implements OnInit {
 
   getUserNameById(id: string) {
     return (
-      this.users.find(user => user.id === id).firstName +
+      this.developers.find(user => user.id === id).firstName +
       " " +
-      this.users.find(user => user.id === id).secondName
+      this.developers.find(user => user.id === id).secondName
     );
   }
 }

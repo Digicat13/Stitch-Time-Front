@@ -4,13 +4,19 @@ import { IProjectData } from "../interfaces/project-data";
 import { environment } from "src/environments/environment";
 import { throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
-import { IProject } from "../interfaces/report-data";
+import { IProject, IReportData } from "../interfaces/report-data";
 import { IUserData } from "../interfaces/user-data";
 
 interface IProjectPmInfo {
   projects: Array<IProjectData>;
   users: Array<IUserData>;
 }
+
+interface IPmReportInfo {
+  projects: Array<IProject>;
+  pmDevelopers: Array<IUserData>;
+  developersReports: Array<IReportData>;
+} 
 
 @Injectable()
 export class ProjectForPMService {
@@ -44,6 +50,12 @@ export class ProjectForPMService {
   getProject(id: number) {
     return this.http
     .get<IProjectData>(environment.apiUrl + "/project/" + id)
+    .pipe(catchError(this.errorHandling));
+  }
+
+  getReportsForPm(id: string) {
+    return this.http
+    .get<IPmReportInfo>(environment.apiUrl + "/User/GetPmReportsInfo/" + id)
     .pipe(catchError(this.errorHandling));
   }
 
