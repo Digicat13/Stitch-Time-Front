@@ -144,7 +144,7 @@ export class ProjectsListComponent implements OnInit {
       name: this.projectForm.get("projectName").value,
       abbrevation: this.projectForm.get("projectAbbreviation").value,
       description: this.projectForm.get("description").value,
-      initialEffort: this.projectForm.get("effort").value,
+      initialEffrort: this.projectForm.get("effort").value,
       initialRisk: this.projectForm.get("risk").value,
       projectManagerId: JSON.parse(localStorage.getItem("userData")).id,
       teamLeadId: this.projectForm.get("teamlead").value,
@@ -157,16 +157,15 @@ export class ProjectsListComponent implements OnInit {
     console.log(projectData);
     this.projectService.setNewProject(projectData).subscribe(
       responseData => {
-    this.pageLoading.isLoading.next(false);
-
         console.log(responseData);
       },
       error => {
-    this.pageLoading.isLoading.next(false);
-console.log('blyaha');
+
+        console.log('blyaha');
         console.log(error);
       }
     );
+    this.pageLoading.isLoading.next(false);
   }
 
   private onGet() {
@@ -174,18 +173,17 @@ console.log('blyaha');
     this.projectService.getProjectsList().subscribe(
       responseData => {
         console.log(responseData);
-        this.pageLoading.isLoading.next(false);
         this.projects = responseData.projects;
         this.developers = responseData.users;
         this.dataSource.data = this.projects;
       },
       errorData => {
-        this.pageLoading.isLoading.next(false);
         if (errorData.name === "HttpErrorResponse") {
           this.openErrorResponseDialog(errorData.message);
         }
       }
     );
+    this.pageLoading.isLoading.next(false);
   }
 
   private openErrorResponseDialog(errorName: string) {

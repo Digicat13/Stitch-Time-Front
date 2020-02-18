@@ -187,7 +187,6 @@ export class ReportsComponent implements OnInit {
   }
 
   defaultDataList() {
-
     this.statuses = JSON.parse(localStorage.getItem('statusesData'));
     this.tasks = JSON.parse(localStorage.getItem('tasksData'));
   }
@@ -277,6 +276,7 @@ export class ReportsComponent implements OnInit {
       userId: JSON.parse(localStorage.getItem("userData")).id
     };
     if (reportData.startDate !== reportData.endDate) {
+      this.pageLoading.isLoading.next(false);
       alert(
         "Sorry, but on this project you can choose only same start and end date!"
       );
@@ -287,6 +287,7 @@ export class ReportsComponent implements OnInit {
         reportData
       )
     ) {
+      this.pageLoading.isLoading.next(false);
       alert("You cannot make report for that day, it is already full");
       return;
     } else if (this.isEdited) {
@@ -513,4 +514,5 @@ export class ReportsComponent implements OnInit {
       console.log("The dialog was closed");
     });
   }
+
 }
