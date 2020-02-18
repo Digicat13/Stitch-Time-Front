@@ -76,6 +76,7 @@ export class NotifiedReportsListComponent implements OnInit {
     this.subscribeFilters();
     this.createFilterDateForm();
 
+    this.onGet();
     this.statuses.splice(
       this.statuses.indexOf(
         this.statuses.find(status => status.name === "Opened")
@@ -91,6 +92,11 @@ export class NotifiedReportsListComponent implements OnInit {
 
     this.dataSource.filterPredicate = this.filterTableService.filterProjectTaskStatus();
     this.pageLoading.isLoading.next(false);
+    this.startedListSort();
+    this.dataSource._updateChangeSubscription();
+  }
+
+  startedListSort() {
     if (
       this.statuses.find(s => s.name === "Notified").id <
       this.statuses.find(s => s.name === "Accepted").id
@@ -99,7 +105,6 @@ export class NotifiedReportsListComponent implements OnInit {
     } else {
       this.dataSource.data.sort((a, b) => (a.statusId > b.statusId ? -1 : 0));
     }
-    this.dataSource._updateChangeSubscription();
   }
 
   defaultDataList() {
@@ -162,27 +167,64 @@ export class NotifiedReportsListComponent implements OnInit {
   }
 
   onGet() {
-    this.pmService.getReportsForPm(JSON.parse(localStorage.getItem("userData")).id).subscribe(
-      responseData => {
-        (this.reports = responseData.developersReports),
-          (this.developers = responseData.pmDevelopers),
-          (this.projects = responseData.projects);
+    this.pmService
+      .getReportsForPm(JSON.parse(localStorage.getItem("userData")).id)
+      .subscribe(
+        responseData => {
+          console.log(responseData);
+          (this.reports = responseData.developersReports),
+            (this.developers = responseData.pmDevelopers),
+            (this.projects = responseData.projects);
 
+          this.dataSource.data = this.reports;
+          this.dataSource._updateChangeSubscription();
+        },
+        error => {
+          console.log(error);
+        }
+      );
+  }
+
+  // to accept it
+  onAccept(report: IReportData) {
+    this.pageLoading.isLoading.next(true);
+    this.pmService.acceptedReport(report).subscribe(
+      responseData => {
+        this.pageLoading.isLoading.next(false);
+
+        this.reports.find(elem => elem.id === report.id).statusId = responseData.statusId;
         this.dataSource.data = this.reports;
         this.dataSource._updateChangeSubscription();
       },
       error => {
-        console.log(error);
+        this.pageLoading.isLoading.next(false);
+        alert(error);
       }
     );
   }
 
-  // to accept it
-  onAccept(report: IReportData) {}
-
   // to decline it
   // IMPLEMENT NEW DECLINE DIALOG WINDOW with description of decline by email
-  onDecline(report: IReportData) {}
+  onDecline(report: IReportData) {
+    this.pageLoading.isLoading.next(true);
+
+    this.pmService.declinedReport(report).subscribe(
+      responseData => {
+        this.pageLoading.isLoading.next(false);
+
+        const index = this.reports.indexOf(
+          this.reports.find(elem => elem.id === report.id)
+        );
+        this.reports.splice(index, 1);
+        this.dataSource.data = this.reports;
+        this.dataSource._updateChangeSubscription();
+      },
+      error => {
+        this.pageLoading.isLoading.next(false);
+        alert(error);
+      }
+    );
+  }
 
   getStatusById(id: number) {
     return this.statuses.find(status => status.id == id).name;

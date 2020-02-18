@@ -141,6 +141,7 @@ export class ProjectsListComponent implements OnInit {
   }
 
   private onGet() {
+    console.log('faksfhadsjkfhadsjklfadsjfkh');
     this.pageLoading.isLoading.next(true);
     this.projectService.getProjectsList().subscribe(
       responseData => {

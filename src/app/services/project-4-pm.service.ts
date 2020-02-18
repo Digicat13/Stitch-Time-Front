@@ -16,7 +16,7 @@ interface IPmReportInfo {
   projects: Array<IProject>;
   pmDevelopers: Array<IUserData>;
   developersReports: Array<IReportData>;
-} 
+}
 
 @Injectable()
 export class ProjectForPMService {
@@ -58,6 +58,14 @@ export class ProjectForPMService {
     .get<IPmReportInfo>(environment.apiUrl + "/User/GetPmReportsInfo/" + id)
     .pipe(catchError(this.errorHandling));
   }
+
+  acceptedReport(report: IReportData) {
+      return this.http.put<IReportData>(environment.apiUrl + '/Report/Accept', report);
+  }
+
+  declinedReport(report: IReportData) {
+    return this.http.put<IReportData>(environment.apiUrl + '/Report/Decline', report);
+}
 
   private errorHandling(errorResponse: HttpErrorResponse) {
     if (
