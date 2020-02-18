@@ -10,7 +10,7 @@ import { FetchDefaultInfoService } from "src/app/services/fetch-default-info.ser
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.scss"]
 })
-export class HomeComponent implements OnInit , OnDestroy {
+export class HomeComponent implements OnInit  {
   projects: string[] = ["EDU-pr", "MED", "cancerheal", "adasdad"];
 
   positionId: number;
@@ -34,10 +34,7 @@ export class HomeComponent implements OnInit , OnDestroy {
     // this.position = 2;
   }
 
-  ngOnDestroy() {
-    this.signInUp.logout();
-    this.router.navigate(['/']);
-  }
+  
   onLogout() {
     this.signInUp.logout();
   }
