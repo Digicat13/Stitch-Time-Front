@@ -47,5 +47,5 @@ export interface IStatus {
 
 export interface IPosition {
   id: number;
-  name: string;
+  positionName: string;
 }

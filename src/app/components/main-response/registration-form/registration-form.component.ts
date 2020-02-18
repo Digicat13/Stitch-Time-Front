@@ -70,6 +70,8 @@ export class RegistrationFormComponent implements OnInit {
       email: this.registrationForm.get("userEmail").value,
       password: this.registrationForm.get("passwords").get("userPassword")
         .value,
+      positionId: 1
+
     };
 
     // this.isLoading = true;
