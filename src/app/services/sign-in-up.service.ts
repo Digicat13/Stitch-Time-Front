@@ -72,7 +72,7 @@ export class SignInUpService {
 
   logout() {
     this.user.next(null);
-    this.http.post(environment.apiUrl + '/account/logout', null).subscribe(responseData => {});
+    this.http.post(environment.apiUrl + '/account/logout', JSON.parse(localStorage.getItem("userData")).id).subscribe(responseData => {});
     this.router.navigate(["/login"]);
     localStorage.removeItem("userData");
     if (this.tokenExpirationTimer) {

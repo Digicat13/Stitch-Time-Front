@@ -11,108 +11,8 @@ import { FilterTableService } from "src/app/services/filter-table..service";
 import { IsPageLoading } from "src/app/services/is-loading-emitter.service";
 import { IUserData } from "src/app/interfaces/user-data";
 
-const REPORT_DATA: IReportData[] = [
-  {
-    projectId: 3,
-    assignmentId: 1,
-    description:
-      "sdadasdasdasdsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddsdadasdasdasddd",
-    time: 2,
-    overtime: 1,
-    startDate: "2020-02-04",
-    endDate: "2020-02-04",
-    userId: '7',
-    statusId: 2
-  },
-  {
-    projectId: 3,
-    assignmentId: 1,
-    description: "ssdasdsad",
-    time: 0,
-    overtime: 0,
-    startDate: "2020-02-04T17:43:53.491Z",
-    endDate: "2020-02-04T17:43:53.491Z",
-    userId: '7',
-    statusId: 3
-  },
-  {
-    projectId: 3,
-    assignmentId: 1,
-    description: "lol",
-    time: 0,
-    overtime: 0,
-    startDate: "2020-02-04T17:43:53.491Z",
-    endDate: "2020-02-04T17:43:53.491Z",
-    userId: '7',
-    statusId: 2
-  },
-  {
-    projectId: 3,
-    assignmentId: 1,
-    description: "lol",
-    time: 0,
-    overtime: 0,
-    startDate: "2020-02-04T17:43:53.491Z",
-    endDate: "2020-02-04T17:43:53.491Z",
-    userId: '7',
-    statusId: 3
-  },
-  {
-    projectId: 3,
-    assignmentId: 1,
-    description: "lol",
-    time: 0,
-    overtime: 0,
-    startDate: "2020-02-04T17:43:53.491Z",
-    endDate: "2020-02-04T17:43:53.491Z",
-    userId: "7",
-    statusId: 3
-  },
-  {
-    projectId: 3,
-    assignmentId: 1,
-    description: "lol",
-    time: 0,
-    overtime: 0,
-    startDate: "2020-02-04T17:43:53.491Z",
-    endDate: "2020-02-04T17:43:53.491Z",
-    userId: '7',
-    statusId: 2
-  },
-  {
-    projectId: 3,
-    assignmentId: 1,
-    description: "lol",
-    time: 0,
-    overtime: 0,
-    startDate: "2020-02-04T17:43:53.491Z",
-    endDate: "2020-02-04T17:43:53.491Z",
-    userId: '7',
-    statusId: 3
-  },
-  {
-    projectId: 3,
-    assignmentId: 1,
-    description: "lol",
-    time: 0,
-    overtime: 0,
-    startDate: "2020-02-04T17:43:53.491Z",
-    endDate: "2020-02-04T17:43:53.491Z",
-    userId: "7",
-    statusId: 3
-  },
-  {
-    projectId: 3,
-    assignmentId: 1,
-    description: "lol",
-    time: 0,
-    overtime: 0,
-    startDate: "2020-02-04T17:43:53.491Z",
-    endDate: "2020-02-04T17:43:53.491Z",
-    userId: '7',
-    statusId: 2
-  }
-];
+const REPORT_DATA: IReportData[] = [];
+
 
 @Component({
   selector: "app-notified-reports-list",
@@ -143,34 +43,13 @@ export class NotifiedReportsListComponent implements OnInit {
     "actions"
   ];
 
-  statuses: Array<IStatus> = [
-    { id: 1, name: "Opened" },
-    { id: 2, name: "Notified" },
-    { id: 3, name: "Accepted" },
-    { id: 4, name: "Declined" }
-  ];
+  statuses: Array<IStatus> = [];
 
-  projects: Array<IProject> = [
-    { id: 3, name: "RDM", projectManagerId: 2 },
-    { id: 1, name: "EDU-pr", projectManagerId: 5 },
-    { id: 2, name: "adasdasd", projectManagerId: 5 },
-    { id: 4, name: "cancerheal", projectManagerId: 5 }
-  ];
+  projects: Array<IProject> = [];
 
-  tasks: Array<IAssignment> = [
-    { id: 3, name: "bug fixing" },
-    { id: 2, name: "testing" },
-    { id: 1, name: "dev" },
-    { id: 4, name: "design" }
-  ];
+  tasks: Array<IAssignment> = [];
 
-  users: Array<IUserData> = [
-    { id: '7', firstName: "John", secondName: "Dou" },
-    { id: '1', firstName: "John2", secondName: "Dou" },
-    { id: '2', firstName: "John3", secondName: "Dou" },
-    { id: "3", firstName: "John4", secondName: "Dou" },
-    { id: '4', firstName: "John5", secondName: "Dou" }
-  ];
+  users: Array<IUserData> = [];
 
   reports: Array<IReportData> = new Array<IReportData>();
 
@@ -191,6 +70,7 @@ export class NotifiedReportsListComponent implements OnInit {
   // to get all notified reports
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
+    this.defaultDataList();
 
     this.pageLoading.isLoading.next(true);
     this.createFilterForm();
@@ -220,8 +100,11 @@ export class NotifiedReportsListComponent implements OnInit {
           this.dataSource.data.sort((a, b) => (a.statusId > b.statusId ? -1 : 0));
         }
   this.dataSource._updateChangeSubscription();
+  }
 
-
+  defaultDataList() {
+    this.statuses = JSON.parse(localStorage.getItem('statusesData'));
+    this.tasks = JSON.parse(localStorage.getItem('tasksData'));
   }
 
   createFilterForm() {
