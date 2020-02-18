@@ -108,19 +108,6 @@
     </div>
 
     <div class="div-for-field">
-      <label for="userPosition">Position</label>
-      <select
-        formControlName="userPosition"
-        name="positions-selector"
-        class="field"
-      >
-        <option *ngFor="let pos of positions" value="{{pos.positionId}}">{{
-          pos.positionName
-        }}</option>
-      </select>
-    </div>
-
-    <div class="div-for-field">
       <input
         type="submit"
         value="Submit"

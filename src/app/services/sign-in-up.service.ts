@@ -49,8 +49,12 @@ export class SignInUpService {
   }
 
   getUserInfoById() {
-    console.log('we r here!!!');
-    return this.http.get<IFullUserData>(environment.apiUrl + "/user/GetInfo");
+    console.log("we r here!!!");
+    return this.http.get<IFullUserData>(
+      environment.apiUrl +
+        "/user/GetInfo/" +
+        JSON.parse(localStorage.getItem("userData")).id
+    );
   }
 
   autoLogin() {
@@ -72,7 +76,15 @@ export class SignInUpService {
 
   logout() {
     this.user.next(null);
-    this.http.post(environment.apiUrl + '/account/logout', JSON.parse(localStorage.getItem("userData")).id).subscribe(responseData => {});
+    console.log(JSON.parse(localStorage.getItem("userData")).id);
+
+    this.http
+      .get(
+        environment.apiUrl +
+          "/Account/Logout/" +
+          JSON.parse(localStorage.getItem("userData")).id
+      )
+      .subscribe(responseData => {});
     this.router.navigate(["/login"]);
     localStorage.removeItem("userData");
     if (this.tokenExpirationTimer) {
