@@ -7,8 +7,9 @@ export interface IProjectData {
   description?: string;
   initialEffrort?: number;
   initialRisk?: number;
+  spentEffort?: number;
   projectManagerId?: string;
-  teamLeadId?: string;
+  // teamLeadId?: string;
   team?: ITeam;
 }
 

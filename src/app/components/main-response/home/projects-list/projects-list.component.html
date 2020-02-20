@@ -1,8 +1,6 @@
-
 <mat-form-field>
   <mat-label>Search</mat-label>
-  <input matInput (keyup)="applyFilter($event)"
-  >
+  <input matInput (keyup)="applyFilter($event)" />
 </mat-form-field>
 
 <div class="mat-elevation-z8">
@@ -24,9 +22,11 @@
           ...
         </button> -->
         <!-- <mat-menu #menu="matMenu"> -->
-          <!-- <button mat-menu-item (click)="onDelete(project)">
+        <!-- <button mat-menu-item (click)="onDelete(project)">
             &#10006; Delete</button> -->
-          <button mat-button class="btn btn-custom" (click)="onInfo(project)">&#10069; Info</button>
+        <button mat-button class="btn btn-custom" (click)="onInfo(project)">
+          &#10069; Info
+        </button>
         <!-- </mat-menu> -->
       </td>
     </ng-container>
@@ -36,6 +36,7 @@
       >
     </tr>
   </table>
+
   <mat-paginator
     [pageSizeOptions]="[5, 10, 20]"
     showFirstLastButtons
@@ -94,14 +95,26 @@
 
     <mat-form-field>
       <mat-label>Effort</mat-label>
-      <input matInput formControlName="effort"
-      type='number' min='0' required />
+      <input
+        matInput
+        formControlName="effort"
+        step="0.5"
+        type="number"
+        min="0"
+        required
+      />
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Risk</mat-label>
-      <input matInput formControlName="risk"
-      type='number' min='0' required />
+      <input
+        matInput
+        formControlName="risk"
+        step="0.5"
+        type="number"
+        min="0"
+        required
+      />
     </mat-form-field>
 
     <mat-form-field>

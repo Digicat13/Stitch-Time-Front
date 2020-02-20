@@ -21,6 +21,7 @@ interface IPmReportInfo {
 interface ITeamLeadInfo {
   users: Array<IUserData>;
   usersReports: Array<IReportData>;
+  projects: Array<IProject>;
 }
 
 @Injectable()

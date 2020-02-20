@@ -55,12 +55,12 @@ export class RegistrationFormComponent implements OnInit {
           userConfirmPassword: new FormControl(null, [Validators.required])
         },
         [Validators.required, this.singInUpValidator.matchPasswordsValidator]
-      ),
-
+      )
     });
   }
 
   onSubmit() {
+    this.removeRedBorders();
     if (this.registrationForm.invalid) {
       return;
     }
@@ -71,7 +71,6 @@ export class RegistrationFormComponent implements OnInit {
       password: this.registrationForm.get("passwords").get("userPassword")
         .value,
       positionId: 1
-
     };
 
     // this.isLoading = true;
@@ -96,15 +95,20 @@ export class RegistrationFormComponent implements OnInit {
         // TODO сюди треба додати обробку помилки, якщо ще щось сталось, хоча, тут єдиний трабл
         // це як раз або ВЖЕ ЗАРЕЄСТРОВАНИЙ емейл, або ж трабл з підключенням до сервака ;)
 
-        if (errorData.name === "HttpErrorResponse") {
-          this.openErrorResponseDialog(errorData.message);
-        } else {
+        if (errorData === "Email is in use.") {
           this.getRedBorderEmailInput();
+        } else if (errorData.name === "HttpErrorResponse") {
+          this.openErrorResponseDialog(errorData.message);
         }
       }
     );
 
     console.log(inputData);
+  }
+
+  removeRedBorders() {
+    const emailInput = document.getElementsByName("userEmail")[0];
+    emailInput.classList.remove("red-border");
   }
 
   getRedBorderEmailInput() {

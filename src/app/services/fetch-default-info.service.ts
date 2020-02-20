@@ -18,20 +18,10 @@ export class FetchDefaultInfoService {
   constructor(private http: HttpClient, private dialog: MatDialog) {}
 
   fetchDefaultInfo() {
-    this.http
+    return this.http
       .get<IDefaultInfo>(environment.apiUrl + "/info")
-      .pipe(catchError(this.errorHandling))
-      .subscribe(
-        responseData => {
-          console.log(responseData);
-          localStorage.setItem("tasksData", JSON.stringify(responseData.assignmentDto));
-          localStorage.setItem("possitionsData", JSON.stringify(responseData.positionDto));
-          localStorage.setItem("statusesData", JSON.stringify(responseData.statusDto));
-        },
-        errorData => {
-          this.openErrorResponseDialog(errorData);
-        }
-      );
+      .pipe(catchError(this.errorHandling));
+
   }
 
 
@@ -40,14 +30,5 @@ export class FetchDefaultInfoService {
     return throwError(errorResponse.message);
   }
 
-  private openErrorResponseDialog(errorName: string) {
-    const dialogRef = this.dialog.open(ErrorResponseDialogComponent, {
-      width: "fit-content",
-      data: errorName
-    });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log("The dialog was closed");
-    });
-  }
 }

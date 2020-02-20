@@ -7,8 +7,7 @@ import { ProjectForPMService } from "src/app/services/project-4-pm.service";
 import { IsPageLoading } from "src/app/services/is-loading-emitter.service";
 import { ErrorResponseDialogComponent } from "../../error-response-dialog/error-response-dialog.component";
 import { IProject } from "src/app/interfaces/report-data";
-
-const PROJECT_DATA: Array<IProjectData> = [];
+import { ProjectInfoDialogComponent } from '../project-info-dialog/project-info-dialog.component';
 
 @Component({
   selector: "app-projects-list",
@@ -28,9 +27,7 @@ export class ProjectsListComponent implements OnInit {
 
   projects: Array<IProjectData> = new Array<IProjectData>();
 
-  // dataSourse here is source for table - observable
-  dataSource = new MatTableDataSource<IProjectData>(PROJECT_DATA);
-  // dataSource = new MatTableDataSource<IProjectData>(this.projects);
+  dataSource = new MatTableDataSource<IProjectData>(this.projects);
 
   projectForm = new FormGroup({
     projectName: new FormControl(null, [
@@ -45,7 +42,7 @@ export class ProjectsListComponent implements OnInit {
     ]),
     description: new FormControl(null, [
       Validators.required,
-      Validators.maxLength(25)
+      Validators.maxLength(256)
     ]),
     teamlead: new FormControl(null, [Validators.required]),
     teammates: new FormControl(null, [Validators.required]),
@@ -75,8 +72,8 @@ export class ProjectsListComponent implements OnInit {
       this.projectService.deleteProject(project).subscribe(
         responseData => {
           const index: number = this.dataSource.data.indexOf(project);
-          if(index !== -1) {
-            this.dataSource.data.splice(index,1);
+          if (index !== -1) {
+            this.dataSource.data.splice(index, 1);
             this.dataSource._updateChangeSubscription();
           }
           this.pageLoading.isLoading.next(false);
@@ -118,7 +115,7 @@ export class ProjectsListComponent implements OnInit {
       initialEffrort: this.projectForm.get("effort").value,
       initialRisk: this.projectForm.get("risk").value,
       projectManagerId: JSON.parse(localStorage.getItem("userData")).id,
-      teamLeadId: this.projectForm.get("teamlead").value,
+      // teamLeadId: this.projectForm.get("teamlead").value,
       team: {
         teamLeadId: this.projectForm.get("teamlead").value,
         teamMembers: teamMembers
@@ -127,11 +124,11 @@ export class ProjectsListComponent implements OnInit {
     console.log(projectData);
     this.projectService.setNewProject(projectData).subscribe(
       responseData => {
+        this.projectForm.reset();
         this.dataSource.data.push(projectData);
         this.dataSource._updateChangeSubscription();
       },
       error => {
-        console.log("blyaha");
         console.log(error);
       }
     );
@@ -141,7 +138,6 @@ export class ProjectsListComponent implements OnInit {
   }
 
   private onGet() {
-    console.log('faksfhadsjkfhadsjklfadsjfkh');
     this.pageLoading.isLoading.next(true);
     this.projectService.getProjectsList().subscribe(
       responseData => {
@@ -158,9 +154,24 @@ export class ProjectsListComponent implements OnInit {
         }
       }
     );
-    this.pageLoading.isLoading.next(false);
 
     this.dataSource._updateChangeSubscription();
+  }
+
+  onInfo(project: IProject) {
+    this.pageLoading.isLoading.next(true);
+    this.projectService.getProject(project.id).subscribe(
+      responseData => {
+        this.pageLoading.isLoading.next(false);
+
+        this.openProjectInfoDialog(responseData);
+      },
+      error => {
+        this.pageLoading.isLoading.next(false);
+        this.openErrorResponseDialog(error.message);
+        console.log(error);
+      }
+    );
   }
 
   private openErrorResponseDialog(errorName: string) {
@@ -174,25 +185,15 @@ export class ProjectsListComponent implements OnInit {
     });
   }
 
-  onInfo(project: IProject) {
-    let projectData: IProjectData;
-    this.projectService.getProject(project.id).subscribe(
-      responseData => {
-        projectData = responseData;
-        console.log(projectData);
-        // alert("Project Name: "+ projectData.name + "\n"+
-        // "Abbrevation: "+ projectData.abbrevation + "\n"+
-        // "Description: "+ projectData.description + "\n"+
-        // "Initial effort: "+ projectData.initialEffrort + "\n"+
-        // "Initial risk: "+ projectData.initialRisk + "\n"+
-        // "Team Lead: "+ projectData.team.teamLeadId  +"\n"
-        // );
-      },
-      error => {
-        console.log(error);
-      }
-    );
+  private openProjectInfoDialog(project: IProjectData) {
+    const dialogRef = this.dialog.open(ProjectInfoDialogComponent, {
+      width: "fit-content",
+      data: project,
+      // scrollStrategy:
+    });
 
-    console.log(projectData);
+    dialogRef.afterClosed().subscribe(result => {
+      console.log("The dialog was closed");
+    });
   }
 }

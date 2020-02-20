@@ -79,19 +79,19 @@ export class NotifiedReportsListComponent implements OnInit {
     this.createFilterDateForm();
     this.position = JSON.parse(localStorage.getItem("userData")).positionId;
 
-    if (this.position === 2) {
-      this.displayedColumns = [
-        "user",
-        "task",
-        "time",
-        "overtime",
-        "description",
-        "startDate",
-        "endDate",
-        "status",
-        "actions"
-      ];
-    }
+    // if (this.position === 2) {
+    //   this.displayedColumns = [
+    //     "user",
+    //     "task",
+    //     "time",
+    //     "overtime",
+    //     "description",
+    //     "startDate",
+    //     "endDate",
+    //     "status",
+    //     "actions"
+    //   ];
+    // }
     this.onGet();
     this.statuses.splice(
       this.statuses.indexOf(
@@ -208,7 +208,7 @@ export class NotifiedReportsListComponent implements OnInit {
             console.log(responseData);
             (this.reports = responseData.usersReports),
               (this.developers = responseData.users);
-            // (this.projects = responseData.projects);
+            (this.projects = responseData.projects);
 
             this.dataSource.data = this.reports;
             this.dataSource._updateChangeSubscription();

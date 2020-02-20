@@ -33,6 +33,8 @@ export class LogininFormComponent implements OnInit {
   }
 
   onSubmit() {
+
+    this.removeRedBorders();
     if (this.loginInForm.invalid) {
       return;
     }
@@ -43,28 +45,35 @@ export class LogininFormComponent implements OnInit {
 
     this.loading.isLoading.next(true);
 
-    console.log('start login in');
+    console.log("start login in");
     this.signInUpService.singIn(loginInData).subscribe(
       responseData => {
         this.loading.isLoading.next(false);
-        console.log('end');
+        console.log("end");
 
         this.loginInForm.reset();
         this.router.navigate(["/home"]);
-
       },
       errorData => {
         this.loading.isLoading.next(false);
         console.log(errorData);
-        if (errorData.name === "HttpErrorResponse") {
-          this.openErrorResponseDialog(errorData.message);
-        } else if (errorData === "email does not registered") {
+        if (errorData === "There is no email") {
           this.getRedBorderEmailInput();
-        } else if (errorData === "incorrect password for this account") {
+        } else if (errorData === "Bad password") {
           this.getRedBorderPasswordInput();
+        } else if (errorData.name === "HttpErrorResponse") {
+          this.openErrorResponseDialog(errorData.message);
         }
       }
     );
+  }
+
+  removeRedBorders() {
+    const emailInput = document.getElementsByName("userEmail")[0];
+    emailInput.classList.remove("red-border");
+
+    const passwordInput = document.getElementsByName("userPassword")[0];
+    passwordInput.classList.remove("red-border");
   }
 
   getRedBorderEmailInput() {
@@ -77,8 +86,8 @@ export class LogininFormComponent implements OnInit {
   getRedBorderPasswordInput() {
     this.loginInForm.get("userPassword").setErrors({ incorrectPassword: true });
 
-    const emailInput = document.getElementsByName("userPassword")[0];
-    emailInput.classList.add("red-border");
+    const passwordInput = document.getElementsByName("userPassword")[0];
+    passwordInput.classList.add("red-border");
   }
 
   openErrorResponseDialog(errorName: string) {

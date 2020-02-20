@@ -116,19 +116,21 @@ export class SignInUpService {
   private errorHandling(errorResponse: HttpErrorResponse) {
     console.log(errorResponse);
 
-    // switch (errorResponse.message) {
-    //   case "": {
-    //   }
-    // }
-    if (
-      errorResponse.name !== undefined &&
-      errorResponse.name === "HttpErrorResponse"
-    ) {
-      return throwError({
-        name: errorResponse.name,
-        message: errorResponse.message
-      });
+    switch (errorResponse.error) {
+      case "Bad password": {
+        return throwError(errorResponse.error);
+      }
+      case "Email is in use.": {
+        return throwError(errorResponse.error);
+      }
+      case "There is no email": {
+        return throwError(errorResponse.error);
+      }
     }
-    return throwError(errorResponse.message);
+
+    return throwError({
+      name: errorResponse.name,
+      message: errorResponse.message
+    });
   }
 }
