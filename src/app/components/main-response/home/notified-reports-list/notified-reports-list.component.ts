@@ -188,7 +188,7 @@ export class NotifiedReportsListComponent implements OnInit {
         .getReportsForPm(JSON.parse(localStorage.getItem("userData")).id)
         .subscribe(
           responseData => {
-            console.log(responseData);
+            // console.log(responseData);
             (this.reports = responseData.developersReports),
               (this.developers = responseData.pmDevelopers),
               (this.projects = responseData.projects);
@@ -205,7 +205,7 @@ export class NotifiedReportsListComponent implements OnInit {
         .getReportsForTeamLead(JSON.parse(localStorage.getItem("userData")).id)
         .subscribe(
           responseData => {
-            console.log(responseData);
+            // console.log(responseData);
             (this.reports = responseData.usersReports),
               (this.developers = responseData.users);
             (this.projects = responseData.projects);
@@ -227,9 +227,9 @@ export class NotifiedReportsListComponent implements OnInit {
       responseData => {
         this.pageLoading.isLoading.next(false);
 
-        this.reports.find(elem => elem.id === report.id).statusId =
+        this.dataSource.data.find(elem => elem.id === report.id).statusId =
           responseData.statusId;
-        this.dataSource.data = this.reports;
+        // this.dataSource.data = this.reports;
         this.dataSource._updateChangeSubscription();
       },
       error => {
@@ -248,11 +248,11 @@ export class NotifiedReportsListComponent implements OnInit {
       responseData => {
         this.pageLoading.isLoading.next(false);
 
-        const index = this.reports.indexOf(
-          this.reports.find(elem => elem.id === report.id)
+        const index = this.dataSource.data.indexOf(
+          this.dataSource.data.find(elem => elem.id === report.id)
         );
-        this.reports.splice(index, 1);
-        this.dataSource.data = this.reports;
+        this.dataSource.data.splice(index, 1);
+        // this.dataSource.data = this.reports;
         this.dataSource._updateChangeSubscription();
       },
       error => {

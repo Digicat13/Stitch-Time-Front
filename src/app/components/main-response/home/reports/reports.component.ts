@@ -210,13 +210,12 @@ export class ReportsComponent implements OnInit {
         .subscribe(
           (data: IReportData) => {
             this.pageLoading.isLoading.next(false);
-            let startDate = data.startDate.split("T");
+            const startDate = data.startDate.split("T");
             data.startDate = startDate[0];
-            let endDate = data.endDate.split("T");
+            const endDate = data.endDate.split("T");
             data.endDate = endDate[0];
-            console.log(data);
+
             this.dataSource.data[this.currentReportIndex] = data;
-            this.reports = this.dataSource.data;
             this.dataSource._updateChangeSubscription();
           },
           error => {
@@ -229,12 +228,9 @@ export class ReportsComponent implements OnInit {
       // pushing into local array, sending request
 
       // CHANGE TO GET ID FROM POST RESPONSE
-      console.log("pooooooost");
       this.reportHttpService.postData(reportData).subscribe(
         (data: IReportData) => {
           this.pageLoading.isLoading.next(false);
-
-          console.log(data);
           const startDate = data.startDate.split("T");
           data.startDate = startDate[0];
           const endDate = data.endDate.split("T");
@@ -242,7 +238,6 @@ export class ReportsComponent implements OnInit {
 
           this.dataSource.data.push(data);
           this.dataSource._updateChangeSubscription();
-          this.reports.push(data);
         },
         error => {
           this.pageLoading.isLoading.next(false);
@@ -275,9 +270,6 @@ export class ReportsComponent implements OnInit {
     const index: number = this.dataSource.data.indexOf(report);
     if (index !== -1) {
       this.currentReportIndex = index;
-      // this.dataSource.data.splice(index, 1);
-      // this.dataSource._updateChangeSubscription();
-      // this.reports.splice(index, 1);
     } else {
       console.log("onEdit: cant find index of report in dataSource");
     }
@@ -306,9 +298,7 @@ export class ReportsComponent implements OnInit {
             status => status.name === "Notified"
           ).id;
 
-          console.log(data);
           this.dataSource._updateChangeSubscription();
-          this.reports = this.dataSource.data;
         },
         error => {
           this.pageLoading.isLoading.next(false);
@@ -317,7 +307,6 @@ export class ReportsComponent implements OnInit {
         }
       );
     }
-    this.dataSource._updateChangeSubscription();
   }
 
   // patching default values
@@ -337,13 +326,13 @@ export class ReportsComponent implements OnInit {
     this.signInUpService.getUserInfoById().subscribe(
       responseData => {
         this.pageLoading.isLoading.next(false);
-        console.log(responseData);
+        // console.log(responseData);
         if (responseData.user === null) {
           this.reports = [];
           return;
         }
 
-        console.log(responseData);
+        // console.log(responseData);
         this.reports = responseData.reports;
         if (this.reports.length > 0) {
           this.reports.forEach(report => {
@@ -370,12 +359,12 @@ export class ReportsComponent implements OnInit {
     } else {
       this.reportHttpService.deleteData(report.id).subscribe(
         (data: IReportData) => {
-          console.log(data);
+          // console.log(data);
           const index: number = this.dataSource.data.indexOf(report);
           if (index !== -1) {
             this.dataSource.data.splice(index, 1);
             this.dataSource._updateChangeSubscription();
-            this.reports = this.dataSource.data;
+            // this.reports = this.dataSource.data;
           }
         },
         error => console.log(error)
