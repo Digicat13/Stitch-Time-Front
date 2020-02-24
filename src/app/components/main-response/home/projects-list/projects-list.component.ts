@@ -125,7 +125,7 @@ export class ProjectsListComponent implements OnInit {
     this.projectService.setNewProject(projectData).subscribe(
       responseData => {
         this.projectForm.reset();
-        this.dataSource.data.push(projectData);
+        this.dataSource.data.push(responseData);
         this.dataSource._updateChangeSubscription();
       },
       error => {
@@ -162,6 +162,7 @@ export class ProjectsListComponent implements OnInit {
     this.pageLoading.isLoading.next(true);
     this.projectService.getProject(project.id).subscribe(
       responseData => {
+        console.log(responseData);
         this.pageLoading.isLoading.next(false);
 
         this.openProjectInfoDialog(responseData);

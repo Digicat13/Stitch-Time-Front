@@ -9,9 +9,9 @@
 
       <mat-label>Team Members</mat-label>
       <cdk-virtual-scroll-viewport itemSize="20" class="example-viewport">
-        <div *cdkVirtualFor="let dev of developers" class="example-item">
-          <p>{{ getDevFullNameById(dev.id) }}</p>
-          ({{ getDevEmailById(dev.id) }})
+        <div *cdkVirtualFor="let dev of project.team.teamMembers" class="example-item">
+          <p>{{ getDevFullNameById(dev.userId) }}</p>
+          ({{ getDevEmailById(dev.userId) }})
         </div>
       </cdk-virtual-scroll-viewport>
     </div>

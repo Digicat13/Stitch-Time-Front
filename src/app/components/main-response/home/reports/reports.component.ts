@@ -105,7 +105,7 @@ export class ReportsComponent implements OnInit {
       descriptionControl: new FormControl(null, Validators.required),
       startDateControl: new FormControl(null, [
         Validators.required,
-        this.reportValidator.startDateValidation
+        // this.reportValidator.startDateValidation
       ]),
       endDateControl: new FormControl(null, Validators.required)
     });
@@ -221,6 +221,7 @@ export class ReportsComponent implements OnInit {
           error => {
             this.pageLoading.isLoading.next(false);
 
+            this.openErrorResponseDialog(error.message);
             console.log(error.message);
           }
         );
@@ -241,6 +242,7 @@ export class ReportsComponent implements OnInit {
         },
         error => {
           this.pageLoading.isLoading.next(false);
+          this.openErrorResponseDialog(error.message);
 
           console.log(error);
         }
@@ -304,6 +306,7 @@ export class ReportsComponent implements OnInit {
           this.pageLoading.isLoading.next(false);
 
           console.log(error);
+          this.openErrorResponseDialog(error.error.detail);
         }
       );
     }

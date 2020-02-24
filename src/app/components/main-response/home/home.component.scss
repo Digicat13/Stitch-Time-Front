@@ -31,6 +31,10 @@ a {
   color: #ece9e1;
 }
 
+a:hover {
+  color: black;
+}
+
 div {
   .filter-line {
     margin: 5% 0%;
@@ -44,12 +48,9 @@ div {
     margin: 0% 0% 0% 0%;
     display: inline;
   }
-
-  
 }
 
 .main {
-  // background: $background-main;
   margin-top: 4.1vw;
   margin-bottom: 3vw;
   z-index: -4;
@@ -58,6 +59,3 @@ div {
 .main-body {
   margin: 0% 5%;
 }
-
-
-

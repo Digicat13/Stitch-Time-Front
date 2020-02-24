@@ -188,7 +188,7 @@ export class NotifiedReportsListComponent implements OnInit {
         .getReportsForPm(JSON.parse(localStorage.getItem("userData")).id)
         .subscribe(
           responseData => {
-            // console.log(responseData);
+            console.log(responseData);
             (this.reports = responseData.developersReports),
               (this.developers = responseData.pmDevelopers),
               (this.projects = responseData.projects);
@@ -201,15 +201,17 @@ export class NotifiedReportsListComponent implements OnInit {
           }
         );
     } else {
+      console.log('WE R TM');
       this.pmService
         .getReportsForTeamLead(JSON.parse(localStorage.getItem("userData")).id)
         .subscribe(
           responseData => {
-            // console.log(responseData);
+            console.log(responseData);
             (this.reports = responseData.usersReports),
               (this.developers = responseData.users);
             (this.projects = responseData.projects);
 
+            console.log(this.reports);
             this.dataSource.data = this.reports;
             this.dataSource._updateChangeSubscription();
           },
@@ -267,6 +269,10 @@ export class NotifiedReportsListComponent implements OnInit {
   }
 
   getProjectById(id: number) {
+    console.log("in da func");
+    console.log(this.projects);
+    console.log(id);
+
     return this.projects.find(project => project.id == id).name;
   }
 

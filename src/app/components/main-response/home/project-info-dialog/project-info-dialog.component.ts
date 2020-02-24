@@ -38,6 +38,10 @@ export class ProjectInfoDialogComponent implements OnInit {
   }
 
   getDevFullNameById(id: string) {
+    console.log(id)
+    console.log(this.developers);
+    // console.log(this.developers);
+
     return (
       this.developers.find(dev => dev.id === id).firstName +
       " " +

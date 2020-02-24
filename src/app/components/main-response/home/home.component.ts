@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+
     this.positionId = +JSON.parse(localStorage.getItem("userData")).positionId;
     console.log(this.positionId);
     this.defaultInfoService.fetchDefaultInfo().subscribe(
