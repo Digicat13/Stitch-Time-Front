@@ -8,14 +8,21 @@ nav {
   cursor: pointer;
   z-index: 100;
 
-  :hover {
-    color: black;
-  }
+
 
   a {
     text-decoration: none;
     color: white;
     margin: 1vw;
+    &:hover {
+      color: black;
+    }
+  }
+
+  .userName {
+    &:hover {
+      color: white;
+    }
   }
 }
 
