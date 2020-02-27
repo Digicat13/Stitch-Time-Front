@@ -105,7 +105,7 @@ export class ReportsComponent implements OnInit {
       descriptionControl: new FormControl(null, Validators.required),
       startDateControl: new FormControl(null, [
         Validators.required,
-        // this.reportValidator.startDateValidation
+        this.reportValidator.DateValidation
       ]),
       endDateControl: new FormControl(null, Validators.required)
     });
@@ -185,6 +185,11 @@ export class ReportsComponent implements OnInit {
       reportData.id = this.currentReportId;
     }
 
+    let responseTimeValidator = this.reportValidator.timePerDayValidator(
+      this.dataSource.data,
+      reportData,
+      this.isEdited
+    );
     if (reportData.startDate !== reportData.endDate) {
       this.pageLoading.isLoading.next(false);
       alert(
@@ -192,14 +197,17 @@ export class ReportsComponent implements OnInit {
       );
       return;
     } else if (
-      !this.reportValidator.timePerDayValidator(
-        this.dataSource.data,
-        reportData,
-        this.isEdited
-      )
+      !responseTimeValidator.enoughtTime ||
+      !responseTimeValidator.enoughtOverTime
     ) {
       this.pageLoading.isLoading.next(false);
-      alert("You cannot make report for that day, it is already full");
+      alert(
+        "On this day You have " +
+          responseTimeValidator.time +
+          " hr left for work and " +
+          responseTimeValidator.overtime +
+          " hr overtime! Go HOME!"
+      );
       return;
     } else if (this.isEdited) {
       this.isEdited = false;

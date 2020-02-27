@@ -33,25 +33,34 @@
 </form>
 
 <!-- Filter Date Form -->
-<form [formGroup]="filterDateForm" class="filter-form" (ngSubmit)="onApplyDateFilters()">
+<form
+  [formGroup]="filterDateForm"
+  class="filter-form"
+  (ngSubmit)="onApplyDateFilters()"
+>
   <mat-form-field>
     <mat-label>From</mat-label>
-    <input matInput type="date" formControlName="filterFromControl" required/>
+    <input matInput type="date" formControlName="filterFromControl" required />
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>To</mat-label>
-    <input matInput type="date" formControlName="filterToControl"  required/>
+    <input matInput type="date" formControlName="filterToControl" required />
   </mat-form-field>
 
-  <button mat-button class="btn-custom"
-  [disabled]="filterDateForm.invalid || applyBtnDisabled"
-  type="submit">
+  <button
+    mat-button
+    class="btn-custom"
+    [disabled]="filterDateForm.invalid || applyBtnDisabled"
+    type="submit"
+  >
     Apply
   </button>
-  <button mat-button class="btn-custom"
-  [disabled]="!applyBtnDisabled ||filterDateForm.invalid"
-  (click)="onClearFilters()"
+  <button
+    mat-button
+    class="btn-custom"
+    [disabled]="!applyBtnDisabled || filterDateForm.invalid"
+    (click)="onClearFilters()"
   >
     Clear
   </button>
@@ -163,9 +172,7 @@
       [class.declined]="getStatusById(report.statusId) === 'Declined'"
       [class.notified]="getStatusById(report.statusId) === 'Notified'"
       [class.approved]="getStatusById(report.statusId) === 'Accepted'"
-    >
-
-    </tr>
+    ></tr>
   </table>
 
   <mat-paginator
@@ -248,11 +255,8 @@
         name="startDateControl"
         required
       />
-      <span
-        *ngIf="
-          reportForm.get('startDateControl').hasError('incorrectStartDate')
-        "
-        >Start date: today or day before the current day</span
+      <span *ngIf="reportForm.get('startDateControl').hasError('weekendDay')"
+        >You need to sleep on weekend!!!</span
       >
     </mat-form-field>
 

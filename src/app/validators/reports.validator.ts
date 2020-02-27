@@ -25,21 +25,38 @@ export class ReportValidator {
   ) {
     let sum: number = 0;
     const limit: number = 8;
+    let overtimeSum: number = 0;
+    const overtimeLimit: number = 16;
 
     console.log(reports);
     console.log(report);
-
+    var oldReportTime;
     reports
       .filter(elem => elem.startDate == report.startDate)
-      .forEach(r => (sum += r.time));
+      .forEach(r => ((sum += r.time), (overtimeSum += r.overtime)));
     if (idEdited) {
       console.log(reports.filter(elem => elem.id === report.id));
-      const oldReportTime: number = reports.filter(
-        elem => elem.id === report.id
-      )[0].time;
+      oldReportTime = reports.filter(elem => elem.id === report.id)[0].time;
       sum -= oldReportTime;
     }
-    sum += report.time;
-    return sum <= limit;
+
+    console.log("fsadgdfgdffd  " + sum);
+    return {
+      enoughtTime: sum + report.time <= limit,
+      time: limit - sum,
+      enoughtOverTime: overtimeSum + report.overtime <= overtimeLimit,
+      overtime: overtimeLimit - overtimeSum
+    };
   }
+
+  DateValidation(startDateInput: FormControl): { [s: string]: boolean } {
+    const date: Date = new Date(startDateInput.value);
+
+    console.log('This is the ' + date.getDay());
+    if(date.getDay() == 6 || date.getDay() == 0) {
+      return {weekendDay: true};
+    }
+    return null;
+  }
+
 }

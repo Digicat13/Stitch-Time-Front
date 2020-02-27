@@ -7,7 +7,7 @@ import { ProjectForPMService } from "src/app/services/project-4-pm.service";
 import { IsPageLoading } from "src/app/services/is-loading-emitter.service";
 import { ErrorResponseDialogComponent } from "../../error-response-dialog/error-response-dialog.component";
 import { IProject } from "src/app/interfaces/report-data";
-import { ProjectInfoDialogComponent } from '../project-info-dialog/project-info-dialog.component';
+import { ProjectInfoDialogComponent } from "../project-info-dialog/project-info-dialog.component";
 
 @Component({
   selector: "app-projects-list",
@@ -189,7 +189,7 @@ export class ProjectsListComponent implements OnInit {
   private openProjectInfoDialog(project: IProjectData) {
     const dialogRef = this.dialog.open(ProjectInfoDialogComponent, {
       width: "fit-content",
-      data: project,
+      data: project
       // scrollStrategy:
     });
 
