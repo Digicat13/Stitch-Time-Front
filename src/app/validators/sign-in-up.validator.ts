@@ -1,8 +1,9 @@
-import { FormControl } from "@angular/forms";
+import { FormControl, FormGroup } from "@angular/forms";
 
 export class SignInUpValidator {
+
   nameValidator(control: FormControl): { [key: string]: boolean } {
-    if (control !== null) {
+    if (control !== undefined) {
       let name: string = control.value;
 
       if (name !== null) {
@@ -52,8 +53,8 @@ export class SignInUpValidator {
       let email: string = control.value;
 
       if (email !== null) {
-        email = email.trim();
-        const regex: RegExp = /^[a-z0-9]{0,}@gmail.com$/;
+        email = email.trim().toLowerCase();
+        const regex: RegExp = /^[a-zA-Z](([^=+&#$%!<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]#!\.,;:\s@\"]{2,})$/i;
         const isContains = regex.test(email);
         if (isContains) {
           document
@@ -62,12 +63,71 @@ export class SignInUpValidator {
 
           return null;
         }
-        document
-          .getElementsByName("userEmail")[0]
-          .classList.add("red-border");
+        document.getElementsByName("userEmail")[0].classList.add("red-border");
 
         return { incorrectEmail: true };
       }
     }
   }
+
+  passwordValidator(control: FormControl): { [key: string]: boolean } {
+    if (control !== null) {
+      let password: string = control.value;
+
+      if (password !== null) {
+        password = password.trim();
+        const regex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+        const isContains = regex.test(password);
+        if (isContains) {
+          document
+            .getElementsByName("userPassword")[0]
+            .classList.remove("red-border");
+
+          return null;
+        }
+        document
+          .getElementsByName("userPassword")[0]
+          .classList.add("red-border");
+
+        return { doesNotStrongPassword: true };
+      }
+    }
+  }
+
+  matchPasswordsValidator(group: FormGroup): { [key: string]: boolean } {
+
+    const password: string = group.value.userPassword;
+    const confirmPassword: string = group.value.userConfirmPassword;
+
+    if (password !== null) {
+      if (confirmPassword !== null && confirmPassword.length > 0) {
+        if (password !== confirmPassword) {
+          document
+            .getElementsByName("userConfirmPassword")[0]
+            .classList.add("red-border");
+
+          return { passwordsDoNotMatch: true };
+        }
+        document
+          .getElementsByName("userConfirmPassword")[0]
+          .classList.remove("red-border");
+
+        return null;
+      }
+      document
+        .getElementsByName("userConfirmPassword")[0]
+        .classList.remove("red-border");
+      return null;
+    }
+    return null;
+  }
+
+  // addRedBorder(inputName: string) {
+  //   document.getElementsByName(inputName)[0].classList.add("red-border");
+  // }
+
+  // removeRedBorder(inputName: string) {
+  //   if (document.getElementsByName(inputName) !== undefined)
+  //     document.getElementsByName(inputName)[0].classList.remove("red-border");
+  // }
 }

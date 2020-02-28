@@ -1,0 +1,35 @@
+<div class="new-event-dialog">
+  <h1>Project: {{ project.name }} ({{ project.abbrevation }})</h1>
+
+  <div mat-dialog-content class="main-container">
+    <div class="subcontainer">
+      <mat-label>Team Lead</mat-label>
+      <p>{{ getDevFullNameById(project.team.teamLeadId) }}</p>
+      <span>({{ getDevEmailById(project.team.teamLeadId) }})</span>
+
+      <mat-label>Team Members</mat-label>
+      <cdk-virtual-scroll-viewport itemSize="20" class="example-viewport">
+        <div *cdkVirtualFor="let dev of project.team.teamMembers" class="example-item">
+          <p>{{ getDevFullNameById(dev.userId) }}</p>
+          ({{ getDevEmailById(dev.userId) }})
+        </div>
+      </cdk-virtual-scroll-viewport>
+    </div>
+
+    <div class="subcontainer">
+      <mat-label>Description</mat-label>
+      <p class="description">"{{project.description}}"</p>
+
+      <mat-label>Details</mat-label>
+      <p class="details">Initial Effort: {{project.initialEffrort}} hr</p>
+      <p class="details">Spent Effort: {{project.spentEffort}} hr</p>
+      <p class="details">Initial Risk: {{project.initialRisk}} hr</p>
+
+
+
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()" class="submit-button">Ok</button>
+  </div>
+</div>

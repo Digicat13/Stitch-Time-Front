@@ -7,6 +7,8 @@ import { SuccessfullyRegisteredDialogComponent } from "../successfully-registere
 import { MatDialog } from "@angular/material";
 import { ErrorResponseDialogComponent } from "../error-response-dialog/error-response-dialog.component";
 import { LocalStorageService } from "src/app/services/local-storage.service";
+import { IsPageLoading } from "src/app/services/is-loading-emitter.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-registration-form",
@@ -16,13 +18,18 @@ import { LocalStorageService } from "src/app/services/local-storage.service";
 export class RegistrationFormComponent implements OnInit {
   registrationForm: FormGroup;
   emailAlreadyRegistered: boolean = false;
-  isLoading = false;
+  positions: Array<{ positionId: number; positionName: string }> = [
+    { positionId: 1, positionName: "Developer" },
+    { positionId: 2, positionName: "Project Manager" }
+  ];
 
   constructor(
     private signInUpService: SignInUpService,
     private singInUpValidator: SignInUpValidator,
     public dialog: MatDialog,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private loading: IsPageLoading,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -39,50 +46,69 @@ export class RegistrationFormComponent implements OnInit {
         Validators.required,
         this.singInUpValidator.emailValidator
       ]),
-      userPassword: new FormControl(null, [Validators.required]),
-      userPosition: new FormControl(null, [Validators.required])
+      passwords: new FormGroup(
+        {
+          userPassword: new FormControl(null, [
+            Validators.required,
+            this.singInUpValidator.passwordValidator
+          ]),
+          userConfirmPassword: new FormControl(null, [Validators.required])
+        },
+        [Validators.required, this.singInUpValidator.matchPasswordsValidator]
+      )
     });
   }
 
   onSubmit() {
+    this.removeRedBorders();
+    if (this.registrationForm.invalid) {
+      return;
+    }
     const inputData: IUserData = {
-      name: this.registrationForm.get("userName").value,
-      surname: this.registrationForm.get("userSurname").value,
+      firstName: this.registrationForm.get("userName").value,
+      secondName: this.registrationForm.get("userSurname").value,
       email: this.registrationForm.get("userEmail").value,
-      password: this.registrationForm.get("userPassword").value,
-      position: this.registrationForm.get("userPosition").value
+      password: this.registrationForm.get("passwords").get("userPassword")
+        .value,
+      positionId: 1
     };
 
-    this.isLoading = true;
+    // this.isLoading = true;
+    this.loading.isLoading.next(true);
 
     this.signInUpService.signUp(inputData).subscribe(
       responseUserData => {
-        this.isLoading = false;
+        this.loading.isLoading.next(false);
 
-        this.localStorageService.storeUserDataOnLocalStorage(responseUserData);
+        this.openSuccessfullyRegisteredDialog(responseUserData.firstName);
 
-        console.log(this.localStorageService.getUserDataFromLocalStorage());
-
-        this.openSuccessfullyRegisteredDialog(responseUserData.name);
+        // TODO доробити
 
         this.registrationForm.reset();
+
+        this.router.navigate(["/home"]);
       },
-      error => {
-        this.isLoading = false;
+      errorData => {
+        this.loading.isLoading.next(false);
+        console.log(errorData);
 
-        this.localStorageService.storeUserDataOnLocalStorage(inputData);
+        // TODO сюди треба додати обробку помилки, якщо ще щось сталось, хоча, тут єдиний трабл
+        // це як раз або ВЖЕ ЗАРЕЄСТРОВАНИЙ емейл, або ж трабл з підключенням до сервака ;)
 
-        console.log(this.localStorageService.getUserDataFromLocalStorage());
-
-        if (error.name !== undefined && error.name !== null) {
-          this.openErrorResponseDialog(error.name);
-        } else {
+        if (errorData === "Email is in use.") {
           this.getRedBorderEmailInput();
+        } else if (errorData.name === "HttpErrorResponse") {
+          this.openErrorResponseDialog(errorData.message);
         }
       }
     );
 
     console.log(inputData);
+  }
+
+  removeRedBorders() {
+    const emailInput = document.getElementsByName("userEmail")[0];
+    emailInput.classList.remove("red-border");
   }
 
   getRedBorderEmailInput() {
